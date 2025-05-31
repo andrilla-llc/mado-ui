@@ -91,8 +91,6 @@ function FormComponent<T extends ElementType = 'form'>({
 
 	return (
 		<FormElement {...props} className={twMerge(className, 'grid gap-3')} onSubmit={processSubmit}>
-			<span className='block text-xl font-black'>{formStatus}</span>
-
 			{children}
 		</FormElement>
 	)
