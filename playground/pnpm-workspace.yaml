@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - '@swc/core'
+  - '@tailwindcss/oxide'
+  - esbuild
+overrides:
+  mado-ui: link:../../../../Library/pnpm/global/5/node_modules/mado-ui

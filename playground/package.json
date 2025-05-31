@@ -1,0 +1,54 @@
+{
+	"name": "mado-ui-playground",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"lint": "eslint .",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@headlessui/react": "^2.2.4",
+		"mado-ui": "link:../../../../Library/pnpm/global/5/node_modules/mado-ui",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"tailwind-merge": "^3.3.0",
+		"tailwindcss": "^4.1.8"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.28.0",
+		"@tailwindcss/postcss": "^4.1.8",
+		"@types/react": "^19.1.6",
+		"@types/react-dom": "^19.1.5",
+		"@vitejs/plugin-react-swc": "^3.10.0",
+		"eslint": "^9.28.0",
+		"eslint-plugin-react-hooks": "^5.2.0",
+		"eslint-plugin-react-refresh": "^0.4.20",
+		"globals": "^16.2.0",
+		"prettier": "^3.5.3",
+		"prettier-plugin-tailwindcss": "^0.6.12",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.33.0",
+		"vite": "^6.3.5"
+	},
+	"prettier": {
+		"singleQuote": true,
+		"semi": false,
+		"printWidth": 120,
+		"useTabs": true,
+		"tabWidth": 2,
+		"arrowParens": "avoid",
+		"jsxSingleQuote": true,
+		"tailwindStylesheet": "./src/index.css",
+		"tailwindFunctions": [
+			"twMerge",
+			"twJoin",
+			"twSort"
+		],
+		"plugins": [
+			"prettier-plugin-tailwindcss"
+		]
+	}
+}

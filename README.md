@@ -1,31 +1,31 @@
-# ストリ <sup>(sutori)</sup> UI
+# 窓 <sup>(mado)</sup> UI
 
-ストリ UI is a collection of opinionated React components built on Tailwind CSS 4. It was originally created for use on websites built by Andrilla, but is now available for anyone.
+窓 UI is a collection of opinionated React components built on Tailwind CSS 4. It was originally created for use on websites built by Andrilla, but is now available for anyone.
 
 All of the components are built in similar ways, that always allow for customization.
 
 ## How to Use
 
-In general it's best to download the latest versions of components to your project, rather than using `npm i sutori-ui`, so you can modify the colors to fit your branding.
+In general it's best to download the latest versions of components to your project, rather than using `npm i mado-ui`, so you can modify the colors to fit your branding.
 
 ### Install
 
 Install or copy and paste the components you with to use.
 
 ```bash
-npm i sutori-ui
+npm i mado-ui
 ```
 
 ```bash
-pnpm i sutori-ui
+pnpm i mado-ui
 ```
 
 ```bash
-yarn add sutori-ui
+yarn add mado-ui
 ```
 
 ```bash
-bun i sutori-ui
+bun i mado-ui
 ```
 
 ### Add CSS
@@ -33,12 +33,12 @@ bun i sutori-ui
 Import the Tailwind CSS modifications to your `globals.css`, or copy and paste what you need.
 
 ```css
-@import 'sutori-ui/css';
+@import 'mado-ui/css';
 ```
 
 ## Tailwind Modifications and Additions
 
-If you use the default `sutori-ui/css` import, then you will have access to the following classes, and you should expect some minor changes.
+If you use the default `mado-ui/css` import, then you will have access to the following classes, and you should expect some minor changes.
 
 ### Modifications
 
@@ -47,12 +47,10 @@ You can review the `@layer base` to see these changes directly.
 1. All elements are positioned relatively by default, instead of static.
 2. Browser-defined minimum widths are removed.
 3. `:focus-visible` uses Tailwind's ring instead of outline.
-4. `color-scheme: light dark;` is enabled.
-5. Default background and text colors are modified to `--color-neutral-50` and `--color-neutral-950` respectively.
-6. `cursor: pointer;` is back on all buttons, in spite of Tailwind removing this.
-7. Color inputs have removed browser default padding on `::-webkit-color-swatch-wrapper`.
-8. Similar to borders, `<svg>` elements use `fill: currentColor;` as the default.
-9. `<svg>` elements are inline blocks when used as children of `<button>` or `<a>` elements.
+4. Default background and text colors are modified to `--color-neutral-50` and `--color-neutral-950` respectively.
+5. `cursor: pointer;` is back on all buttons, in spite of Tailwind removing this.
+6. Color inputs have removed browser default padding on `::-webkit-color-swatch-wrapper`.
+7. Similar to borders, `<svg>` elements use `fill: currentColor;` as the default.
 
 ### Additions
 
@@ -62,23 +60,153 @@ These apply to `@layer theme`, `@layer components`, `@utility`, and `@custom-var
 2. Modified animations to use the new utility classes.
 3. More animations.
 4. UI colors that work great in both light and dark mode.
-5. Better easing.
+5. More easing options.
 6. More border radiuses.
-7. Counter utility classes.
-8. Change gap to use variables for easy reuse in children.
-9. New grid template rows and columns utility classes for 0fr to 1fr transitions.
-10. Grid template rows and columns added as transition options.
-11. New z-index for making elements always on top.
-12. `@custom-variant` for both desktop and mobile, that checks the pointer size.
-13. `.error` component class.
+7. Change gap to use variables for easy reuse in children.
+8. New grid template rows and columns utility classes for 0fr to 1fr transitions.
+9. Grid template rows and columns added as transition options.
 
 ## Components
 
+### Button
+
+A pre-styled button component with utility props for easy customization. Supports both button and anchor functionality.
+
+Exported from `mado-ui/button`:
+
+Default export:
+- Button
+
+Props include `padding`, `rounded`, `theme`, and standard button/anchor attributes.
+
+#### Example
+
+```tsx
+import Button from 'mado-ui/button'
+
+<Button theme="primary" padding="md" rounded="lg">
+  Click me
+</Button>
+
+<Button href="/about" theme="blue-gradient">
+  Link Button
+</Button>
+```
+
+### Form
+
+A comprehensive form component with built-in validation and status management. Works with controlled or uncontrolled inputs.
+
+Exported from `mado-ui/form`:
+
+Default export:
+- Form
+
+Other exports:
+- Input
+- SubmitButton
+
+#### Example
+
+```tsx
+import Form, { Input, SubmitButton } from 'mado-ui/form'
+
+<Form onSubmit={({ formContext }) => ({ status: 'success' })}>
+  <Input name="email" type="email" label="Email Address" />
+  <Input name="password" type="password" label="Password" />
+  <SubmitButton>Submit Form</SubmitButton>
+</Form>
+```
+
+### Ghost
+
+A loading placeholder component with animated pulse effect.
+
+Exported from `mado-ui/ghost`:
+
+Default export:
+- Ghost
+
+#### Example
+
+```tsx
+import Ghost from 'mado-ui/ghost'
+
+<Ghost className="h-4 w-32" />
+```
+
+### Heading
+
+A heading component that renders HTML heading elements (h1-h6) with appropriate styling. Automatically generates IDs for targeting.
+
+Exported from `mado-ui/heading`:
+
+Default export:
+- Heading
+
+#### Example
+
+```tsx
+import Heading from 'mado-ui/heading'
+
+<Heading as="h1">Page Title</Heading>
+<Heading as="h2">Section Title</Heading>
+```
+
+### Input
+
+A form input component with built-in validation, labels, and descriptions. Integrates with the Form component's context.
+
+Exported from `mado-ui/form`:
+
+- Input
+
+Props include validation options, styling props, and standard input attributes.
+
+#### Example
+
+```tsx
+import { Input } from 'mado-ui/form'
+
+<Input 
+  name="username" 
+  label="Username" 
+  description="Choose a unique username"
+  required 
+/>
+```
+
+### Link
+
+A link component with various animation styles and theming options. Supports both single-line and multiline text.
+
+Exported from `mado-ui/link`:
+
+Default export:
+- Link
+
+Other exports:
+- Anchor
+
+#### Example
+
+```tsx
+import Link from 'mado-ui/link'
+
+<Link href="/about" type="ltr" theme="blue">
+  Learn more
+</Link>
+
+<Link href="/contact" type="fill-center" theme="primary">
+  Get in touch
+</Link>
+```
+
 ### Modal
 
-This component is a pre-built version of @headless-ui's Dialog component. It handles all of the transitions and additional functionality for you. It has some reasonable pre-defined classes, but still offers great customization to fit your branding.
+A pre-built modal component based on @headlessui's Dialog. Handles transitions, drag-to-close functionality, and backdrop interactions.
 
-Exported from 'sutori-ui/modal' are three components.
+Exported from `mado-ui/modal`:
 
 Default export:
 - Modal
@@ -86,31 +214,61 @@ Default export:
 Other exports:
 - ModalDialog
 - ModalTrigger
+- ModalTitle
+- ModalClose
 
 The Modal component must wrap both the ModalDialog and ModalTrigger components to work.
-
-The ModalTrigger must have a `<button>` element child to handle the opening functionality.
-
-The ModalDialog renders as a `<div>` and is the container for all of the contents of the modal.
 
 #### Example
 
 ```tsx
+import Modal, { ModalDialog, ModalTrigger } from 'mado-ui/modal'
+
 <Modal>
-  <ModalTrigger>
-    <button>Open Modal</button>
-  </ModalTrigger>
-
+  <ModalTrigger>Open Modal</ModalTrigger>
   <ModalDialog>
-    <h2>You've successfully opened the modal.</h2>
-
-    <p>You may swipe down on it, click the "X" in the top right, click anywhere outside of the modal, or hit the escape key to close it.</p>
+    <h2>Modal Content</h2>
+    <p>This is the modal content.</p>
   </ModalDialog>
 </Modal>
 ```
 
-Adding classes to the Modal component will edit the container of ModalDialog. This is primarily useful for sizing, and is separate from the ModalDialog to avoid jank. By default the Modal renders a transparent `<div>` and it's recommended to keep it this way.
+### SubmitButton
 
-Add classes to the ModalDialog to style what is acutally visible to users. This is a good place to add padding and change the background color.
+A specialized button for form submission with status-aware styling and content.
 
-Don't add classes to the ModalTrigger, but rather the child `<button>`, as the ModalTrigger renders a Fragment.
+Exported from `mado-ui/form`:
+
+- SubmitButton
+
+#### Example
+
+```tsx
+import { SubmitButton } from 'mado-ui/form'
+
+<SubmitButton 
+  loading="Submitting..."
+  success="Form Submitted!"
+  error="Submission Failed"
+>
+  Submit
+</SubmitButton>
+```
+
+### Time
+
+A time component that displays formatted dates and times with customizable precision.
+
+Exported from `mado-ui/time`:
+
+Default export:
+- Time
+
+#### Example
+
+```tsx
+import Time from 'mado-ui/time'
+
+<Time dateObject={new Date()} day month year hours minutes />
+<Time dateTime="2024-01-01T12:00:00Z" />
+```

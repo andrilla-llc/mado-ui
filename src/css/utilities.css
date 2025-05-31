@@ -1,0 +1,69 @@
+@utility animation-delay-* {
+	/* prettier-ignore */
+	--tw-animation-delay: --value([*]);
+	/* prettier-ignore */
+	--tw-animation-delay: --value(integer)ms;
+	animation-delay: var(--tw-animation-delay);
+}
+
+@utility animation-direction-* {
+	/* prettier-ignore */
+	--tw-animation-direction: --value(--animation-direction-*);
+	animation-direction: var(--tw-animation-direction);
+}
+
+@utility animation-duration-* {
+	/* prettier-ignore */
+	--tw-animation-duration: --value([*]);
+	/* prettier-ignore */
+	--tw-animation-duration: --value(integer)ms;
+	animation-duration: var(--tw-animation-duration);
+}
+
+@utility animation-ease-* {
+	/* prettier-ignore */
+	--tw-animation-timing-function: --value([*]);
+	/* prettier-ignore */
+	--tw-animation-timing-function: --value(--ease-*);
+	animation-timing-function: var(--tw-animation-timing-function);
+}
+
+@utility animation-fill-* {
+	/* prettier-ignore */
+	--tw-animation-fill-mode: --value(--animation-fill-*);
+	animation-fill-mode: var(--tw-animation-fill-mode);
+}
+
+@utility animation-iteration-* {
+	/* prettier-ignore */
+	--tw-animation-iteration-count: --value(integer);
+	/* prettier-ignore */
+	--tw-animation-iteration-count: --value(--animation-iteration-*);
+	animation-iteration-count: var(--tw-animation-iteration-count);
+}
+
+@utility animation-state-* {
+	/* prettier-ignore */
+	--tw-animation-state: --value(--animation-state-*);
+	animation-play-state: var(--tw-animation-state);
+}
+
+@utility grid-cols-0fr {
+	grid-template-columns: 0fr;
+}
+
+@utility grid-cols-1fr {
+	grid-template-columns: 1fr;
+}
+
+@utility grid-rows-0fr {
+	grid-template-rows: 0fr;
+}
+
+@utility grid-rows-1fr {
+	grid-template-rows: 1fr;
+}
+
+@utility transition-rows {
+	transition-property: grid-template-rows;
+}

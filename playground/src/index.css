@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+@import 'mado-ui/css';
+
+@font-face {
+	src: url('../typefaces/oi/oi-regular.ttf') format('truetype');
+	font-family: oi;
+	font-weight: 400;
+	font-style: normal;
+}
+
+@theme {
+	--font-oi: oi, var(--font-sans);
+}
+
+@layer base {
+	::selection,
+	::-moz-selection {
+		background-color: var(--color-ui-blue);
+		color: var(--color-white);
+	}
+
+	p {
+		font-size: var(--text-lg);
+		line-height: var(--text-lg--line-height);
+		max-width: 50ch;
+
+		&.text-center {
+			margin-inline: auto;
+		}
+
+		@media (min-width: 640px) {
+			font-size: var(--text-xl);
+			line-height: var(--text-xl--line-height);
+		}
+	}
+}

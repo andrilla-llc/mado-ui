@@ -1,0 +1,297 @@
+import {
+	Button,
+	Form,
+	FormSubmitArgs,
+	Heading,
+	Input,
+	Link,
+	Modal,
+	ModalDialog,
+	ModalTrigger,
+	SubmitButton,
+} from 'mado-ui'
+
+export default function App() {
+	const handleSubmit = ({ event, formContext }: FormSubmitArgs) => {
+		const { currentTarget } = event
+
+		console.log(formContext)
+
+		currentTarget.reset()
+
+		return { status: 'success' } as const
+	}
+
+	return (
+		<main>
+			<section className='px-6 py-12 sm:px-8 sm:py-16 md:px-10 md:py-20 lg:px-12 lg:py-24 xl:px-14 xl:py-28 2xl:px-16 2xl:py-32'>
+				<div className='pb-8 sm:pb-16 md:pb-24 lg:pb-32'>
+					<h1 className='from-ui-purple via-ui-magenta to-ui-red bg-linear-60 bg-clip-text text-center text-2xl font-thin text-transparent uppercase font-stretch-expanded brightness-125 sm:text-4xl md:text-5xl lg:text-6xl'>
+						Welcome to the{' '}
+						<b className='from-ui-green via-ui-blue to-ui-violet block bg-linear-60 bg-clip-text pt-4 pb-1 text-8xl font-black whitespace-nowrap font-stretch-normal [-webkit-text-stroke-color:var(--color-white)] [-webkit-text-stroke-width:1px] sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
+							<span className='from-ui-blue via-ui-blue to-ui-violet bg-linear-60 bg-clip-text'>
+								窓
+								<span
+									aria-hidden='true'
+									className='text-ui-grey absolute -top-1 left-1/2 block -translate-x-1/2 text-xs font-normal [-webkit-text-stroke-width:0] sm:top-0.5 sm:translate-y-1/2 md:top-3 lg:top-4'
+								>
+									mado
+								</span>
+							</span>{' '}
+							UI
+						</b>{' '}
+						Playground
+					</h1>
+
+					<span
+						aria-hidden='true'
+						className='from-ui-purple via-ui-magenta to-ui-red absolute inset-0 -z-10 block bg-linear-60 bg-clip-text text-center text-2xl font-thin text-transparent uppercase font-stretch-expanded opacity-75 blur-xs brightness-125 select-none sm:text-4xl md:text-5xl lg:text-6xl'
+					>
+						Welcome to the{' '}
+						<b className='from-ui-green via-ui-blue to-ui-violet block bg-linear-60 bg-clip-text pt-4 pb-1 text-8xl font-black whitespace-nowrap font-stretch-normal sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
+							窓 UI
+						</b>{' '}
+						Playground
+					</span>
+
+					<span
+						aria-hidden='true'
+						className='from-ui-purple via-ui-magenta to-ui-red absolute inset-0 -z-10 block bg-linear-60 bg-clip-text text-center text-2xl font-thin text-transparent uppercase font-stretch-expanded opacity-50 blur-md brightness-110 select-none sm:text-4xl md:text-5xl lg:text-6xl'
+					>
+						Welcome to the{' '}
+						<b className='from-ui-green via-ui-blue to-ui-violet block bg-linear-60 bg-clip-text pt-4 pb-1 text-8xl font-black whitespace-nowrap font-stretch-normal sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
+							窓 UI
+						</b>{' '}
+						Playground
+					</span>
+
+					<span
+						aria-hidden='true'
+						className='from-ui-purple via-ui-magenta to-ui-red absolute inset-0 -z-10 block bg-linear-60 bg-clip-text text-center text-2xl font-thin text-transparent uppercase font-stretch-expanded opacity-50 blur-2xl select-none sm:text-4xl md:text-5xl lg:text-6xl'
+					>
+						Welcome to the{' '}
+						<b className='from-ui-green via-ui-blue to-ui-violet block bg-linear-60 bg-clip-text pt-4 pb-1 text-8xl font-black whitespace-nowrap font-stretch-normal sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
+							窓 UI
+						</b>{' '}
+						Playground
+					</span>
+				</div>
+
+				<p className='bg-linear-to-t from-blue-300 via-blue-200 to-blue-50 bg-[size:100%_calc(1.5rem*1.625)] bg-clip-text bg-repeat-y text-center font-oi text-2xl leading-relaxed text-transparent [-webkit-text-stroke-color:var(--color-neutral-50)] [-webkit-text-stroke-width:.5px] text-shadow-sm sm:bg-[size:100%_calc(3rem*1.25)] sm:text-5xl sm:leading-tight sm:text-shadow-md md:bg-[size:100%_calc(3.75rem*1.25)] md:text-6xl md:text-shadow-lg lg:bg-[size:100%_calc(4.5rem*1.25)] lg:text-7xl dark:from-blue-600 dark:via-blue-500 dark:to-blue-200 dark:text-shadow-neutral-50/5'>
+					A{' '}
+					<span className='inline-block bg-[url(/images/window.webp)] bg-[size:140%_auto] bg-clip-text bg-[position:50%_40%] bg-no-repeat brightness-125 contrast-125 saturate-125 dark:brightness-100'>
+						window
+					</span>{' '}
+					of{' '}
+					<span className='from-ui-sky-blue inline-block bg-linear-to-t to-white bg-clip-text brightness-125 dark:brightness-100'>
+						clean,
+					</span>{' '}
+					<span className='inline-block bg-[url(/images/apple.webp)] bg-[size:350%_auto] bg-clip-text bg-bottom-left bg-no-repeat contrast-125 saturate-200'>
+						easy
+					</span>{' '}
+					and{' '}
+					<span className='inline-block w-fit bg-[url(/images/baloons.webp)] bg-cover bg-clip-text bg-[position:50%_25%] bg-no-repeat brightness-125 contrast-125 saturate-125 [-webkit-text-stroke-color:var(--color-orange-950)] dark:brightness-100'>
+						fun-to-use
+					</span>{' '}
+					UI components for an{' '}
+					<span className='inline-block bg-[url(/images/keyboard.webp)] bg-[size:150%_auto] bg-clip-text bg-center bg-no-repeat contrast-125 saturate-125'>
+						accessible,
+					</span>{' '}
+					<span className='inline-block w-fit bg-[url(/images/brain.webp)] bg-[size:150%_auto] bg-clip-text bg-[position:50%_60%] bg-no-repeat brightness-110 contrast-150 saturate-200 dark:brightness-80'>
+						no-thinking
+					</span>{' '}
+					user{' '}
+					<span className='animate-bg-scroll animation-duration-10000 inline-block bg-linear-to-r [--tw-gradient-stops:var(--tw-gradient-position),var(--color-ui-magenta),var(--color-ui-red),var(--color-ui-orange),var(--color-ui-yellow),var(--color-ui-green),var(--color-ui-sky-blue),var(--color-ui-blue),var(--color-ui-violet),var(--color-ui-purple),var(--color-ui-magenta)] bg-[size:75rem_100%] bg-clip-text bg-repeat-x brightness-125 saturate-150 [--tw-bg-scroll-end:-75rem] dark:brightness-100'>
+						experience.
+					</span>
+				</p>
+			</section>
+
+			<section className='from-ui-red via-ui-orange to-ui-yellow bg-linear-30 px-6 py-12 sm:px-8 sm:py-16 md:px-10 md:py-20 lg:px-12 lg:py-24 xl:px-14 xl:py-28 2xl:px-16 2xl:py-32 dark:from-red-950 dark:via-orange-800 dark:to-yellow-600'>
+				<Heading className='pb-8 text-white text-shadow-lg'>Components</Heading>
+
+				<ul className='grid gap-8 lg:grid-cols-2'>
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Heading
+						</Heading>
+
+						<p className='pb-8'>
+							A heading component that renders HTML heading elements (h1-h6) with appropriate styling. Automatically
+							generates an ID for the heading based on its content if none is provided.
+						</p>
+
+						<Heading as='h4'>
+							This is an example of{' '}
+							<code className='inline-block rounded-2xl border-1 border-neutral-50/15 bg-linear-30 from-neutral-900/50 via-neutral-800/50 to-neutral-700/50 px-3 pt-2 pb-2.5 font-mono text-[size:smaller] font-medium text-white shadow-inner'>
+								&lt;Heading as='h4'&gt;&lt;/Heading&gt;
+							</code>
+						</Heading>
+					</li>
+
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Link
+						</Heading>
+
+						<p className='pb-8'>An animated link component with many variants for easy customization.</p>
+
+						<p>
+							<Link href='#'>Normal</Link>{' '}
+							<Link href='#' type='center'>
+								Center
+							</Link>{' '}
+							<Link href='#' type='fill'>
+								Fill
+							</Link>{' '}
+							<Link href='#' type='fill-ltr' theme='green'>
+								Fill Left to Right
+							</Link>{' '}
+							<Link href='#' type='fill-rtl' theme='magenta'>
+								Fill Right to Left
+							</Link>{' '}
+							<Link href='#' type='lift'>
+								Lift
+							</Link>{' '}
+							<Link href='#' type='ltr'>
+								Left to Right
+							</Link>{' '}
+							<Link href='#' type='multiline'>
+								Multi-line
+							</Link>{' '}
+							<Link href='#' type='multiline-center'>
+								Multi-line Center
+							</Link>{' '}
+							<Link href='#' type='multiline-fill' theme='orange'>
+								Multi-line Fill
+							</Link>{' '}
+							<Link href='#' type='multiline-fill-center' theme='pink'>
+								Multi-line Fill Center
+							</Link>{' '}
+							<Link href='#' type='multiline-fill-lift' theme='purple'>
+								Multi-line Fill Lift
+							</Link>{' '}
+							<Link href='#' type='multiline-fill-ltr' theme='red'>
+								Multi-line Fill Left to Right
+							</Link>{' '}
+							<Link href='#' type='multiline-fill-rtl' theme='violet'>
+								Multi-line Fill Right to Left
+							</Link>{' '}
+							<Link href='#' type='multiline-lift'>
+								Multi-line Lift
+							</Link>{' '}
+							<Link href='#' type='multiline-ltr'>
+								Multi-line Left to Right
+							</Link>{' '}
+							<Link href='#' type='multiline-rtl'>
+								Multi-line Right to Left
+							</Link>{' '}
+							<Link href='#' type='multiline-static'>
+								Multi-line Static
+							</Link>{' '}
+							<Link href='#' type='rtl'>
+								Right to Left
+							</Link>{' '}
+							<Link href='#' type='static'>
+								Static
+							</Link>
+						</p>
+					</li>
+
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Button
+						</Heading>
+
+						<p className='pb-8'>A pre-styled button with utility props for easy customization depending on use case.</p>
+
+						<Button theme='blue'>Interact With Me</Button>
+					</li>
+
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Modal
+						</Heading>
+
+						<p className='pb-8'>
+							A uniquely interactive modal that allows for simplicity in closing the modal by swiping down, pressing the
+							x-mark, pressing outside of the modal, pressing the escape key, or your own built-in method. Built for
+							both mobile and desktop.
+						</p>
+
+						<Modal>
+							{({ closeModal }: { closeModal: () => void }) => (
+								<>
+									<ModalTrigger as={Button} theme='green'>
+										Open the Modal
+									</ModalTrigger>
+
+									<ModalDialog>
+										<Heading as='h4'>Welcome to the Modal</Heading>
+
+										<p className='pb-2'>Close the modal however you would like:</p>
+
+										<ul className='list-inside list-disc pb-4 leading-normal'>
+											<li>
+												<p>Swipe down from the top bar.</p>
+											</li>
+
+											<li>
+												<p>Press the x-mark in the top right of the screen.</p>
+											</li>
+
+											<li>
+												<p>Press the blurry space outside of the modal.</p>
+											</li>
+
+											<li>
+												<p>Press your escape key.</p>
+											</li>
+
+											<li>
+												<p>Press the close button below.</p>
+											</li>
+										</ul>
+
+										<Button onClick={closeModal} theme='magenta'>
+											All Done ✓
+										</Button>
+									</ModalDialog>
+								</>
+							)}
+						</Modal>
+					</li>
+
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Form
+						</Heading>
+
+						<p className='pb-8'>
+							A fully controlled form that manages its own state and provides a simple API for validation and
+							submission.
+						</p>
+
+						<Form onSubmit={handleSubmit}>
+							<Input name='First Name' label='*' description='Enter your first name' placeholder='*' />
+
+							<Input name='Last Name' label='*' description='Enter your last name' placeholder='*' />
+
+							<Input
+								name='Email Address'
+								type='email'
+								label='*'
+								description='Enter your email address'
+								placeholder='*'
+							/>
+
+							<Input name='Phone Number' type='tel' label='*' description='Enter your phone number' placeholder='*' />
+
+							<SubmitButton theme='blue'>Submit</SubmitButton>
+						</Form>
+					</li>
+				</ul>
+			</section>
+		</main>
+	)
+}

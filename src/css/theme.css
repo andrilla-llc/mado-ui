@@ -1,0 +1,170 @@
+@theme {
+	--animate-bounce: bounce var(--tw-animation-duration, 2s) var(--tw-animation-iteration-count, infinite);
+
+	@keyframes bounce {
+		0%,
+		15%,
+		85%,
+		100% {
+			translate: 0 -25%;
+			animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+		}
+		50% {
+			translate: 0 0%;
+			animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+		}
+	}
+
+	--animate-drop-in: drop-in var(--tw-animation-duration, 1s) var(--tw-animation-timing-function, ease-out)
+		var(--tw-animation-fill-mode, forwards);
+
+	@keyframes drop-in {
+		from {
+			opacity: 0;
+			scale: 1.2;
+			translate: 0 var(--tw-drop-in-start, -100%);
+		}
+	}
+
+	--animate-fade-out: fade-out var(--tw-animation-duration, 0.5s) var(--tw-animation-timing-function, ease-in)
+		var(--tw-animation-fill-mode, forwards);
+
+	@keyframes fade-out {
+		to {
+			opacity: 0;
+			scale: 0.8;
+			translate: 0 var(--tw-fade-out-to, -2rem);
+		}
+	}
+
+	--animate-flip: flip var(--tw-animation-duration, 0.5s) var(--tw-animation-fill-mode, forwards)
+		var(--tw-animation-timing-function, cubic-bezier(0.25, 0.5, 0, 0.99));
+
+	@keyframes flip {
+		from {
+			rotate: var(--tw-animate-flip-from, 0deg);
+		}
+		to {
+			rotate: var(--tw-animate-flip-to, 180deg);
+		}
+	}
+
+	--animate-flip-again: flip-again var(--tw-animation-duration, 0.5s) var(--tw-animation-fill-mode, forwards)
+		var(--tw-animation-timing-function, cubic-bezier(0.25, 0.5, 0, 0.99));
+
+	@keyframes flip-again {
+		from {
+			rotate: var(--tw-animate-flip-again-from, 180deg);
+		}
+		to {
+			rotate: var(--tw-animate-flip-again-to, 360deg);
+		}
+	}
+
+	--animate-grid-rows: grid-rows var(--tw-animation-duration, 500ms)
+		var(--tw-animation-timing-function, cubic-bezier(0.25, 0.5, 0, 0.99)) var(--tw-animation-direction, forwards);
+
+	@keyframes grid-rows {
+		from {
+			grid-template-rows: 0fr;
+		}
+		to {
+			grid-template-rows: 1fr;
+		}
+	}
+
+	--animate-heartbeat: heartbeat var(--tw-animation-duration, 2s) var(--tw-animation-timing-function, ease-out)
+		var(--tw-animation-iteration-count, infinite) var(--tw-animation-direction, alternate);
+
+	@keyframes heartbeat {
+		0% {
+			scale: 1.05;
+		}
+		25%,
+		100% {
+			scale: 0.95;
+		}
+	}
+
+	--animate-ping: ping var(--tw-animation-duration, 1s) var(--tw-animation-timing-function, cubic-bezier(0, 0, 0.2, 1))
+		var(--tw-animation-iteration-count, infinite);
+
+	@keyframes ping {
+		75%,
+		100% {
+			scale: 2;
+			opacity: 0;
+		}
+	}
+
+	--animate-pulse: pulse var(--tw-animation-duration, 2s)
+		var(--tw-animation-timing-function, cubic-bezier(0.4, 0, 0.6, 1)) var(--tw-animation-iteration-count, infinite);
+
+	@keyframes pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.5;
+		}
+	}
+
+	--animate-spin: spin var(--tw-animation-duration, 3s) var(--tw-animation-timing-function, linear)
+		var(--tw-animation-iteration-count, infinite);
+
+	@keyframes spin {
+		to {
+			rotate: 360deg;
+		}
+	}
+
+	--animate-wave: wave var(--tw-animation-duration, 3s) var(--tw-animation-timing-function, ease-in-out)
+		var(--tw-animation-iteration-count, infinite);
+
+	@keyframes wave {
+		0%,
+		15%,
+		85%,
+		100% {
+			transform: translateY(0);
+		}
+		35% {
+			transform: translateY(-3px);
+		}
+		65% {
+			transform: translateY(3px);
+		}
+	}
+
+	--animation-direction-normal: normal;
+	--animation-direction-reverse: reverse;
+	--animation-direction-alternate: alternate;
+	--animation-direction-alternate-reverse: alternate-reverse;
+
+	--animation-fill-none: none;
+	--animation-fill-forwards: forwards;
+	--animation-fill-backwards: backwards;
+	--animation-fill-both: both;
+
+	--animation-iteration-infinite: infinite;
+
+	--animation-state-paused: paused;
+	--animation-state-running: running;
+
+	--color-ui-red: oklab(0.5656944011258305 0.17137043937370722 0.0983431730576434); /* #ec4b3c */
+	--color-ui-orange: oklab(0.7544838258014663 0.06962652890244281 0.1351525632743709); /* #f19737 */
+	--color-ui-yellow: oklab(0.864401609303759 0.004406105377300462 0.16623715943613981); /* #f8cb44 */
+	--color-ui-green: oklab(0.6863074196293343 -0.13605313120122559 0.09519570691610196); /* #5bc264 */
+	--color-ui-sky-blue: oklab(0.7153572821941506 -0.04107940303102553 -0.11406096547278932); /* #65a8ec */
+	--color-ui-blue: oklab(0.5856965969935841 -0.037261276734565585 -0.1972068921491013); /* #2c7df6 */
+	--color-ui-violet: oklab(0.46619568305930886 0.016705350913468753 -0.18200784945425813); /* #5559ce */
+	--color-ui-magenta: oklab(0.5813092499395571 0.16761476584851437 0.037339480279777626); /* #d84f6b */
+	--color-ui-purple: oklab(0.6920965111787926 0.09308348072869937 -0.10179484234426395); /* #b47cd5 */
+	--color-ui-brown: oklab(0.6337347589023636 0.010406271663056188 0.04783706522684539); /* #998566 */
+	--color-ui-grey: oklab(0.5085006967074223 -0.0075697141654152145 -0.01376379542356776); /* #5e676e */
+	--color-ui-pink: oklab(0.7566508631614479 0.0424728438838603 0.027088713207660264); /* #d3aaa1 */
+
+	--ease-exponential: cubic-bezier(0.25, 0.5, 0, 0.99);
+	--ease-spring: cubic-bezier(0.83, 1.16, 0.73, 1.62);
+}
