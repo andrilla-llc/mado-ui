@@ -51,7 +51,7 @@
 		"tabWidth": 2,
 		"arrowParens": "avoid",
 		"jsxSingleQuote": true,
-		"tailwindStylesheet": "./app/globals.css",
+		"tailwindStylesheet": "./src/css/index.css",
 		"tailwindFunctions": [
 			"twMerge",
 			"twJoin",
