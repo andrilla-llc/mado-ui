@@ -11,14 +11,14 @@ export type AcceptsRef<T extends ElementType> = T extends keyof JSX.IntrinsicEle
 				: false
 			: false
 
+export type AnyElementProps<T extends ElementType, Props extends { [key: string]: unknown } = {}> = AsElement<T> &
+	Omit<ComponentProps<T>, keyof AsElement> &
+	Props
+
 export type AsElement<T extends ElementType = 'div'> = {
 	/** Specify what element should be rendered */
 	as?: T
 }
-
-export type AnyElementProps<T extends ElementType, Props extends { [key: string]: unknown } = {}> = AsElement<T> &
-	Omit<ComponentProps<T>, keyof AsElement> &
-	Props
 
 export type MergeTypes<TypesArray extends unknown[], Result = object> = TypesArray extends [
 	infer Head,
@@ -27,8 +27,6 @@ export type MergeTypes<TypesArray extends unknown[], Result = object> = TypesArr
 	? MergeTypes<Remaining, Result & Head>
 	: Result
 
-export type OnlyFirst<F, L> = F & { [Key in keyof Omit<L, keyof F>]?: never }
-
 export type OneOf<
 	TypesArray extends unknown[],
 	Result = never,
@@ -36,3 +34,5 @@ export type OneOf<
 > = TypesArray extends [infer Head, ...infer Remaining]
 	? OneOf<Remaining, Result | OnlyFirst<Head, AllProps>, AllProps>
 	: Result
+
+export type OnlyFirst<F, L> = F & { [Key in keyof Omit<L, keyof F>]?: never }
