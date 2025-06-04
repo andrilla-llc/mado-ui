@@ -9,6 +9,7 @@ import {
 	ModalDialog,
 	ModalTrigger,
 	SubmitButton,
+	Textarea,
 } from 'mado-ui'
 
 export default function App() {
@@ -121,12 +122,17 @@ export default function App() {
 							generates an ID for the heading based on its content if none is provided.
 						</p>
 
-						<Heading as='h4'>
-							This is an example of{' '}
-							<code className='inline-block rounded-2xl border-1 border-neutral-50/15 bg-linear-30 from-neutral-900/50 via-neutral-800/50 to-neutral-700/50 px-3 pt-2 pb-2.5 font-mono text-[size:smaller] font-medium text-white shadow-inner'>
-								&lt;Heading as='h4'&gt;&lt;/Heading&gt;
-							</code>
-						</Heading>
+						<span className='block pb-2.5 text-6xl font-black last:pb-0'>Heading 1</span>
+
+						<span className='block pb-2.5 text-5xl font-medium last:pb-0'>Heading 2</span>
+
+						<span className='block pb-2 text-4xl font-extralight last:pb-0'>Heading 3</span>
+
+						<Heading as='h4'>Heading 4</Heading>
+
+						<Heading as='h5'>Heading 5</Heading>
+
+						<Heading as='h6'>Heading 6</Heading>
 					</li>
 
 					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
@@ -134,7 +140,11 @@ export default function App() {
 							Link
 						</Heading>
 
-						<p className='pb-8'>An animated link component with many variants for easy customization.</p>
+						<p className='pb-8'>
+							An animated link component with many variants for easy customization. It also has some sensible defaults
+							depending on whether the link is external or internal, link only prefetching on internal links. When a
+							link with a hash in the URL is clicked, the hash is automatically removed from the URL after scrolling.
+						</p>
 
 						<p>
 							<Link href='#'>Normal</Link>{' '}
@@ -205,7 +215,25 @@ export default function App() {
 
 						<p className='pb-8'>A pre-styled button with utility props for easy customization depending on use case.</p>
 
-						<Button theme='blue'>Interact With Me</Button>
+						<div className='flex flex-wrap items-center gap-4'>
+							<Button>Standard</Button>
+
+							<Button padding='sm' rounded='md' theme='magenta' className='text-sm'>
+								Small Magenta
+							</Button>
+
+							<Button padding='xs' rounded='sm' theme='yellow' className='text-xs'>
+								X-Small Yellow
+							</Button>
+
+							<Button padding='lg' rounded='none' theme='red-gradient' className='text-lg'>
+								Large Sharp Red Gradient
+							</Button>
+
+							<Button padding='xl' rounded='full' theme='violet-gradient' className='text-xl'>
+								X-Large Violet Gradient Pill
+							</Button>
+						</div>
 					</li>
 
 					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
@@ -286,6 +314,13 @@ export default function App() {
 							/>
 
 							<Input name='Phone Number' type='tel' label='*' description='Enter your phone number' placeholder='*' />
+
+							<Textarea
+								name='Message'
+								label='*'
+								description='Enter a message, if you would like'
+								placeholder='Message…'
+							/>
 
 							<SubmitButton theme='blue'>Submit</SubmitButton>
 						</Form>

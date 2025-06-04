@@ -1,55 +1,24 @@
 // * Types
-import {
-	ChangeEventHandler,
-	FocusEventHandler,
-	HTMLInputTypeAttribute,
-	ReactNode,
-	RefObject,
-	useEffect,
-	useId,
-	useRef,
-} from 'react'
-import { OneOf } from '../../../types'
+import { ChangeEventHandler, ReactNode, RefObject, useEffect, useId, useRef } from 'react'
 
-type PasswordOptionList = {
-	matchPreviousInput: boolean
-	requireLowercaseCharacter: boolean
-	requireNumber: boolean
-	requireSpecialCharacter: boolean
-	requireUppercaseCharacter: boolean
+export type TextareaProps = Omit<HeadlessTextareaProps, 'name'> & {
+	description?: ReactNode
+	descriptionProps?: Omit<DescriptionProps, 'children'> & {
+		/** @deprecated Use the `description` prop instead. */
+		children?: never
+	}
+	fieldProps?: Omit<FieldProps, 'children' | 'disabled'>
+	label?: ReactNode
+	labelProps?: Omit<LabelProps, 'children'> & {
+		/** @deprecated Use the `label` prop instead. */
+		children?: never
+	}
+	name: string
+	ref?: RefObject<HTMLTextAreaElement | null>
 }
 
-type TypeOfPasswordOrNot = OneOf<
-	[
-		{
-			type?: 'password'
-			passwordOptions?: Partial<PasswordOptionList>
-		},
-		{
-			type?: Exclude<HTMLInputTypeAttribute, 'password'>
-		},
-	]
->
-
-export type InputProps = Omit<HeadlessInputProps, 'name' | 'type'> &
-	TypeOfPasswordOrNot & {
-		description?: ReactNode
-		descriptionProps?: Omit<DescriptionProps, 'children'> & {
-			/** @deprecated Use the `description` prop instead. */
-			children?: never
-		}
-		fieldProps?: Omit<FieldProps, 'children' | 'disabled'>
-		label?: ReactNode
-		labelProps?: Omit<LabelProps, 'children'> & {
-			/** @deprecated Use the `label` prop instead. */
-			children?: never
-		}
-		name: string
-		ref?: RefObject<HTMLInputElement | null>
-	}
-
 // * Hooks
-import { defineField, Field as FieldContext, useFormContext } from '../../../hooks'
+import { defineField, Field as FieldContext, useFormContext } from '../../hooks'
 
 // * Headless UI
 import {
@@ -57,36 +26,26 @@ import {
 	DescriptionProps,
 	Field,
 	FieldProps,
-	Input as HeadlessInput,
-	InputProps as HeadlessInputProps,
+	Textarea as HeadlessTextarea,
+	TextareaProps as HeadlessTextareaProps,
 	Label,
 	LabelProps,
 } from '@headlessui/react'
 
 // * Utilities
-import { formatPhoneNumber, isEmail, isPhoneNumber, toLowerCase, twMerge } from '../../../utils'
+import { toLowerCase, twMerge } from '../../utils'
 
-function validateField(value: string, { required, type }: FieldContext) {
+function validateField(value: string, { required }: FieldContext) {
 	const noValue = !value || value === ''
 
 	if (!required && noValue) return true
 
 	if (noValue) return false
 
-	switch (type) {
-		case 'email':
-			return isEmail(value)
-		case 'number':
-			return !isNaN(Number(value))
-		case 'tel':
-			return isPhoneNumber(value)
-		default:
-			return true
-	}
+	return true
 }
 
-export default function Input({
-	checked,
+export default function Textarea({
 	className,
 	defaultValue,
 	description,
@@ -102,10 +61,9 @@ export default function Input({
 	placeholder,
 	ref,
 	required = true,
-	type,
 	value,
 	...props
-}: InputProps) {
+}: TextareaProps) {
 	const [formContext, setFormContext] = useFormContext()
 
 	if (placeholder === '*') placeholder = name + (required && !label ? '*' : '')
@@ -116,27 +74,8 @@ export default function Input({
 
 	if (Boolean(formContext?.find(field => field.id === fieldContextID)?.invalid)) invalid = true
 
-	const getFieldContextType = () => {
-		switch (type) {
-			case 'email':
-				return 'email'
-			case 'file':
-				return 'file'
-			case 'number':
-				return 'number'
-			case 'tel':
-				return 'tel'
-			case 'url':
-				return 'url'
-			default:
-				return 'string'
-		}
-	}
-
-	const fieldContextType = getFieldContextType()
-
 	const initialFieldContext = defineField({
-		type: fieldContextType,
+		type: 'textarea',
 		id: fieldContextID,
 		invalid,
 		name,
@@ -163,7 +102,7 @@ export default function Input({
 
 	const debounceTimerRef = useRef<NodeJS.Timeout>(undefined)
 
-	const handleChange: ChangeEventHandler<HTMLInputElement> = e => {
+	const handleChange: ChangeEventHandler<HTMLTextAreaElement> = e => {
 		if (disabled) {
 			e.preventDefault()
 			return
@@ -214,51 +153,6 @@ export default function Input({
 		onChange?.(e)
 	}
 
-	const handleBlur: FocusEventHandler<HTMLInputElement> = e => {
-		if (disabled) {
-			e.preventDefault()
-			return
-		}
-
-		const { currentTarget } = e,
-			{ value: newValue } = currentTarget
-
-		switch (type) {
-			case 'email':
-				setFormContext?.(prevContext => {
-					if (!prevContext) return []
-
-					const field = prevContext.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-					if (!field) throw new Error(`Field with id "${initialFieldContext.id}" not found in form context.`)
-
-					const otherFields = prevContext.filter(({ id: fieldID }) => fieldID !== initialFieldContext.id)
-
-					const updatedField = { ...field, value: newValue.toLowerCase() }
-
-					return [...otherFields, updatedField]
-				})
-				break
-			case 'tel':
-				setFormContext?.(prevContext => {
-					if (!prevContext) return []
-
-					const field = prevContext.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-					if (!field) throw new Error(`Field with id "${initialFieldContext.id}" not found in form context.`)
-
-					const otherFields = prevContext.filter(({ id: fieldID }) => fieldID !== initialFieldContext.id)
-
-					const updatedField = { ...field, value: formatPhoneNumber(newValue, '1') }
-
-					return [...otherFields, updatedField]
-				})
-				break
-		}
-
-		onBlur?.(e)
-	}
-
 	const restFieldProps: Omit<FieldProps, 'className' | 'disabled'> = fieldProps
 		? Object.fromEntries(Object.entries(fieldProps).filter(([key]) => key !== 'className'))
 		: {}
@@ -297,12 +191,12 @@ export default function Input({
 				</Label>
 			)}
 
-			<HeadlessInput
+			<HeadlessTextarea
 				{...props}
 				className={bag =>
 					twMerge(
 						// Base styles
-						'rounded-xl border-1 border-neutral-500/50 bg-neutral-100 py-1 pl-2 text-neutral-950 outline-offset-1 outline-ui-sky-blue/95 transition-[background-color] duration-300 ease-exponential dark:bg-neutral-700 dark:text-neutral-50',
+						'field-sizing-content resize-none rounded-xl border-1 border-neutral-500/50 bg-neutral-100 py-1 pl-2 text-neutral-950 outline-offset-1 outline-ui-sky-blue/95 transition-[background-color] duration-300 ease-exponential dark:bg-neutral-700 dark:text-neutral-50',
 						// Pseudo styles
 						'focus-visible:bg-neutral-50 focus-visible:outline-3 active:bg-neutral-200 dark:focus-visible:bg-neutral-600 dark:active:bg-neutral-800 pointer-fine:hover:bg-neutral-50 pointer-fine:active:bg-neutral-200 dark:pointer-fine:hover:bg-neutral-600 dark:pointer-fine:active:bg-neutral-800',
 						// user-invalid styles
@@ -313,12 +207,10 @@ export default function Input({
 				}
 				id={fieldContext?.id}
 				invalid={invalid}
-				onBlur={handleBlur}
 				onChange={handleChange}
 				placeholder={placeholder}
 				ref={ref}
 				required={required}
-				type={type}
 				value={fieldContext?.value}
 			/>
 

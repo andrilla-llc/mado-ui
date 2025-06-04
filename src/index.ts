@@ -19,6 +19,8 @@ import {
 	ModalTrigger,
 	SubmitButton,
 	SubmitButtonProps,
+	Textarea,
+	TextareaProps,
 	Time,
 } from './components'
 
@@ -357,6 +359,8 @@ export {
 	SubmitButton,
 	SubmitButtonProps,
 	telRegex,
+	Textarea,
+	TextareaProps,
 	Time,
 	toFullDateString,
 	toggleClass,

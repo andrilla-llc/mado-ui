@@ -31,7 +31,6 @@ import { twMerge, twSort } from '../../utils'
 export default function SubmitButton({
 	children,
 	className,
-	'aria-disabled': ariaDisabled,
 	error,
 	incomplete,
 	loading,
@@ -43,18 +42,10 @@ export default function SubmitButton({
 }: SubmitButtonProps) {
 	const [formStatus] = useFormStatus()
 
-	const getDisabledStatus = () => {
-		if (ariaDisabled !== undefined) return ariaDisabled
-		if (formStatus !== 'ready') return 'true'
-		return 'false'
-	}
-
-	const disabled = getDisabledStatus()
-
 	const getFormStatusButtonClasses = () => {
 		switch (formStatus) {
 			case 'loading':
-				return twSort('animate-pulse cursor-wait text-lg font-black leading-6 tracking-widest')
+				return twSort('animate-pulse cursor-wait text-lg leading-6 font-black tracking-widest')
 			case 'error':
 			case 'success':
 				return 'cursor-not-allowed'
@@ -90,9 +81,9 @@ export default function SubmitButton({
 				return (
 					loading || (
 						<>
-							<span className='animate-wave animation-delay-300 inline-block'>•</span>
-							<span className='animate-wave animation-delay-150 inline-block'>•</span>
-							<span className='animate-wave inline-block'>•</span>
+							<span className='inline-block animate-wave animation-delay-300'>•</span>
+							<span className='inline-block animate-wave animation-delay-150'>•</span>
+							<span className='inline-block animate-wave'>•</span>
 						</>
 					)
 				)
@@ -115,7 +106,6 @@ export default function SubmitButton({
 	return (
 		<Button<HTMLButtonElement>
 			{...props}
-			{...(disabled === 'true' ? { 'aria-disabled': 'true', disabled: true } : {})}
 			className={twMerge([formStatusButtonClasses, 'w-full', className])}
 			ref={ref}
 			theme={formStatusButtonTheme}

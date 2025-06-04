@@ -1,7 +1,7 @@
 {
 	"name": "mado-ui",
 	"author": "Andrilla LLC",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"description": "A collection of opinionated React components built on Tailwind CSS",
 	"repository": "https://github.com/andrilla-llc/mado-ui",
 	"license": "GNU GPL",
@@ -33,7 +33,7 @@
 		"@tailwindcss/postcss": "^4.1.8",
 		"@types/node": "^22.15.29",
 		"@types/react": "^19.1.6",
-		"@types/react-dom": "^19.1.5",
+		"@types/react-dom": "^19.1.6",
 		"postcss": "^8.5.4",
 		"postcss-cli": "^11.0.1",
 		"prettier": "^3.5.3",

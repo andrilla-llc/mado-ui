@@ -1,5 +1,14 @@
 import Button, { ButtonProps } from './button'
-import Form, { FormProps, FormSubmitArgs, Input, InputProps, SubmitButton, SubmitButtonProps } from './form'
+import Form, {
+	FormProps,
+	FormSubmitArgs,
+	Input,
+	InputProps,
+	SubmitButton,
+	SubmitButtonProps,
+	Textarea,
+	TextareaProps,
+} from './form'
 import Ghost from './ghost'
 import Heading, { HeadingProps } from './heading'
 import Link, { Anchor, AnchorProps, LinkProps } from './link'
@@ -27,5 +36,7 @@ export {
 	ModalTrigger,
 	SubmitButton,
 	SubmitButtonProps,
+	Textarea,
+	TextareaProps,
 	Time,
 }

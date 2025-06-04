@@ -1,6 +1,6 @@
 // * Types
 import { ElementType, FormEvent, FormEventHandler, Fragment, useEffect } from 'react'
-import { AnyElementProps, OneOf } from '../../types'
+import { AnyElementProps } from '../../types'
 
 export type FormSubmitArgs = {
 	event: FormEvent<HTMLFormElement>
@@ -114,5 +114,6 @@ export default function Form<T extends ElementType = 'form'>({
 
 import Input, { InputProps } from './input'
 import SubmitButton, { SubmitButtonProps } from './submit-button'
+import Textarea, { TextareaProps } from './textarea'
 
-export { Input, InputProps, SubmitButton, SubmitButtonProps }
+export { Input, InputProps, Textarea, TextareaProps, SubmitButton, SubmitButtonProps }
