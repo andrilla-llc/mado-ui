@@ -1,7 +1,7 @@
 {
 	"name": "mado-ui",
 	"author": "Andrilla LLC",
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"description": "A collection of opinionated React components built on Tailwind CSS",
 	"repository": "https://github.com/andrilla-llc/mado-ui",
 	"license": "GNU GPL",
@@ -19,6 +19,8 @@
 			"import": "./dist/components.esm.js",
 			"require": "./dist/components.js"
 		},
+		"./css": "./css/index.css",
+		"./css/index.css": "./css/index.css",
 		"./hooks": {
 			"types": "./dist/hooks.d.ts",
 			"import": "./dist/hooks.esm.js",
@@ -29,11 +31,7 @@
 			"import": "./dist/icons.esm.js",
 			"require": "./dist/icons.js"
 		},
-		"./types": {
-			"types": "./dist/types.d.ts",
-			"import": "./dist/types.esm.js",
-			"require": "./dist/types.js"
-		},
+		"./types": "./dist/types.d.ts",
 		"./utils": {
 			"types": "./dist/utils.d.ts",
 			"import": "./dist/utils.esm.js",

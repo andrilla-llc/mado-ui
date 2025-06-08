@@ -10,7 +10,7 @@ import {
 	ModalTrigger,
 	SubmitButton,
 	Textarea,
-} from 'mado-ui'
+} from 'mado-ui/components'
 
 export default function App() {
 	const handleSubmit = ({ event, formContext }: FormSubmitArgs) => {
@@ -27,9 +27,9 @@ export default function App() {
 		<main>
 			<section className='px-6 py-12 sm:px-8 sm:py-16 md:px-10 md:py-20 lg:px-12 lg:py-24 xl:px-14 xl:py-28 2xl:px-16 2xl:py-32'>
 				<div className='pb-8 sm:pb-16 md:pb-24 lg:pb-32'>
-					<h1 className='from-ui-purple via-ui-magenta to-ui-red bg-linear-60 font-stretch-expanded bg-clip-text text-center text-2xl font-thin uppercase text-transparent brightness-125 sm:text-4xl md:text-5xl lg:text-6xl'>
+					<h1 className='from-ui-purple via-ui-magenta to-ui-red bg-linear-60 bg-clip-text text-center text-2xl font-thin text-transparent uppercase font-stretch-expanded brightness-125 sm:text-4xl md:text-5xl lg:text-6xl'>
 						Welcome to the{' '}
-						<b className='from-ui-green via-ui-blue to-ui-violet bg-linear-60 font-stretch-normal block whitespace-nowrap bg-clip-text pb-1 pt-4 text-8xl font-black [-webkit-text-stroke-color:var(--color-white)] [-webkit-text-stroke-width:1px] sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
+						<b className='from-ui-green via-ui-blue to-ui-violet block bg-linear-60 bg-clip-text pt-4 pb-1 text-8xl font-black whitespace-nowrap font-stretch-normal [-webkit-text-stroke-color:var(--color-white)] [-webkit-text-stroke-width:1px] sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
 							<span className='from-ui-blue via-ui-blue to-ui-violet bg-linear-60 bg-clip-text'>
 								窓
 								<span
@@ -46,10 +46,10 @@ export default function App() {
 
 					<span
 						aria-hidden='true'
-						className='from-ui-purple via-ui-magenta to-ui-red bg-linear-60 font-stretch-expanded blur-xs absolute inset-0 -z-10 block select-none bg-clip-text text-center text-2xl font-thin uppercase text-transparent opacity-75 brightness-125 sm:text-4xl md:text-5xl lg:text-6xl'
+						className='from-ui-purple via-ui-magenta to-ui-red absolute inset-0 -z-10 block bg-linear-60 bg-clip-text text-center text-2xl font-thin text-transparent uppercase font-stretch-expanded opacity-75 blur-xs brightness-125 select-none sm:text-4xl md:text-5xl lg:text-6xl'
 					>
 						Welcome to the{' '}
-						<b className='from-ui-green via-ui-blue to-ui-violet bg-linear-60 font-stretch-normal block whitespace-nowrap bg-clip-text pb-1 pt-4 text-8xl font-black sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
+						<b className='from-ui-green via-ui-blue to-ui-violet block bg-linear-60 bg-clip-text pt-4 pb-1 text-8xl font-black whitespace-nowrap font-stretch-normal sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
 							窓 UI
 						</b>{' '}
 						Playground
@@ -57,10 +57,10 @@ export default function App() {
 
 					<span
 						aria-hidden='true'
-						className='from-ui-purple via-ui-magenta to-ui-red bg-linear-60 font-stretch-expanded absolute inset-0 -z-10 block select-none bg-clip-text text-center text-2xl font-thin uppercase text-transparent opacity-50 blur-md brightness-110 sm:text-4xl md:text-5xl lg:text-6xl'
+						className='from-ui-purple via-ui-magenta to-ui-red absolute inset-0 -z-10 block bg-linear-60 bg-clip-text text-center text-2xl font-thin text-transparent uppercase font-stretch-expanded opacity-50 blur-md brightness-110 select-none sm:text-4xl md:text-5xl lg:text-6xl'
 					>
 						Welcome to the{' '}
-						<b className='from-ui-green via-ui-blue to-ui-violet bg-linear-60 font-stretch-normal block whitespace-nowrap bg-clip-text pb-1 pt-4 text-8xl font-black sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
+						<b className='from-ui-green via-ui-blue to-ui-violet block bg-linear-60 bg-clip-text pt-4 pb-1 text-8xl font-black whitespace-nowrap font-stretch-normal sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
 							窓 UI
 						</b>{' '}
 						Playground
@@ -68,51 +68,51 @@ export default function App() {
 
 					<span
 						aria-hidden='true'
-						className='from-ui-purple via-ui-magenta to-ui-red bg-linear-60 font-stretch-expanded absolute inset-0 -z-10 block select-none bg-clip-text text-center text-2xl font-thin uppercase text-transparent opacity-50 blur-2xl sm:text-4xl md:text-5xl lg:text-6xl'
+						className='from-ui-purple via-ui-magenta to-ui-red absolute inset-0 -z-10 block bg-linear-60 bg-clip-text text-center text-2xl font-thin text-transparent uppercase font-stretch-expanded opacity-50 blur-2xl select-none sm:text-4xl md:text-5xl lg:text-6xl'
 					>
 						Welcome to the{' '}
-						<b className='from-ui-green via-ui-blue to-ui-violet bg-linear-60 font-stretch-normal block whitespace-nowrap bg-clip-text pb-1 pt-4 text-8xl font-black sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
+						<b className='from-ui-green via-ui-blue to-ui-violet block bg-linear-60 bg-clip-text pt-4 pb-1 text-8xl font-black whitespace-nowrap font-stretch-normal sm:text-[12rem] md:text-[16rem] lg:text-[18rem]'>
 							窓 UI
 						</b>{' '}
 						Playground
 					</span>
 				</div>
 
-				<p className='bg-linear-to-t font-oi text-shadow-sm sm:text-shadow-md md:text-shadow-lg dark:text-shadow-neutral-50/5 from-blue-300 via-blue-200 to-blue-50 bg-[size:100%_calc(1.5rem*1.625)] bg-clip-text bg-repeat-y text-center text-2xl leading-relaxed text-transparent [-webkit-text-stroke-color:var(--color-neutral-50)] [-webkit-text-stroke-width:.5px] sm:bg-[size:100%_calc(3rem*1.25)] sm:text-5xl sm:leading-tight md:bg-[size:100%_calc(3.75rem*1.25)] md:text-6xl lg:bg-[size:100%_calc(4.5rem*1.25)] lg:text-7xl dark:from-blue-600 dark:via-blue-500 dark:to-blue-200'>
+				<p className='bg-linear-to-t from-blue-300 via-blue-200 to-blue-50 bg-[size:100%_calc(1.5rem*1.625)] bg-clip-text bg-repeat-y text-center font-oi text-2xl leading-relaxed text-transparent [-webkit-text-stroke-color:var(--color-neutral-50)] [-webkit-text-stroke-width:.5px] text-shadow-sm sm:bg-[size:100%_calc(3rem*1.25)] sm:text-5xl sm:leading-tight sm:text-shadow-md md:bg-[size:100%_calc(3.75rem*1.25)] md:text-6xl md:text-shadow-lg lg:bg-[size:100%_calc(4.5rem*1.25)] lg:text-7xl dark:from-blue-600 dark:via-blue-500 dark:to-blue-200 dark:text-shadow-neutral-50/5'>
 					A{' '}
-					<span className='saturate-125 inline-block bg-[url(/images/window.webp)] bg-[size:140%_auto] bg-clip-text bg-[position:50%_40%] bg-no-repeat brightness-125 contrast-125 dark:brightness-100'>
+					<span className='inline-block bg-[url(/images/window.webp)] bg-[size:140%_auto] bg-clip-text bg-[position:50%_40%] bg-no-repeat brightness-125 contrast-125 saturate-125 dark:brightness-100'>
 						window
 					</span>{' '}
 					of{' '}
-					<span className='from-ui-sky-blue bg-linear-to-t inline-block to-white bg-clip-text brightness-125 dark:brightness-100'>
+					<span className='from-ui-sky-blue inline-block bg-linear-to-t to-white bg-clip-text brightness-125 dark:brightness-100'>
 						clean,
 					</span>{' '}
-					<span className='bg-bottom-left inline-block bg-[url(/images/apple.webp)] bg-[size:350%_auto] bg-clip-text bg-no-repeat contrast-125 saturate-200'>
+					<span className='inline-block bg-[url(/images/apple.webp)] bg-[size:350%_auto] bg-clip-text bg-bottom-left bg-no-repeat contrast-125 saturate-200'>
 						easy
 					</span>{' '}
 					and{' '}
-					<span className='saturate-125 inline-block w-fit bg-[url(/images/baloons.webp)] bg-cover bg-clip-text bg-[position:50%_25%] bg-no-repeat brightness-125 contrast-125 [-webkit-text-stroke-color:var(--color-orange-950)] dark:brightness-100'>
+					<span className='inline-block w-fit bg-[url(/images/baloons.webp)] bg-cover bg-clip-text bg-[position:50%_25%] bg-no-repeat brightness-125 contrast-125 saturate-125 [-webkit-text-stroke-color:var(--color-orange-950)] dark:brightness-100'>
 						fun-to-use
 					</span>{' '}
 					UI components for an{' '}
-					<span className='saturate-125 inline-block bg-[url(/images/keyboard.webp)] bg-[size:150%_auto] bg-clip-text bg-center bg-no-repeat contrast-125'>
+					<span className='inline-block bg-[url(/images/keyboard.webp)] bg-[size:150%_auto] bg-clip-text bg-center bg-no-repeat contrast-125 saturate-125'>
 						accessible,
 					</span>{' '}
-					<span className='dark:brightness-80 inline-block w-fit bg-[url(/images/brain.webp)] bg-[size:150%_auto] bg-clip-text bg-[position:50%_60%] bg-no-repeat brightness-110 contrast-150 saturate-200'>
+					<span className='inline-block w-fit bg-[url(/images/brain.webp)] bg-[size:150%_auto] bg-clip-text bg-[position:50%_60%] bg-no-repeat brightness-110 contrast-150 saturate-200 dark:brightness-80'>
 						no-thinking
 					</span>{' '}
 					user{' '}
-					<span className='animate-bg-scroll animation-duration-10000 bg-linear-to-r inline-block bg-[size:75rem_100%] bg-clip-text bg-repeat-x brightness-125 saturate-150 [--tw-bg-scroll-end:-75rem] [--tw-gradient-stops:var(--tw-gradient-position),var(--color-ui-magenta),var(--color-ui-red),var(--color-ui-orange),var(--color-ui-yellow),var(--color-ui-green),var(--color-ui-sky-blue),var(--color-ui-blue),var(--color-ui-violet),var(--color-ui-purple),var(--color-ui-magenta)] dark:brightness-100'>
+					<span className='animate-bg-scroll animation-duration-10000 inline-block bg-linear-to-r [--tw-gradient-stops:var(--tw-gradient-position),var(--color-ui-magenta),var(--color-ui-red),var(--color-ui-orange),var(--color-ui-yellow),var(--color-ui-green),var(--color-ui-sky-blue),var(--color-ui-blue),var(--color-ui-violet),var(--color-ui-purple),var(--color-ui-magenta)] bg-[size:75rem_100%] bg-clip-text bg-repeat-x brightness-125 saturate-150 [--tw-bg-scroll-end:-75rem] dark:brightness-100'>
 						experience.
 					</span>
 				</p>
 			</section>
 
 			<section className='from-ui-red via-ui-orange to-ui-yellow bg-linear-30 px-6 py-12 sm:px-8 sm:py-16 md:px-10 md:py-20 lg:px-12 lg:py-24 xl:px-14 xl:py-28 2xl:px-16 2xl:py-32 dark:from-red-950 dark:via-orange-800 dark:to-yellow-600'>
-				<Heading className='text-shadow-lg pb-8 text-white'>Components</Heading>
+				<Heading className='pb-8 text-white text-shadow-lg'>Components</Heading>
 
 				<ul className='grid gap-8 lg:grid-cols-2'>
-					<li className='py-4.5 rounded-3xl px-6 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
 						<Heading as='h3' className='pb-4'>
 							Heading
 						</Heading>
@@ -135,7 +135,7 @@ export default function App() {
 						<Heading as='h6'>Heading 6</Heading>
 					</li>
 
-					<li className='py-4.5 rounded-3xl px-6 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
 						<Heading as='h3' className='pb-4'>
 							Link
 						</Heading>
@@ -208,7 +208,7 @@ export default function App() {
 						</p>
 					</li>
 
-					<li className='py-4.5 rounded-3xl px-6 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
 						<Heading as='h3' className='pb-4'>
 							Button
 						</Heading>
@@ -236,7 +236,7 @@ export default function App() {
 						</div>
 					</li>
 
-					<li className='py-4.5 rounded-3xl px-6 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
 						<Heading as='h3' className='pb-4'>
 							Modal
 						</Heading>
@@ -290,7 +290,7 @@ export default function App() {
 						</Modal>
 					</li>
 
-					<li className='py-4.5 rounded-3xl px-6 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
 						<Heading as='h3' className='pb-4'>
 							Form
 						</Heading>

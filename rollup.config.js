@@ -30,16 +30,15 @@ const createConfig = (input, outputName) => ({
 			verbose: true,
 		}),
 		resolve(),
-		typescript({ tsconfig: './tsconfig.json', declaration: true, declarationDir: 'dist', rootDir: 'src' }),
+		typescript({ tsconfig: './tsconfig.json' }),
 	],
 	external: ['react', 'react-dom', '@headlessui/react', 'tailwind-merge'],
 })
 
 export default [
 	createConfig('src/index.ts', 'index'),
-	createConfig('src/components/index.ts', 'components'),
-	createConfig('src/hooks/index.ts', 'hooks'),
-	createConfig('src/icons/index.ts', 'icons'),
-	createConfig('src/types/index.ts', 'types'),
-	createConfig('src/utils/index.ts', 'utils'),
+	createConfig('src/components.ts', 'components'),
+	createConfig('src/hooks.ts', 'hooks'),
+	createConfig('src/icons.ts', 'icons'),
+	createConfig('src/utils.ts', 'utils'),
 ]
