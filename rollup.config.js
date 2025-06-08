@@ -30,7 +30,7 @@ const createConfig = (input, outputName) => ({
 			verbose: true,
 		}),
 		resolve(),
-		typescript({ tsconfig: './tsconfig.json' }),
+		typescript({ tsconfig: './tsconfig.json', declaration: true, declarationDir: 'dist', rootDir: 'src' }),
 	],
 	external: ['react', 'react-dom', '@headlessui/react', 'tailwind-merge'],
 })
