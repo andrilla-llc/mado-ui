@@ -3,16 +3,16 @@ import typescript from '@rollup/plugin-typescript'
 import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import postcss from 'rollup-plugin-postcss'
 
-export default {
-	input: 'src/index.ts',
+const createConfig = (input, outputName) => ({
+	input,
 	output: [
 		{
-			file: 'dist/index.js',
+			file: `dist/${outputName}.js`,
 			format: 'cjs',
 			sourcemap: true,
 		},
 		{
-			file: 'dist/index.esm.js',
+			file: `dist/${outputName}.esm.js`,
 			format: 'esm',
 			sourcemap: true,
 		},
@@ -33,4 +33,13 @@ export default {
 		typescript({ tsconfig: './tsconfig.json' }),
 	],
 	external: ['react', 'react-dom', '@headlessui/react', 'tailwind-merge'],
-}
+})
+
+export default [
+	createConfig('src/index.ts', 'index'),
+	createConfig('src/components/index.ts', 'components'),
+	createConfig('src/hooks/index.ts', 'hooks'),
+	createConfig('src/icons/index.ts', 'icons'),
+	createConfig('src/types/index.ts', 'types'),
+	createConfig('src/utils/index.ts', 'utils'),
+]

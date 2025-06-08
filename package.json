@@ -1,7 +1,7 @@
 {
 	"name": "mado-ui",
 	"author": "Andrilla LLC",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "A collection of opinionated React components built on Tailwind CSS",
 	"repository": "https://github.com/andrilla-llc/mado-ui",
 	"license": "GNU GPL",
@@ -9,6 +9,38 @@
 	"module": "dist/index.esm.js",
 	"types": "dist/index.d.ts",
 	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/index.esm.js",
+			"require": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./components": {
+			"import": "./dist/components.esm.js",
+			"require": "./dist/components.js",
+			"types": "./dist/components.d.ts"
+		},
+		"./hooks": {
+			"import": "./dist/hooks.esm.js",
+			"require": "./dist/hooks.js",
+			"types": "./dist/hooks.d.ts"
+		},
+		"./icons": {
+			"import": "./dist/icons.esm.js",
+			"require": "./dist/icons.js",
+			"types": "./dist/icons.d.ts"
+		},
+		"./types": {
+			"import": "./dist/types.esm.js",
+			"require": "./dist/types.js",
+			"types": "./dist/types.d.ts"
+		},
+		"./utils": {
+			"import": "./dist/utils.esm.js",
+			"require": "./dist/utils.js",
+			"types": "./dist/utils.d.ts"
+		}
+	},
 	"files": [
 		"dist",
 		"css"
