@@ -1,22 +1,42 @@
 // * Types
 import { ReactNode } from 'react'
 
-export type SubmitButtonProps = ButtonProps<HTMLButtonElement> & {
+export type SubmitButtonProps = Omit<
+	ButtonProps<'button'> & { href?: never },
+	'as' | 'customTheme' | 'href' | 'theme'
+> & {
+	customTheme?: {
+		/** Example: `'[--theme-color:var(--color-blue-500)]'` */
+		themeColor: string
+		/**
+		 * @deprecated Only `themeColor` is available.
+		 *
+		 * ~~This doesn't use any preset color theme classes.~~
+		 */
+		classes?: never
+	}
 	/** The message to display when the form status is "error" */
 	error?: ReactNode
 	/** The message to display when the form status is "incomplete" */
 	incomplete?: ReactNode
 	/** The message to display when the form status is "loading" */
 	loading?: ReactNode
-	/** @deprecated Use `children` instead.
+	/** The message to display when the form status is "readonly" */
+	readonly?: ReactNode
+	/**
+	 * @deprecated Use `children` instead.
 	 *
 	 * ~~The message to display when the form status is "ready"~~
 	 */
 	ready?: never
 	/** The message to display when the form status is "success" */
 	success?: ReactNode
-	/** The message to display when the form status is "readonly" */
-	readonly?: ReactNode
+	/**
+	 * @deprecated Use `customTheme.themeColor` instead.
+	 *
+	 * ~~Color theme.~~
+	 */
+	theme?: never
 }
 
 // * Hooks
@@ -31,13 +51,12 @@ import { twMerge, twSort } from '../../utils'
 export default function SubmitButton({
 	children,
 	className,
+	customTheme,
 	error,
 	incomplete,
 	loading,
 	success,
-	theme,
 	type = 'submit',
-	ref,
 	...props
 }: SubmitButtonProps) {
 	const [formStatus] = useFormStatus()
@@ -55,23 +74,6 @@ export default function SubmitButton({
 	}
 
 	const formStatusButtonClasses = getFormStatusButtonClasses()
-
-	const getFormStatusButtonTheme = () => {
-		switch (formStatus) {
-			case 'incomplete':
-				return 'grey'
-			case 'loading':
-				return 'blue'
-			case 'error':
-				return 'red'
-			case 'success':
-				return 'green'
-			default:
-				return theme
-		}
-	}
-
-	const formStatusButtonTheme = getFormStatusButtonTheme()
 
 	const getButtonText = () => {
 		switch (formStatus) {
@@ -103,13 +105,41 @@ export default function SubmitButton({
 
 	const buttonText = getButtonText()
 
+	const getDataFormState = () => {
+		switch (formStatus) {
+			case 'error':
+				return { 'data-error': true }
+			case 'incomplete':
+				return { 'data-incomplete': true }
+			case 'loading':
+				return { 'data-loading': true }
+			case 'readonly':
+				return { 'data-readonly': true }
+			case 'ready':
+				return { 'data-ready': true }
+			case 'success':
+				return { 'data-success': true }
+			default:
+				return {}
+		}
+	}
+
+	const dataFormState = getDataFormState()
+
 	return (
-		<Button<HTMLButtonElement>
+		<Button<'button'>
 			{...props}
-			className={twMerge([formStatusButtonClasses, 'w-full', className])}
-			ref={ref}
-			theme={formStatusButtonTheme}
-			type={type}
+			{...dataFormState}
+			as='button'
+			className={twMerge([formStatusButtonClasses, 'w-full text-white data-loading:text-black', className])}
+			customTheme={{
+				themeColor: twMerge(
+					'data-error:[--theme-color:var(--color-ui-red)] data-incomplete:[--theme-color:var(--color-ui-grey)] data-loading:[--theme-color:var(--color-ui-yellow)] data-readonly:[--theme-color:var(--color-ui-grey)] data-ready:[--theme-color:var(--color-ui-blue)] data-success:[--theme-color:var(--color-ui-green)]',
+					customTheme?.themeColor,
+				),
+			}}
+			theme='custom'
+			type={type as 'button' | 'reset' | 'submit'}
 		>
 			{buttonText}
 		</Button>

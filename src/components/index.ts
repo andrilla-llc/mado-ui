@@ -1,5 +1,21 @@
 import Button, { ButtonProps } from './button'
+import Details, { DetailsBody, DetailsBodyProps, DetailsProps, DetailsSummary, DetailsSummaryProps } from './details'
+import DropDown, {
+	DropDownButton,
+	DropDownButtonProps,
+	DropDownItem,
+	DropDownItemProps,
+	DropDownItems,
+	DropDownItemsProps,
+	DropDownProps,
+	DropDownSection,
+	DropDownSectionProps,
+	DropDownSeparator,
+	DropDownSeparatorProps,
+} from './drop-down'
 import Form, {
+	Fieldset,
+	FieldsetProps,
 	FormProps,
 	FormSubmitArgs,
 	Input,
@@ -14,12 +30,33 @@ import Heading, { HeadingProps } from './heading'
 import Link, { Anchor, AnchorProps, LinkProps } from './link'
 import Modal, { ModalDialog, ModalProps, ModalTrigger } from './modal'
 import Time from './time'
+import Tooltip, { TooltipPanel, TooltipProps, TooltipTrigger } from './tooltip'
 
 export {
 	Anchor,
 	AnchorProps,
 	Button,
 	ButtonProps,
+	Details,
+	DetailsBody,
+	DetailsBodyProps,
+	DetailsProps,
+	DetailsSummary,
+	DetailsSummaryProps,
+	DropDown,
+	DropDownButton,
+	DropDownButtonProps,
+	DropDownItem,
+	DropDownItemProps,
+	DropDownItems,
+	DropDownItemsProps,
+	DropDownProps,
+	DropDownSection,
+	DropDownSectionProps,
+	DropDownSeparator,
+	DropDownSeparatorProps,
+	Fieldset,
+	FieldsetProps,
 	Form,
 	FormProps,
 	FormSubmitArgs,
@@ -39,4 +76,8 @@ export {
 	Textarea,
 	TextareaProps,
 	Time,
+	Tooltip,
+	TooltipPanel,
+	TooltipProps,
+	TooltipTrigger,
 }

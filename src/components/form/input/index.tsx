@@ -1,14 +1,4 @@
 // * Types
-import {
-	ChangeEventHandler,
-	FocusEventHandler,
-	HTMLInputTypeAttribute,
-	ReactNode,
-	RefObject,
-	useEffect,
-	useId,
-	useRef,
-} from 'react'
 import { OneOf } from '../../../types'
 
 type PasswordOptionList = {
@@ -48,6 +38,18 @@ export type InputProps = Omit<HeadlessInputProps, 'name' | 'type'> &
 		ref?: RefObject<HTMLInputElement | null>
 	}
 
+// * React
+import {
+	ChangeEventHandler,
+	FocusEventHandler,
+	HTMLInputTypeAttribute,
+	ReactNode,
+	RefObject,
+	useEffect,
+	useId,
+	useState,
+} from 'react'
+
 // * Hooks
 import { defineField, Field as FieldContext, useFormContext } from '../../../hooks'
 
@@ -63,27 +65,13 @@ import {
 	LabelProps,
 } from '@headlessui/react'
 
+// * Components
+import Button from '../../button'
+import Tooltip, { TooltipPanel, TooltipTrigger } from '../../tooltip'
+import { ExclamationmarkOctagon } from '../../../icons'
+
 // * Utilities
 import { formatPhoneNumber, isEmail, isPhoneNumber, toLowerCase, twMerge } from '../../../utils'
-
-function validateField(value: string, { required, type }: FieldContext) {
-	const noValue = !value || value === ''
-
-	if (!required && noValue) return true
-
-	if (noValue) return false
-
-	switch (type) {
-		case 'email':
-			return isEmail(value)
-		case 'number':
-			return !isNaN(Number(value))
-		case 'tel':
-			return isPhoneNumber(value)
-		default:
-			return true
-	}
-}
 
 export default function Input({
 	checked,
@@ -106,7 +94,8 @@ export default function Input({
 	value,
 	...props
 }: InputProps) {
-	const [formContext, setFormContext] = useFormContext()
+	const [formContext, setFormContext] = useFormContext(),
+		[errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
 	if (placeholder === '*') placeholder = name + (required && !label ? '*' : '')
 	if (label === '*') label = name
@@ -161,15 +150,42 @@ export default function Input({
 	const fieldContext: FieldContext =
 		formContext?.find(({ id: fieldID }) => fieldID === initialFieldContext.id) || initialFieldContext
 
-	const debounceTimerRef = useRef<NodeJS.Timeout>(undefined)
+	const validateField = (validValue: string) => {
+		const noValue = !validValue || validValue === ''
+
+		if (!required && noValue) return true
+
+		const errorMessageList: string[] = []
+
+		if (noValue) {
+			errorMessageList.push('This field is required.')
+			setErrorMessage(errorMessageList.join(' '))
+			return false
+		}
+
+		switch (type) {
+			case 'email':
+				if (!isEmail(validValue)) errorMessageList.push('This is not a valid email.')
+				break
+			case 'number':
+				if (isNaN(Number(validValue))) errorMessageList.push('This is not a valid number.')
+				break
+			case 'tel':
+				if (!isPhoneNumber(validValue)) errorMessageList.push('This is not a valid phone number.')
+				break
+		}
+
+		if (errorMessageList.length === 0) return true
+
+		setErrorMessage(errorMessageList.join(' '))
+		return false
+	}
 
 	const handleChange: ChangeEventHandler<HTMLInputElement> = e => {
 		if (disabled) {
 			e.preventDefault()
 			return
 		}
-
-		clearTimeout(debounceTimerRef.current)
 
 		const { currentTarget } = e,
 			{ value: newValue } = currentTarget
@@ -185,31 +201,12 @@ export default function Input({
 
 			const updatedField = { ...field, value: newValue }
 
+			const invalidField = validateField(newValue) === false
+
+			if (invalidField !== field.invalid) updatedField.invalid = invalidField
+
 			return [...otherFields, updatedField]
 		})
-
-		debounceTimerRef.current = setTimeout(() => {
-			const field = formContext?.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-			if (!field) return
-
-			const invalid = validateField(newValue, field) === false
-
-			if (invalid !== field.invalid)
-				setFormContext?.(prevContext => {
-					if (!prevContext) return []
-
-					const field = prevContext.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-					if (!field) throw new Error(`Field with id "${initialFieldContext.id}" not found in form context.`)
-
-					const otherFields = prevContext.filter(({ id: fieldID }) => fieldID !== initialFieldContext.id)
-
-					const updatedField = { ...field, invalid }
-
-					return [...otherFields, updatedField]
-				})
-		}, 500)
 
 		onChange?.(e)
 	}
@@ -222,6 +219,8 @@ export default function Input({
 
 		const { currentTarget } = e,
 			{ value: newValue } = currentTarget
+
+		if (required) validateField(newValue)
 
 		switch (type) {
 			case 'email':
@@ -297,30 +296,47 @@ export default function Input({
 				</Label>
 			)}
 
-			<HeadlessInput
-				{...props}
-				className={bag =>
-					twMerge(
-						// Base styles
-						'rounded-xl border-1 border-neutral-500/50 bg-neutral-100 py-1 pl-2 text-neutral-950 outline-offset-1 outline-ui-sky-blue/95 transition-[background-color] duration-300 ease-exponential dark:bg-neutral-700 dark:text-neutral-50',
-						// Pseudo styles
-						'focus-visible:bg-neutral-50 focus-visible:outline-3 active:bg-neutral-200 dark:focus-visible:bg-neutral-600 dark:active:bg-neutral-800 pointer-fine:hover:bg-neutral-50 pointer-fine:active:bg-neutral-200 dark:pointer-fine:hover:bg-neutral-600 dark:pointer-fine:active:bg-neutral-800',
-						// user-invalid styles
-						'user-invalid:border-ui-red user-invalid:bg-[color-mix(in_oklab,var(--color-ui-red)_20%,var(--color-neutral-100))] user-invalid:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-100))] user-invalid:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-100))] dark:user-invalid:bg-[color-mix(in_oklab,var(--color-ui-red)_20%,var(--color-neutral-800))] dark:user-invalid:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-800))] dark:user-invalid:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-800))] user-invalid:pointer-fine:hover:bg-[color-mix(in_oklab,var(--color-ui-red)_10%,var(--color-neutral-100))] user-invalid:pointer-fine:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-100))] user-invalid:pointer-fine:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-100))] dark:user-invalid:pointer-fine:hover:bg-[color-mix(in_oklab,var(--color-ui-red)_10%,var(--color-neutral-800))] dark:user-invalid:pointer-fine:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-800))] dark:user-invalid:pointer-fine:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-800))]',
-						// Custom styles
-						typeof className === 'function' ? className(bag) : className,
-					)
-				}
-				id={fieldContext?.id}
-				invalid={invalid}
-				onBlur={handleBlur}
-				onChange={handleChange}
-				placeholder={placeholder}
-				ref={ref}
-				required={required}
-				type={type}
-				value={fieldContext?.value}
-			/>
+			<div>
+				<HeadlessInput
+					{...props}
+					className={bag =>
+						twMerge(
+							// Base styles
+							'w-full rounded-xl border-1 border-neutral-500/50 bg-neutral-100 py-1 pl-2 text-neutral-950 outline-offset-1 outline-ui-sky-blue/95 transition-[background-color] duration-300 ease-exponential dark:bg-neutral-700 dark:text-neutral-50',
+							// Pseudo styles
+							'focus-visible:bg-neutral-50 focus-visible:outline-3 active:bg-neutral-200 dark:focus-visible:bg-neutral-600 dark:active:bg-neutral-800 pointer-fine:hover:bg-neutral-50 pointer-fine:active:bg-neutral-200 dark:pointer-fine:hover:bg-neutral-600 dark:pointer-fine:active:bg-neutral-800',
+							// user-invalid styles
+							'user-invalid:border-ui-red user-invalid:bg-[color-mix(in_oklab,var(--color-ui-red)_20%,var(--color-neutral-100))] user-invalid:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-100))] user-invalid:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-100))] dark:user-invalid:bg-[color-mix(in_oklab,var(--color-ui-red)_20%,var(--color-neutral-800))] dark:user-invalid:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-800))] dark:user-invalid:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-800))] user-invalid:pointer-fine:hover:bg-[color-mix(in_oklab,var(--color-ui-red)_10%,var(--color-neutral-100))] user-invalid:pointer-fine:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-100))] user-invalid:pointer-fine:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-100))] dark:user-invalid:pointer-fine:hover:bg-[color-mix(in_oklab,var(--color-ui-red)_10%,var(--color-neutral-800))] dark:user-invalid:pointer-fine:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-800))] dark:user-invalid:pointer-fine:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-800))]',
+							// Custom styles
+							typeof className === 'function' ? className(bag) : className,
+						)
+					}
+					invalid={invalid}
+					onBlur={handleBlur}
+					onChange={handleChange}
+					placeholder={placeholder}
+					ref={ref}
+					required={required}
+					type={type}
+					value={fieldContext?.value}
+				/>
+
+				{fieldContext.invalid && errorMessage && (
+					<Tooltip anchor='top-end' arrow portal>
+						<TooltipTrigger
+							as={Button}
+							className='absolute top-1.25 right-1.25 z-10 size-6 min-w-0'
+							padding='none'
+							rounded='md'
+							theme='red'
+						>
+							<ExclamationmarkOctagon className='absolute top-1/2 left-1/2 size-full -translate-x-1/2 -translate-y-1/2 scale-70' />
+						</TooltipTrigger>
+
+						<TooltipPanel>{errorMessage}</TooltipPanel>
+					</Tooltip>
+				)}
+			</div>
 
 			{description && (
 				<Description

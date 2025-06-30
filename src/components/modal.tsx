@@ -3,7 +3,6 @@ import { AnyElementProps } from '../types'
 
 export type ModalProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 	children: ReactNode | (({ openModal, closeModal }: { openModal: () => void; closeModal: () => void }) => ReactNode)
-	closeButtonRef?: RefObject<HTMLButtonElement | null>
 	dragToClose?: boolean
 	onClose?: () => void
 	onOpen?: () => void
@@ -18,7 +17,6 @@ import {
 	MouseEventHandler,
 	ReactElement,
 	ReactNode,
-	RefObject,
 	TouchEventHandler,
 	useEffect,
 	useRef,
@@ -79,13 +77,13 @@ export default function Modal({ children, className, onClose, onOpen, place = 'b
 		[readyToClose, setReadyToClose] = useState(false)
 
 	const openModal = () => {
-		console.log('open')
+		if (isOpen) return
 		setIsOpen(true)
 		onOpen?.()
 	}
 
 	const closeModal = () => {
-		console.log('close')
+		if (!isOpen) return
 		setIsOpen(false)
 		onClose?.()
 	}
@@ -185,7 +183,7 @@ export default function Modal({ children, className, onClose, onOpen, place = 'b
 				createPortal(
 					<div
 						ref={dragMoveBoxRef}
-						className='z-99 pointer-coarse:hidden fixed inset-0 h-dvh w-screen bg-transparent active:cursor-grabbing'
+						className='fixed inset-0 z-99 h-dvh w-screen bg-transparent active:cursor-grabbing pointer-coarse:hidden'
 						onMouseMove={handleMouseMove}
 						onMouseUp={disableMouseDragClose}
 					></div>,
@@ -207,7 +205,7 @@ export default function Modal({ children, className, onClose, onOpen, place = 'b
 				<DialogBackdrop
 					transition
 					className={[
-						'duration-750 ease-exponential data-closed:opacity-0 fixed inset-0 cursor-pointer transition-[opacity_background-color_backdrop-filter_-webkit-backdrop-filter] delay-100',
+						'fixed inset-0 cursor-pointer transition-[opacity_background-color_backdrop-filter_-webkit-backdrop-filter] delay-100 duration-750 ease-exponential data-closed:opacity-0',
 						readyToClose
 							? 'bg-neutral-50/5 backdrop-blur-[1px] dark:bg-neutral-950/5'
 							: 'bg-neutral-50/25 backdrop-blur-sm dark:bg-neutral-950/25',
@@ -217,14 +215,14 @@ export default function Modal({ children, className, onClose, onOpen, place = 'b
 						theme='blue'
 						padding='none'
 						rounded='full'
-						className='group/button pointer-fine:hover:w-20 fixed right-4 top-4 h-7 w-7 overflow-x-hidden transition-[scale_width_filter]'
+						className='group/button fixed top-4 right-4 h-7 w-7 overflow-x-hidden transition-[scale_width_filter] pointer-fine:hover:w-20'
 					>
-						<div className='pointer-fine:group-hover/button:-translate-x-0.5 ease-exponential absolute right-1 top-1 flex items-center gap-1 pt-px transition-transform duration-300'>
-							<span className='block text-xs font-medium uppercase leading-none text-neutral-50'>
+						<div className='absolute top-1 right-1 flex items-center gap-1 pt-px transition-transform duration-300 ease-exponential pointer-fine:group-hover/button:-translate-x-0.5'>
+							<span className='block text-xs leading-none font-medium text-neutral-50 uppercase'>
 								Close<span className='sr-only'> Modal</span>
 							</span>
 
-							<Xmark className='-top-px block size-5 rotate-90 scale-75 fill-white stroke-white stroke-1 transition-transform duration-300 ease-in-out group-hover/button:rotate-0' />
+							<Xmark className='-top-px block size-5 scale-75 rotate-90 fill-white stroke-white stroke-1 transition-transform duration-300 ease-in-out group-hover/button:rotate-0' />
 						</div>
 					</Button>
 				</DialogBackdrop>
@@ -233,10 +231,10 @@ export default function Modal({ children, className, onClose, onOpen, place = 'b
 					ref={dialogPanelRef}
 					transition
 					className={twMerge(
-						'duration-750 ease-exponential data-closed:opacity-0 data-closed:scale-50 fixed left-1/2 -translate-x-1/2 overflow-y-scroll bg-neutral-50 p-4 shadow-[0_-15px_50px_-12px] shadow-neutral-950/25 transition-[transform_translate_opacity] sm:w-[calc(100vw-2rem)] sm:max-w-fit sm:p-6 sm:shadow-2xl lg:p-8 dark:bg-neutral-900',
+						'fixed left-1/2 -translate-x-1/2 overflow-y-scroll bg-neutral-50 p-4 shadow-[0_-15px_50px_-12px] shadow-neutral-950/25 transition-[transform_translate_opacity] duration-750 ease-exponential data-closed:scale-50 data-closed:opacity-0 sm:w-[calc(100vw-2rem)] sm:max-w-fit sm:p-6 sm:shadow-2xl lg:p-8 dark:bg-neutral-900',
 						place === 'center'
-							? 'data-enter:translate-y-[calc(-50%+12rem)] data-leave:translate-y-[calc(-50%-8rem)] top-1/2 -translate-y-1/2 rounded-2xl'
-							: 'rounded-t-4xl pointer-fine:top-1/2 pointer-fine:bottom-auto pointer-fine:-translate-y-1/2 pointer-fine:rounded-2xl data-enter:translate-y-full sm:data-enter:translate-y-[calc(-50%+12rem)] data-leave:translate-y-full sm:data-leave:translate-y-[calc(-50%-8rem)] sm:data-open:-translate-y-1/2 bottom-0 h-fit max-h-[calc(100dvh-4rem)] translate-y-0 sm:bottom-auto sm:top-1/2 sm:rounded-b-2xl sm:rounded-t-2xl',
+							? 'top-1/2 -translate-y-1/2 rounded-2xl data-enter:translate-y-[calc(-50%+12rem)] data-leave:translate-y-[calc(-50%-8rem)]'
+							: 'bottom-0 h-fit max-h-[calc(100dvh-4rem)] translate-y-0 rounded-t-4xl data-enter:translate-y-full data-leave:translate-y-full sm:top-1/2 sm:bottom-auto sm:rounded-t-2xl sm:rounded-b-2xl sm:data-enter:translate-y-[calc(-50%+12rem)] sm:data-leave:translate-y-[calc(-50%-8rem)] sm:data-open:-translate-y-1/2 pointer-fine:top-1/2 pointer-fine:bottom-auto pointer-fine:-translate-y-1/2 pointer-fine:rounded-2xl',
 						className,
 					)}
 					// onTouchStart={dragToClose ? handleTouchStart : undefined}
@@ -247,10 +245,10 @@ export default function Modal({ children, className, onClose, onOpen, place = 'b
 						onTouchStart={enableTouchClose}
 						onMouseDown={enableMouseClose}
 						className={[
-							'after:ease-exponential absolute inset-x-0 top-0 z-10 flex h-6 cursor-grab items-center justify-center after:h-1 after:w-8 after:rounded-full after:transition-[transform_background-color] after:duration-500 active:cursor-grabbing',
+							'absolute inset-x-0 top-0 z-10 flex h-6 cursor-grab items-center justify-center after:h-1 after:w-8 after:rounded-full after:transition-[transform_background-color] after:duration-500 after:ease-exponential active:cursor-grabbing',
 							readyToClose
 								? 'after:scale-x-200 after:scale-y-200 after:bg-ui-blue'
-								: 'after:bg-ui-grey/50 active:after:bg-ui-grey pointer-fine:hover:after:scale-x-125 pointer-fine:hover:after:bg-neutral-500/75 pointer-fine:active:after:scale-x-150 pointer-fine:active:after:bg-ui-grey active:after:scale-x-150 active:after:scale-y-125',
+								: 'after:bg-ui-grey/50 active:after:scale-x-150 active:after:scale-y-125 active:after:bg-ui-grey pointer-fine:hover:after:scale-x-125 pointer-fine:hover:after:bg-neutral-500/75 pointer-fine:active:after:scale-x-150 pointer-fine:active:after:bg-ui-grey',
 						].join(' ')}
 					>
 						<span className='sr-only'>Drag down to close</span>

@@ -1,5 +1,15 @@
 import {
 	Button,
+	Details,
+	DetailsBody,
+	DetailsSummary,
+	DropDown,
+	DropDownButton,
+	DropDownItem,
+	DropDownItems,
+	DropDownSection,
+	DropDownSeparator,
+	Fieldset,
 	Form,
 	FormSubmitArgs,
 	Heading,
@@ -10,15 +20,20 @@ import {
 	ModalTrigger,
 	SubmitButton,
 	Textarea,
+	Tooltip,
+	TooltipPanel,
+	TooltipTrigger,
 } from 'mado-ui/components'
 
-export default function App() {
-	const handleSubmit = ({ event, formContext }: FormSubmitArgs) => {
-		const { currentTarget } = event
+function delay(ms: number) {
+	return new Promise(resolve => setTimeout(resolve, ms))
+}
 
+export default function App() {
+	const handleSubmit = async ({ formContext }: FormSubmitArgs) => {
 		console.log(formContext)
 
-		currentTarget.reset()
+		await delay(5000)
 
 		return { status: 'success' } as const
 	}
@@ -111,7 +126,7 @@ export default function App() {
 			<section className='from-ui-red via-ui-orange to-ui-yellow bg-linear-30 px-6 py-12 sm:px-8 sm:py-16 md:px-10 md:py-20 lg:px-12 lg:py-24 xl:px-14 xl:py-28 2xl:px-16 2xl:py-32 dark:from-red-950 dark:via-orange-800 dark:to-yellow-600'>
 				<Heading className='pb-8 text-white text-shadow-lg'>Components</Heading>
 
-				<ul className='grid gap-8 lg:grid-cols-2'>
+				<ul className='grid grid-rows-[masonry] gap-8 lg:grid-cols-2'>
 					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
 						<Heading as='h3' className='pb-4'>
 							Heading
@@ -175,7 +190,12 @@ export default function App() {
 							<Link href='#' type='multiline-fill' theme='orange'>
 								Multi-line Fill
 							</Link>{' '}
-							<Link href='#' type='multiline-fill-center' theme='pink'>
+							<Link
+								href='#'
+								type='multiline-fill-center'
+								theme='custom'
+								customTheme={{ themeColor: '[--theme-color:var(--color-cyan-500)]' }}
+							>
 								Multi-line Fill Center
 							</Link>{' '}
 							<Link href='#' type='multiline-fill-lift' theme='purple'>
@@ -226,12 +246,25 @@ export default function App() {
 								X-Small Yellow
 							</Button>
 
-							<Button padding='lg' rounded='none' theme='red-gradient' className='text-lg'>
+							<Button gradient padding='lg' rounded='none' theme='red' className='text-lg'>
 								Large Sharp Red Gradient
 							</Button>
 
-							<Button padding='xl' rounded='full' theme='violet-gradient' className='text-xl'>
+							<Button gradient padding='xl' rounded='full' theme='violet' className='text-xl'>
 								X-Large Violet Gradient Pill
+							</Button>
+
+							<Button customTheme={{ themeColor: '[--theme-color:var(--color-cyan-500)]' }} theme='custom'>
+								Custom Cyan Theme Color
+							</Button>
+
+							<Button
+								className='text-shadow-[0_-1px_0] text-shadow-cyan-950'
+								customTheme={{ themeColor: '[--theme-color:var(--color-cyan-500)]' }}
+								gradient
+								theme='custom'
+							>
+								Custom Cyan Theme Color with Gradient
 							</Button>
 						</div>
 					</li>
@@ -292,18 +325,96 @@ export default function App() {
 
 					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
 						<Heading as='h3' className='pb-4'>
-							Form
+							Tooltip
+						</Heading>
+
+						<p className='pb-8'>
+							A straight-forward component for displaying additional information when the user hovers over the trigger
+							on desktop or taps on the trigger on touch devices. It always stays on screen, relative to the trigger,
+							and you can set an anchor point to control its position.
+						</p>
+
+						<div className='flex flex-wrap items-center gap-4'>
+							<Tooltip arrow>
+								<TooltipTrigger as={Button} gradient theme='blue'>
+									<span className='hidden pointer-fine:inline'>Hover </span>
+									<span className='hidden pointer-coarse:inline'>Tap </span>to Open the Tooltip
+								</TooltipTrigger>
+
+								<TooltipPanel>
+									Example of a super long tooltip, with so much detail, it's guaranteed to go off the screen on smaller
+									displays, like a mobile device, and maybe a tablet, if that tablet is on the smaller end, or at least
+									in a vertical orientation.
+								</TooltipPanel>
+							</Tooltip>
+
+							<Tooltip anchor='right' arrow>
+								<TooltipTrigger as={Button} gradient theme='green'>
+									This One Goes Out Right
+								</TooltipTrigger>
+
+								<TooltipPanel>
+									Since this tooltip is so long and it's anchored to the right of the trigger, it will overflow to the
+									right. On a screen large enough, it will appear under the element to the right of this tooltip's
+									container. One option to fix this would be adding a z-index to the container, making it appear above
+									its siblings. However, often the best choice is using a React Portal. Thankfully, this feature is
+									built into the tooltip component. See the next example to see it in use.
+								</TooltipPanel>
+							</Tooltip>
+
+							<Tooltip anchor='right-end' arrow portal>
+								<TooltipTrigger as={Button} gradient theme='red'>
+									This One Uses a Portal
+								</TooltipTrigger>
+
+								<TooltipPanel>
+									Just like the previous example, this tooltip is anchored to the right of the trigger element. However,
+									since it's rendered in a portal, it will always appear above all other elements on the page. There are
+									some drawbacks to using portals, so it's not the default. The main issue is with how the position
+									translates from the top left of the body to its correct position.
+								</TooltipPanel>
+							</Tooltip>
+
+							<Tooltip anchor='bottom-end' arrow>
+								<TooltipTrigger as={Button} gradient theme='brown'>
+									Bottom End
+								</TooltipTrigger>
+
+								<TooltipPanel>
+									I should be below the trigger, and aligned with the right side. Look at how it beautifully stays on
+									screen anyway.
+								</TooltipPanel>
+							</Tooltip>
+
+							<Tooltip anchor='left-end' arrow>
+								<TooltipTrigger as={Button} gradient theme='sky-blue'>
+									Left End
+								</TooltipTrigger>
+
+								<TooltipPanel>
+									I can only be on the left side if there's room for me. I'll be on the right side if there's not enough
+									room.
+								</TooltipPanel>
+							</Tooltip>
+						</div>
+					</li>
+
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Form <small>and Inputs</small>
 						</Heading>
 
 						<p className='pb-8'>
 							A fully controlled form that manages its own state and provides a simple API for validation and
-							submission.
+							submission. Use the various input components for an easy, robust implementation.
 						</p>
 
 						<Form onSubmit={handleSubmit}>
-							<Input name='First Name' label='*' description='Enter your first name' placeholder='*' />
+							<Fieldset legend='Full Name'>
+								<Input name='First Name' label='*' description='Enter your first name' placeholder='*' />
 
-							<Input name='Last Name' label='*' description='Enter your last name' placeholder='*' />
+								<Input name='Last Name' label='*' description='Enter your last name' placeholder='*' />
+							</Fieldset>
 
 							<Input
 								name='Email Address'
@@ -322,8 +433,82 @@ export default function App() {
 								placeholder='Message…'
 							/>
 
-							<SubmitButton theme='blue'>Submit</SubmitButton>
+							<SubmitButton>Submit</SubmitButton>
 						</Form>
+					</li>
+
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Details
+						</Heading>
+
+						<p className='pb-8'>
+							Components for <code>{`<details>`}</code> and <code>{`<summary>`}</code> with smooth animations.
+						</p>
+
+						<Details>
+							<DetailsSummary>The Frames for the Glass</DetailsSummary>
+
+							<DetailsBody>
+								<p>
+									<span className='block'>The frames for the glass</span>
+
+									<span className='block'>A sturdy structure</span>
+
+									<span className='block'>For light now to pass</span>
+
+									<span className='block'>Without any fracture</span>
+								</p>
+
+								<p>
+									<span className='block'>The glass for the frames</span>
+
+									<span className='block'>Sits there so pretty</span>
+
+									<span className='block'>No light does it claim</span>
+
+									<span className='block'>(Not sure)</span>
+								</p>
+							</DetailsBody>
+						</Details>
+					</li>
+
+					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Drop Down Menu
+						</Heading>
+
+						<p className='pb-8'>Drop down components.</p>
+
+						<DropDown>
+							<DropDownButton as={Button}>Drop the Down</DropDownButton>
+
+							<DropDownItems>
+								<DropDownSection label='Section 1' separatorBelow>
+									<DropDownItem>Item 1</DropDownItem>
+
+									<DropDownItem>Item 2</DropDownItem>
+
+									<DropDownItem>Item 3</DropDownItem>
+								</DropDownSection>
+
+								<DropDownSection label='Section 2' separatorBelow>
+									<DropDownItem>Item 1</DropDownItem>
+
+									<DropDownItem>Item 2</DropDownItem>
+
+									<DropDownItem>Item 3</DropDownItem>
+								</DropDownSection>
+
+								<DropDownSection label='Section 3'>
+									<DropDownItem>Item 1</DropDownItem>
+
+									<DropDownItem>Item 2</DropDownItem>
+
+									<DropDownItem>Item 3</DropDownItem>
+								</DropDownSection>
+							</DropDownItems>
+						</DropDown>
 					</li>
 				</ul>
 			</section>

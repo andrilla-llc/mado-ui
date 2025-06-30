@@ -1,6 +1,4 @@
 // * Types
-import { ChangeEventHandler, ReactNode, RefObject, useEffect, useId, useRef } from 'react'
-
 export type TextareaProps = Omit<HeadlessTextareaProps, 'name'> & {
 	description?: ReactNode
 	descriptionProps?: Omit<DescriptionProps, 'children'> & {
@@ -17,6 +15,9 @@ export type TextareaProps = Omit<HeadlessTextareaProps, 'name'> & {
 	ref?: RefObject<HTMLTextAreaElement | null>
 }
 
+// * React
+import { ChangeEventHandler, ReactNode, RefObject, useEffect, useId, useState } from 'react'
+
 // * Hooks
 import { defineField, Field as FieldContext, useFormContext } from '../../hooks'
 
@@ -32,18 +33,13 @@ import {
 	LabelProps,
 } from '@headlessui/react'
 
+// * Components
+import Tooltip, { TooltipPanel, TooltipTrigger } from '../tooltip'
+import Button from '../button'
+import { ExclamationmarkOctagon } from '../../icons'
+
 // * Utilities
 import { toLowerCase, twMerge } from '../../utils'
-
-function validateField(value: string, { required }: FieldContext) {
-	const noValue = !value || value === ''
-
-	if (!required && noValue) return true
-
-	if (noValue) return false
-
-	return true
-}
 
 export default function Textarea({
 	className,
@@ -64,7 +60,8 @@ export default function Textarea({
 	value,
 	...props
 }: TextareaProps) {
-	const [formContext, setFormContext] = useFormContext()
+	const [formContext, setFormContext] = useFormContext(),
+		[errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
 	if (placeholder === '*') placeholder = name + (required && !label ? '*' : '')
 	if (label === '*') label = name
@@ -100,15 +97,30 @@ export default function Textarea({
 	const fieldContext: FieldContext =
 		formContext?.find(({ id: fieldID }) => fieldID === initialFieldContext.id) || initialFieldContext
 
-	const debounceTimerRef = useRef<NodeJS.Timeout>(undefined)
+	const validateField = (validValue: string) => {
+		const noValue = !validValue || validValue === ''
+
+		if (!required && noValue) return true
+
+		const errorMessageList: string[] = []
+
+		if (noValue) {
+			errorMessageList.push('This field is required.')
+			setErrorMessage(errorMessageList.join(' '))
+			return false
+		}
+
+		if (errorMessageList.length === 0) return true
+
+		setErrorMessage(errorMessageList.join(' '))
+		return false
+	}
 
 	const handleChange: ChangeEventHandler<HTMLTextAreaElement> = e => {
 		if (disabled) {
 			e.preventDefault()
 			return
 		}
-
-		clearTimeout(debounceTimerRef.current)
 
 		const { currentTarget } = e,
 			{ value: newValue } = currentTarget
@@ -124,31 +136,12 @@ export default function Textarea({
 
 			const updatedField = { ...field, value: newValue }
 
+			const invalidField = validateField(newValue) === false
+
+			if (invalidField !== field.invalid) updatedField.invalid = invalidField
+
 			return [...otherFields, updatedField]
 		})
-
-		debounceTimerRef.current = setTimeout(() => {
-			const field = formContext?.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-			if (!field) return
-
-			const invalid = validateField(newValue, field) === false
-
-			if (invalid !== field.invalid)
-				setFormContext?.(prevContext => {
-					if (!prevContext) return []
-
-					const field = prevContext.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-					if (!field) throw new Error(`Field with id "${initialFieldContext.id}" not found in form context.`)
-
-					const otherFields = prevContext.filter(({ id: fieldID }) => fieldID !== initialFieldContext.id)
-
-					const updatedField = { ...field, invalid }
-
-					return [...otherFields, updatedField]
-				})
-		}, 500)
 
 		onChange?.(e)
 	}
@@ -191,28 +184,46 @@ export default function Textarea({
 				</Label>
 			)}
 
-			<HeadlessTextarea
-				{...props}
-				className={bag =>
-					twMerge(
-						// Base styles
-						'field-sizing-content resize-none rounded-xl border-1 border-neutral-500/50 bg-neutral-100 py-1 pl-2 text-neutral-950 outline-offset-1 outline-ui-sky-blue/95 transition-[background-color] duration-300 ease-exponential dark:bg-neutral-700 dark:text-neutral-50',
-						// Pseudo styles
-						'focus-visible:bg-neutral-50 focus-visible:outline-3 active:bg-neutral-200 dark:focus-visible:bg-neutral-600 dark:active:bg-neutral-800 pointer-fine:hover:bg-neutral-50 pointer-fine:active:bg-neutral-200 dark:pointer-fine:hover:bg-neutral-600 dark:pointer-fine:active:bg-neutral-800',
-						// user-invalid styles
-						'user-invalid:border-ui-red user-invalid:bg-[color-mix(in_oklab,var(--color-ui-red)_20%,var(--color-neutral-100))] user-invalid:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-100))] user-invalid:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-100))] dark:user-invalid:bg-[color-mix(in_oklab,var(--color-ui-red)_20%,var(--color-neutral-800))] dark:user-invalid:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-800))] dark:user-invalid:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-800))] user-invalid:pointer-fine:hover:bg-[color-mix(in_oklab,var(--color-ui-red)_10%,var(--color-neutral-100))] user-invalid:pointer-fine:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-100))] user-invalid:pointer-fine:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-100))] dark:user-invalid:pointer-fine:hover:bg-[color-mix(in_oklab,var(--color-ui-red)_10%,var(--color-neutral-800))] dark:user-invalid:pointer-fine:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-800))] dark:user-invalid:pointer-fine:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-800))]',
-						// Custom styles
-						typeof className === 'function' ? className(bag) : className,
-					)
-				}
-				id={fieldContext?.id}
-				invalid={invalid}
-				onChange={handleChange}
-				placeholder={placeholder}
-				ref={ref}
-				required={required}
-				value={fieldContext?.value}
-			/>
+			<div className='z-10 -mb-1.5'>
+				<HeadlessTextarea
+					{...props}
+					className={bag =>
+						twMerge(
+							// Base styles
+							'field-sizing-content w-full resize-none rounded-xl border-1 border-neutral-500/50 bg-neutral-100 py-1 pl-2 text-neutral-950 outline-offset-1 outline-ui-sky-blue/95 transition-[background-color] duration-300 ease-exponential dark:bg-neutral-700 dark:text-neutral-50',
+							// Pseudo styles
+							'focus-visible:bg-neutral-50 focus-visible:outline-3 active:bg-neutral-200 dark:focus-visible:bg-neutral-600 dark:active:bg-neutral-800 pointer-fine:hover:bg-neutral-50 pointer-fine:active:bg-neutral-200 dark:pointer-fine:hover:bg-neutral-600 dark:pointer-fine:active:bg-neutral-800',
+							// user-invalid styles
+							'user-invalid:border-ui-red user-invalid:bg-[color-mix(in_oklab,var(--color-ui-red)_20%,var(--color-neutral-100))] user-invalid:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-100))] user-invalid:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-100))] dark:user-invalid:bg-[color-mix(in_oklab,var(--color-ui-red)_20%,var(--color-neutral-800))] dark:user-invalid:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-800))] dark:user-invalid:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-800))] user-invalid:pointer-fine:hover:bg-[color-mix(in_oklab,var(--color-ui-red)_10%,var(--color-neutral-100))] user-invalid:pointer-fine:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-100))] user-invalid:pointer-fine:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-100))] dark:user-invalid:pointer-fine:hover:bg-[color-mix(in_oklab,var(--color-ui-red)_10%,var(--color-neutral-800))] dark:user-invalid:pointer-fine:focus-visible:bg-[color-mix(in_oklab,var(--color-ui-red)_1%,var(--color-neutral-800))] dark:user-invalid:pointer-fine:active:bg-[color-mix(in_oklab,var(--color-ui-red)_25%,var(--color-neutral-800))]',
+							// Custom styles
+							typeof className === 'function' ? className(bag) : className,
+						)
+					}
+					id={fieldContext?.id}
+					invalid={invalid}
+					onChange={handleChange}
+					placeholder={placeholder}
+					ref={ref}
+					required={required}
+					value={fieldContext?.value}
+				/>
+
+				{fieldContext.invalid && errorMessage && (
+					<Tooltip anchor='top-end' arrow portal>
+						<TooltipTrigger
+							as={Button}
+							className='absolute top-1.25 right-1.25 z-10 size-6 min-w-0'
+							padding='none'
+							rounded='md'
+							theme='red'
+						>
+							<ExclamationmarkOctagon className='absolute top-1/2 left-1/2 size-full -translate-x-1/2 -translate-y-1/2 scale-70' />
+						</TooltipTrigger>
+
+						<TooltipPanel>{errorMessage}</TooltipPanel>
+					</Tooltip>
+				)}
+			</div>
 
 			{description && (
 				<Description

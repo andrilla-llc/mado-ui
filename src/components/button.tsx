@@ -1,49 +1,57 @@
 // * Types
-import { ButtonHTMLAttributes, RefObject } from 'react'
-import { OneOf } from '../types'
+import { ElementType } from 'react'
+import { AnyElementProps, OneOf } from '../types'
 
-type HtmlButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { ref?: RefObject<HTMLButtonElement | null> }
+type ColorTheme = OneOf<
+	[
+		{
+			/** Color theme. */
+			theme?:
+				| 'blue'
+				| 'brown'
+				| 'green'
+				| 'grey'
+				| 'sky-blue'
+				| 'magenta'
+				| 'orange'
+				| 'pink'
+				| 'purple'
+				| 'red'
+				| 'violet'
+				| 'yellow'
+		},
+		{
+			/** Color theme. */
+			theme?: 'custom'
+			customTheme: OneOf<
+				[
+					{
+						/** Example: `'[--theme-color:var(--color-blue-500)]'` */
+						themeColor: string
+					},
+					{
+						/** This doesn't use any preset color theme classes. */
+						classes: string
+					},
+				]
+			>
+		},
+	]
+>
 
-type LinkOrButtonProps<T extends HTMLButtonElement | HTMLAnchorElement | unknown> = [T] extends [HTMLButtonElement]
-	? HtmlButtonProps
-	: [T] extends [HTMLAnchorElement]
-		? AnchorProps
-		: OneOf<[AnchorProps, HtmlButtonProps]>
+type LinkOrOther<TTag extends ElementType> =
+	| (AnyElementProps<TTag> & { href?: never })
+	| (AnchorProps & { href: string })
 
-export type ButtonProps<T extends HTMLButtonElement | HTMLAnchorElement | unknown> = LinkOrButtonProps<T> & {
-	/** The size of the element based on padding. */
-	padding?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-	/** The size of the border-1 radius. */
-	rounded?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
-	/** Color theme. */
-	theme?:
-		| 'blue'
-		| 'blue-gradient'
-		| 'brown'
-		| 'brown-gradient'
-		| 'green'
-		| 'green-gradient'
-		| 'grey'
-		| 'grey-gradient'
-		| 'sky-blue'
-		| 'sky-blue-gradient'
-		| 'magenta'
-		| 'magenta-gradient'
-		| 'neutral'
-		| 'neutral-gradient'
-		| 'orange'
-		| 'orange-gradient'
-		| 'pink'
-		| 'pink-gradient'
-		| 'purple'
-		| 'purple-gradient'
-		| 'red'
-		| 'red-gradient'
-		| 'violet'
-		| 'violet-gradient'
-		| 'yellow'
-		| 'yellow-gradient'
-}
+export type ButtonProps<TTag extends ElementType> = LinkOrOther<TTag> &
+	ColorTheme & {
+		/** Customizes the theme color to a sensible gradient. */
+		gradient?: boolean
+		/** The size of the element based on padding. */
+		padding?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+		/** The size of the border-1 radius. */
+		rounded?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
+	}
 
 // * Components
 import { Anchor, AnchorProps } from './link'
@@ -56,14 +64,15 @@ import { twMerge, twSort } from '../utils'
  * # Button
  * - A pre-styled button with utility props for easy customization depending on use case.
  */
-export default function Button<T extends HTMLButtonElement | HTMLAnchorElement | unknown = unknown>({
+export default function Button<TTag extends ElementType = typeof HeadlessButton>({
 	className,
+	customTheme,
+	gradient = false,
 	padding = 'md',
 	rounded = 'lg',
 	theme = 'blue',
-	ref,
 	...props
-}: ButtonProps<T>) {
+}: ButtonProps<TTag>) {
 	const getPaddingClasses = () => {
 		switch (padding) {
 			case 'xs':
@@ -96,216 +105,72 @@ export default function Button<T extends HTMLButtonElement | HTMLAnchorElement |
 		}
 	}
 
-	const getThemeClasses = () => {
-		const classList = []
-
+	const getThemeColorVariable = () => {
 		switch (theme) {
 			case 'blue':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-blue/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-blue before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'blue-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-blue text-white shadow-lg shadow-ui-blue/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-blue)]')
 			case 'brown':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-brown/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-brown before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'brown-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-brown text-white shadow-lg shadow-ui-brown/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-brown)]')
 			case 'green':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-green/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-green before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'green-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-green text-white shadow-lg shadow-ui-green/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-green)]')
 			case 'grey':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-grey/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-grey before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'grey-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-grey text-white shadow-lg shadow-ui-grey/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'sky-blue':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-sky-blue/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-sky-blue before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'sky-blue-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-sky-blue text-white shadow-lg shadow-ui-sky-blue/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-grey)]')
 			case 'magenta':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-magenta/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-magenta before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'magenta-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-magenta text-white shadow-lg shadow-ui-magenta/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'neutral':
-				classList.push(
-					twSort(
-						'pointer-fine:active:before:brightness-90text-white dark bg-zinc-200 text-black before:absolute before:inset-0 before:rounded-[inherit] before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 dark:bg-zinc-800 pointer-fine:hover:before:brightness-110',
-					),
-				)
-				break
-			case 'neutral-gradient':
-				classList.push(
-					twSort(
-						'dark bg-linear-to-t from-zinc-300 via-zinc-200 to-zinc-100 text-black before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-700 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-magenta)]')
 			case 'orange':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-orange/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-orange before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'orange-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-orange text-white shadow-lg shadow-ui-orange/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-orange)]')
 			case 'pink':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-pink/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-pink before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'pink-gradient':
-				classList.push(
-					twSort(
-						'before:to-white/75/75 bg-ui-pink text-white shadow-lg shadow-ui-pink/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-pink)]')
 			case 'purple':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-purple/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-purple before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'purple-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-purple text-white shadow-lg shadow-ui-purple/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-purple)]')
 			case 'red':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-red/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-red before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'red-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-red text-white shadow-lg shadow-ui-red/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-red)]')
+			case 'sky-blue':
+				return twSort('text-white [--theme-color:var(--color-ui-sky-blue)]')
 			case 'violet':
-				classList.push(
-					twSort(
-						'text-white shadow-lg shadow-ui-violet/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-violet before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'violet-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-violet text-white shadow-lg shadow-ui-violet/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black/75 before:via-transparent before:to-white/75 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
+				return twSort('text-white [--theme-color:var(--color-ui-violet)]')
 			case 'yellow':
-				classList.push(
-					twSort(
-						'text-black shadow-lg shadow-ui-yellow/25 transition-transform before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-ui-yellow before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-			case 'yellow-gradient':
-				classList.push(
-					twSort(
-						'bg-ui-yellow text-black shadow-lg shadow-ui-yellow/25 transition-transform before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-t before:from-black before:via-black/50 before:to-white/50 before:opacity-75 before:mix-blend-soft-light before:transition-[filter] before:duration-300 before:ease-exponential active:before:brightness-90 pointer-fine:hover:before:brightness-110 pointer-fine:active:before:brightness-90',
-					),
-				)
-				break
-		}
+				return twSort('text-black [--theme-color:var(--color-ui-yellow)]')
+			case 'custom':
+				if (customTheme && customTheme.themeColor && !customTheme.themeColor.includes('[--theme-color:'))
+					throw new Error(
+						'`customTheme.themeColor` must modify the `--theme-color` variable. Otherwise, please use `customTheme.classes`.',
+					)
 
-		return classList.join(' ')
+				return customTheme!.themeColor || customTheme!.classes
+		}
 	}
 
 	const paddingClasses = getPaddingClasses(),
 		roundedClasses = getRoundedClasses(),
-		themeClasses = getThemeClasses()
+		themeColorVariable = getThemeColorVariable()
+
+	const themeClasses =
+		customTheme && customTheme.classes
+			? customTheme.classes
+			: [
+					gradient
+						? twSort(
+								'bg-linear-to-t from-[color-mix(in_oklab,var(--theme-color),var(--color-black)_20%)] via-(--theme-color) to-[color-mix(in_oklab,var(--theme-color),var(--color-white)_20%)] bg-[size:100%_200%] transition-[scale,background-position-y] [background-position-y:50%] active:[background-position-y:100%] data-focus:[background-position-y:0%] pointer-fine:hover:[background-position-y:0%] pointer-fine:hover:active:[background-position-y:100%]',
+							)
+						: twSort(
+								'bg-(--theme-color) transition-[scale,background-color] active:bg-[color-mix(in_oklab,var(--theme-color),var(--color-black)_10%)] data-focus:bg-[color-mix(in_oklab,var(--theme-color),var(--color-white)_10%)] pointer-fine:hover:bg-[color-mix(in_oklab,var(--theme-color),var(--color-white)_10%)] pointer-fine:hover:active:bg-[color-mix(in_oklab,var(--theme-color),var(--color-black)_10%)]',
+							),
+					'shadow-(--theme-color)/25',
+				].join(' ')
 
 	const buttonClasses = twMerge([
-		'block w-fit min-w-fit text-center font-semibold duration-300 ease-exponential focus-visible:scale-101 active:scale-95 pointer-fine:hover:scale-101 pointer-fine:active:scale-99',
+		'block w-fit min-w-fit text-center font-semibold shadow-lg duration-300 ease-exponential active:scale-99 data-focus:scale-101 pointer-fine:hover:scale-101 pointer-fine:hover:active:scale-99',
 		paddingClasses,
 		roundedClasses,
+		themeColorVariable,
 		themeClasses,
 		className,
 	])
 
-	return 'href' in props && typeof props.href === 'string' ? (
-		<Anchor ref={ref as RefObject<HTMLAnchorElement | null>} {...(props as AnchorProps)} className={buttonClasses} />
-	) : (
-		<HeadlessButton
-			ref={ref as RefObject<HTMLButtonElement | null>}
-			{...(props as HtmlButtonProps)}
-			className={buttonClasses}
-		/>
-	)
+	const ButtonElement = 'as' in props ? (props.as as ElementType) : props.href ? Anchor : HeadlessButton<TTag>
+
+	const { as, ...restProps } = 'as' in props ? props : { ...props, as: undefined }
+
+	return <ButtonElement {...restProps} className={buttonClasses} />
 }

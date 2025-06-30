@@ -1,3 +1,3 @@
-import { AcceptsRef, AnyElementProps, AsElement, MergeTypes, OneOf, OnlyFirst } from './utils'
+import { AnyElementProps, AsElement, MergeTypes, OneOf, OnlyFirst } from './utils'
 
-export { AcceptsRef, AnyElementProps, AsElement, MergeTypes, OneOf, OnlyFirst }
+export { AnyElementProps, AsElement, MergeTypes, OneOf, OnlyFirst }

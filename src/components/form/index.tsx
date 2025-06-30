@@ -77,13 +77,13 @@ function FormComponent<T extends ElementType = 'form'>({
 
 			if (response && ('error' in response || response.status === 'error')) {
 				setFormStatus?.('error')
-				onError?.({ event: e, error: response.error || 'An error occurred when submitting the form.' })
+				onError?.({ event: e, error: response.error || 'An error occurred when submitting the form.', formContext })
 				return
 			}
 
 			if ((response && response.status === 'success') || !response) {
 				setFormStatus?.('success')
-				onSuccess?.({ event: e })
+				onSuccess?.({ event: e, formContext })
 			}
 		})
 
@@ -112,8 +112,9 @@ export default function Form<T extends ElementType = 'form'>({
 	)
 }
 
+import Fieldset, { FieldsetProps } from './fieldset'
 import Input, { InputProps } from './input'
 import SubmitButton, { SubmitButtonProps } from './submit-button'
 import Textarea, { TextareaProps } from './textarea'
 
-export { Input, InputProps, Textarea, TextareaProps, SubmitButton, SubmitButtonProps }
+export { Fieldset, FieldsetProps, Input, InputProps, Textarea, TextareaProps, SubmitButton, SubmitButtonProps }

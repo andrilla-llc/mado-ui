@@ -1,7 +1,7 @@
 {
 	"name": "mado-ui",
 	"author": "Andrilla LLC",
-	"version": "0.2.3",
+	"version": "0.3.0",
 	"description": "A collection of opinionated React components built on Tailwind CSS",
 	"repository": "https://github.com/andrilla-llc/mado-ui",
 	"license": "GNU GPL",
@@ -58,16 +58,16 @@
 	},
 	"devDependencies": {
 		"@rollup/plugin-node-resolve": "^16.0.1",
-		"@rollup/plugin-typescript": "^12.1.2",
-		"@tailwindcss/postcss": "^4.1.8",
-		"@types/node": "^22.15.30",
-		"@types/react": "^19.1.6",
+		"@rollup/plugin-typescript": "^12.1.4",
+		"@tailwindcss/postcss": "^4.1.11",
+		"@types/node": "^24.0.7",
+		"@types/react": "^19.1.8",
 		"@types/react-dom": "^19.1.6",
-		"postcss": "^8.5.4",
+		"postcss": "^8.5.6",
 		"postcss-cli": "^11.0.1",
-		"prettier": "^3.5.3",
-		"prettier-plugin-tailwindcss": "^0.6.12",
-		"rollup": "^4.42.0",
+		"prettier": "^3.6.2",
+		"prettier-plugin-tailwindcss": "^0.6.13",
+		"rollup": "^4.44.1",
 		"rollup-plugin-peer-deps-external": "^2.2.4",
 		"rollup-plugin-postcss": "^4.0.2",
 		"typescript": "^5.8.3"
@@ -89,5 +89,8 @@
 		"plugins": [
 			"prettier-plugin-tailwindcss"
 		]
+	},
+	"dependencies": {
+		"@floating-ui/react-dom": "^2.1.4"
 	}
 }

@@ -16,7 +16,7 @@ export type HeadingProps = HTMLAttributes<HTMLHeadingElement> & {
 import { Children, HTMLAttributes, ReactNode, RefObject, isValidElement } from 'react'
 
 // * Utilities
-import { twMerge, twSort } from '../utils'
+import { twMerge } from '../utils'
 
 function getTextFromChildren(children: ReactNode) {
 	let text = ''
@@ -45,17 +45,17 @@ export default function Heading({ as = 'h2', children, customize, className, id,
 	const getBaseClasses = () => {
 		switch (as) {
 			case 'h1':
-				return customize?.h1 || twSort('pb-2.5 text-6xl font-black last:pb-0')
+				return twMerge('pb-2.5 text-6xl font-black last:pb-0', customize?.h1)
 			case 'h3':
-				return customize?.h3 || twSort('pb-2 text-4xl font-extralight last:pb-0')
+				return twMerge('pb-2 text-4xl font-extralight last:pb-0', customize?.h3)
 			case 'h4':
-				return customize?.h4 || twSort('pb-2 text-3xl font-extrabold last:pb-0')
+				return twMerge('pb-2 text-3xl font-extrabold last:pb-0', customize?.h4)
 			case 'h5':
-				return customize?.h5 || twSort('pb-1.5 text-2xl font-semibold last:pb-0')
+				return twMerge('pb-1.5 text-2xl font-semibold last:pb-0', customize?.h5)
 			case 'h6':
-				return customize?.h6 || twSort('pb-1 text-xl font-bold last:pb-0')
+				return twMerge('pb-1 text-xl font-bold last:pb-0', customize?.h6)
 			default:
-				return customize?.h2 || twSort('pb-2.5 text-5xl font-medium last:pb-0')
+				return twMerge('pb-2.5 text-5xl font-medium last:pb-0', customize?.h2)
 		}
 	}
 
