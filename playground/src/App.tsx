@@ -484,13 +484,15 @@ export default function App() {
 							<DropDownButton as={Button}>Drop the Down</DropDownButton>
 
 							<DropDownItems>
-								<DropDownSection label='Section 1' separatorBelow>
+								<DropDownSection label='Section 1'>
 									<DropDownItem>Item 1</DropDownItem>
 
 									<DropDownItem>Item 2</DropDownItem>
 
 									<DropDownItem>Item 3</DropDownItem>
 								</DropDownSection>
+
+								<DropDownSeparator />
 
 								<DropDownSection label='Section 2' separatorBelow>
 									<DropDownItem>Item 1</DropDownItem>

@@ -570,9 +570,6 @@
   .gap-8 {
     gap: calc(var(--spacing) * 8);
   }
-  .overflow-hidden {
-    overflow: hidden;
-  }
   .overflow-x-hidden {
     overflow-x: hidden;
   }
@@ -659,12 +656,6 @@
   }
   .bg-transparent {
     background-color: transparent;
-  }
-  .bg-ui-grey\/50 {
-    background-color: color-mix(in srgb, oklab(0.5085006967074223 -0.0075697141654152145 -0.01376379542356776) 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-ui-grey) 50%, transparent);
-    }
   }
   .bg-white\/50 {
     background-color: color-mix(in srgb, #fff 50%, transparent);
@@ -989,9 +980,6 @@
   }
   .pt-px {
     padding-top: 1px;
-  }
-  .pr-6 {
-    padding-right: calc(var(--spacing) * 6);
   }
   .pb-1 {
     padding-bottom: calc(var(--spacing) * 1);
@@ -1382,9 +1370,6 @@
     -webkit-user-select: none;
     user-select: none;
   }
-  .\[--anchor-gap\:1rem\] {
-    --anchor-gap: 1rem;
-  }
   .\[--theme-color\:var\(--color-blue-500\)\] {
     --theme-color: var(--color-blue-500);
   }
@@ -1471,11 +1456,6 @@
       @media (hover: hover) {
         rotate: 0deg;
       }
-    }
-  }
-  .group-data-open\:animate-flip {
-    &:is(:where(.group)[data-open] *) {
-      animation: var(--animate-flip);
     }
   }
   .group-data-open\/button\:animate-flip {
@@ -2167,11 +2147,6 @@
   .data-loading\:\[--theme-color\:var\(--color-ui-yellow\)\] {
     &[data-loading] {
       --theme-color: var(--color-ui-yellow);
-    }
-  }
-  .data-open\:animate-flip {
-    &[data-open] {
-      animation: var(--animate-flip);
     }
   }
   .data-portal\:fixed {
