@@ -9,13 +9,14 @@ export type DetailsProps<TTag extends ElementType = 'div'> = Omit<DisclosureProp
 	className?: string
 }
 
-export type DetailsSummaryProps<TTag extends ElementType = typeof Button> = Omit<
-	DisclosureButtonProps<TTag> & { href?: never },
-	'className' | 'href' | 'role'
+export type DetailsSummaryProps<TTag extends ElementType = typeof Button<typeof HeadlessButton>> = Omit<
+	DisclosureButtonProps<TTag>,
+	'as' | 'className' | 'role'
 > & { arrow?: boolean | ReactNode; className?: string }
 
 // * Headless UI
 import {
+	Button as HeadlessButton,
 	Disclosure,
 	DisclosureProps,
 	DisclosureButton,
@@ -31,18 +32,16 @@ import { ChevronDown } from '../icons'
 // * Utilities
 import { twMerge } from '../utils'
 
-export function DetailsSummary<TTag extends ElementType = typeof Button<'button'>>({
+export function DetailsSummary<TTag extends ElementType = typeof Button>({
 	arrow = true,
-	as,
 	children,
 	className,
 	...props
 }: DetailsSummaryProps<TTag>) {
 	return (
-		// @ts-expect-error Button has some extra props
-		<DisclosureButton
+		<DisclosureButton<typeof Button<typeof HeadlessButton>>
 			{...props}
-			as={as || Button<'button'>}
+			as={Button<typeof HeadlessButton>}
 			className={twMerge('w-full', className, Boolean(arrow) && 'grid grid-cols-[1fr_1rem] gap-2')}
 			role='summary'
 		>

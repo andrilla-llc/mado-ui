@@ -6,11 +6,20 @@ import { ElementType, MouseEventHandler, RefObject } from 'react'
 import { twMerge, twSort } from '../utils'
 import { twJoin } from 'tailwind-merge'
 
-export type AnchorProps<TTag extends ElementType<any, 'a'> = 'a'> = AnyElementProps<TTag> & {
+export type AnchorProps<TTag extends ElementType = 'a'> = AnyElementProps<TTag> & {
 	disabled?: boolean
 }
 
-export function Anchor({ as, className, disabled, href, onClick, target, rel, ...props }: AnchorProps) {
+export function Anchor<TTag extends ElementType = 'a'>({
+	as,
+	className,
+	disabled,
+	href,
+	onClick,
+	target,
+	rel,
+	...props
+}: AnchorProps<TTag>) {
 	const isExternal = `${href}`.startsWith('http'),
 		hasHash = `${href}`.includes('#')
 
@@ -87,7 +96,7 @@ type ColorTheme = OneOf<
 	]
 >
 
-export type LinkProps<TTag extends ElementType<any, 'a'> = 'a'> = AnyElementProps<
+export type LinkProps<TTag extends ElementType = typeof Anchor> = AnyElementProps<
 	TTag,
 	OneOf<
 		[
@@ -160,7 +169,7 @@ const lineLiftClasses = twJoin([
 
 const fillClasses = twJoin(
 	baseClasses,
-	'whitespace-nowrap transition-[transform_color] after:top-1/2 after:h-[calc(100%+0.05rem)] after:w-[calc(100%+0.25rem)] after:-translate-y-1/2 after:rounded after:ease-exponential active:text-zinc-50 pointer-fine:hover:text-zinc-50',
+	'whitespace-nowrap transition-[transform,color] after:top-1/2 after:h-[calc(100%+0.05rem)] after:w-[calc(100%+0.25rem)] after:-translate-y-1/2 after:rounded after:ease-exponential active:text-zinc-50 pointer-fine:hover:text-zinc-50',
 )
 
 // Define theme-specific fill color transition classes
@@ -223,7 +232,7 @@ const getFillColorTransitionClasses = (theme: LinkProps['theme'] = 'blue', custo
 const getFillCenterClasses = (theme: LinkProps['theme'] = 'blue', customTheme?: ThemeColorOrClasses) => {
 	let fillCenterColorClasses = twJoin(
 		fillClasses,
-		'after:scale-x-50 after:scale-y-[0.25] after:bg-(--theme-color)/0 after:transition-[transform_background-color] active:after:scale-x-100 active:after:scale-y-100 active:after:bg-(--theme-color) pointer-fine:hover:after:scale-x-100 pointer-fine:hover:after:scale-y-100 pointer-fine:hover:after:bg-(--theme-color)',
+		'after:scale-x-50 after:scale-y-[0.25] after:bg-(--theme-color)/0 after:transition-[transform,background-color] active:after:scale-x-100 active:after:scale-y-100 active:after:bg-(--theme-color) pointer-fine:hover:after:scale-x-100 pointer-fine:hover:after:scale-y-100 pointer-fine:hover:after:bg-(--theme-color)',
 	)
 
 	switch (theme) {
@@ -309,7 +318,7 @@ const multilineFillBaseClasses = twJoin(
 const getMultilineFillColorClasses = (theme: LinkProps['theme'] = 'blue', customTheme?: ThemeColorOrClasses) => {
 	let multilineFillColorClasses = twJoin(
 		multilineFillBaseClasses,
-		'from-(--theme-color) to-(--theme-color) transition-[background-size_color]',
+		'from-(--theme-color) to-(--theme-color) transition-[background-size,color]',
 	)
 
 	switch (theme) {
@@ -367,7 +376,7 @@ const getMultilineFillColorClasses = (theme: LinkProps['theme'] = 'blue', custom
 const getMultilineFillClasses = (theme: LinkProps['theme'] = 'blue', customTheme?: ThemeColorOrClasses) => {
 	let multilineFillColorClasses = twJoin(
 		multilineFillBaseClasses,
-		'from-(--theme-color)/0 to-(--theme-color)/0 bg-[size:50%_0px] bg-[position:50%_50%] transition-[background-size_background-image_color] focus-visible:from-(--theme-color) focus-visible:to-(--theme-color) focus-visible:bg-[size:100%_100%] active:from-(--theme-color) active:to-(--theme-color) active:bg-[size:100%_100%] contrast-more:from-(--theme-color)/0 pointer-fine:hover:from-(--theme-color) pointer-fine:hover:to-(--theme-color) pointer-fine:hover:bg-[size:100%_100%]',
+		'from-(--theme-color)/0 to-(--theme-color)/0 bg-[size:50%_0px] bg-[position:50%_50%] transition-[background-size,background-image,color] focus-visible:from-(--theme-color) focus-visible:to-(--theme-color) focus-visible:bg-[size:100%_100%] active:from-(--theme-color) active:to-(--theme-color) active:bg-[size:100%_100%] contrast-more:from-(--theme-color)/0 pointer-fine:hover:from-(--theme-color) pointer-fine:hover:to-(--theme-color) pointer-fine:hover:bg-[size:100%_100%]',
 	)
 
 	switch (theme) {
@@ -473,7 +482,14 @@ const getMultilineFillCenterClasses = (theme: LinkProps['theme'] = 'blue', custo
  * @example
  *   <Link href='/about' type='fill-ltr' theme='red' title='About Us'>Learn more about our company</Link>
  */
-export default function Link({ as, className, customTheme, theme = 'blue', type, ...props }: LinkProps) {
+export default function Link<TTag extends ElementType = typeof Anchor>({
+	as,
+	className,
+	customTheme,
+	theme = 'blue',
+	type,
+	...props
+}: LinkProps<TTag>) {
 	const getLinkClasses = () => {
 		switch (type) {
 			case 'static':
@@ -526,4 +542,149 @@ export default function Link({ as, className, customTheme, theme = 'blue', type,
 	const LinkElement = as || Anchor
 
 	return <LinkElement {...props} className={twMerge(linkClasses, className)} />
+}
+
+export type ExtendedLinkConfig = {
+	/** Modifies the default element that is rendered. The `as` prop on the component still overrides the default set here. */
+	as?: ElementType
+	/** Adds default classes. */
+	className?: string
+	/** Sets the default theme. */
+	defaultTheme?: ColorTheme['theme'] | string
+	/** Sets the default for the `type` prop. */
+	type?: LinkProps['type']
+	/** Add more theme options. */
+	theme?: {
+		[themeName: string]: {
+			/** Custom theme configuration - supports both multiline and regular link theme formats */
+			customTheme: Omit<ThemeColorOrClasses, 'themeColor'> & {
+				themeColor?: {
+					/** Example: `'after:[--theme-color:var(--color-blue-500)]'` */
+					fill: string
+					/** Example: `'[--theme-color:var(--color-blue-500)]'` */
+					multilineFill: string
+				}
+			}
+			/** Additional CSS classes to apply */
+			className?: string
+		}
+	}
+}
+
+export type ExtendedThemeNames<T extends ExtendedLinkConfig> =
+	T['theme'] extends Record<string, unknown> ? keyof T['theme'] : never
+
+export type ExtendedLinkProps<
+	TExtendedConfig extends ExtendedLinkConfig,
+	TTag extends ElementType = typeof Anchor,
+> = Omit<LinkProps<TTag>, 'theme' | 'customTheme'> & {
+	theme?: LinkProps<TTag>['theme'] | ExtendedThemeNames<TExtendedConfig>
+	customTheme?: LinkProps<TTag>['customTheme']
+}
+
+/**
+ * # createLink
+ * Creates an extended Link component with additional theme options.
+ *
+ * @param config - Configuration object defining new themes and defaults
+ * @returns A new Link component with extended theme support
+ *
+ * @example
+ * ```tsx
+ * const MyLink = createLink({
+ *   as: NextLink,
+ *   className: 'font-bold',
+ *   type: 'fill',
+ *   theme: {
+ *     primary: {
+ *       customTheme: {
+ *         fill: 'after:[--theme-color:var(--color-primary-500)]',
+ *         multilineFill: '[--theme-color:var(--color-primary-500)]'
+ *       },
+ *       className: 'text-white'
+ *     }
+ *   }
+ * })
+ * ```
+ */
+export function createLink<TExtendedConfig extends ExtendedLinkConfig>(config: TExtendedConfig) {
+	return function ExtendedLink<TTag extends ElementType = typeof Anchor>({
+		theme,
+		className,
+		customTheme,
+		type,
+		as,
+		...props
+	}: ExtendedLinkProps<TExtendedConfig, TTag>) {
+		const finalType: string | undefined = type !== undefined ? type : config.type,
+			finalTheme = theme !== undefined ? theme : config.defaultTheme
+
+		const configClassName = config.className
+
+		const shouldOverrideElement = !Boolean(as) && Boolean(config.as)
+
+		const linkProps: Omit<
+			ExtendedLinkProps<TExtendedConfig, TTag>,
+			'as' | 'theme' | 'customTheme' | 'type' | 'className'
+		> & { as?: ElementType } = {
+			...props,
+			className: undefined,
+			customTheme: undefined,
+			type: finalType,
+		}
+
+		if (shouldOverrideElement) {
+			linkProps.as = config.as
+		} else if (as) {
+			linkProps.as = as
+		}
+
+		if (finalTheme && typeof finalTheme === 'string' && config.theme && finalTheme in config.theme) {
+			const extendedTheme = config.theme[finalTheme]
+
+			if (customTheme)
+				return (
+					<Link
+						{...linkProps}
+						theme='custom'
+						customTheme={customTheme}
+						className={twMerge(configClassName, extendedTheme.className, className)}
+					/>
+				)
+
+			let resolvedCustomTheme: ThemeColorOrClasses
+
+			if (extendedTheme.customTheme.themeColor) {
+				const isMultilineType = finalType ? finalType.includes('multiline') : false
+
+				resolvedCustomTheme = {
+					themeColor: isMultilineType
+						? extendedTheme.customTheme.themeColor.multilineFill
+						: extendedTheme.customTheme.themeColor.fill,
+				}
+			} else {
+				resolvedCustomTheme = {
+					classes: extendedTheme.customTheme.classes!,
+				}
+			}
+
+			return (
+				<Link
+					{...linkProps}
+					theme='custom'
+					customTheme={resolvedCustomTheme}
+					className={twMerge(configClassName, extendedTheme.className, className)}
+				/>
+			)
+		}
+
+		return (
+			<Link
+				{...linkProps}
+				theme={finalTheme as LinkProps<TTag>['theme']}
+				className={twMerge(configClassName, className)}
+				customTheme={customTheme}
+			/>
+		)
+	}
 }

@@ -12,12 +12,15 @@ export type DropDownButtonProps<TTag extends ElementType = 'button'> = Omit<
 
 export type DropDownItemProps = MenuItemProps
 
-export type DropDownItemsProps = Omit<MenuItemsProps, 'className' | 'transition'> & { className?: string }
+export type DropDownItemsProps = Omit<MenuItemsProps, 'className' | 'transition'> & {
+	className?: string
+	containerClassName?: string
+}
 
 export type DropDownProps = MenuProps
 
 export type DropDownSectionProps = MenuSectionProps & {
-	label: string
+	label?: string
 	labelProps?: Omit<MenuHeadingProps, 'children'> & {
 		/** @deprecated Use `label` instead. */
 		children?: never
@@ -44,7 +47,6 @@ import {
 	MenuSectionProps,
 	MenuSeparator,
 	MenuSeparatorProps,
-	Transition,
 } from '@headlessui/react'
 
 // * Components
@@ -79,7 +81,14 @@ export function DropDownItem({ as, ...props }: DropDownItemProps) {
 	return <MenuItem as={as || 'div'} {...props} />
 }
 
-export function DropDownItems({ anchor, children, className, style, ...props }: DropDownItemsProps) {
+export function DropDownItems({
+	anchor,
+	children,
+	className,
+	containerClassName,
+	style,
+	...props
+}: DropDownItemsProps) {
 	const getAnchorProps = () => {
 		let initialAnchor: typeof anchor = { gap: '1rem', padding: '1rem', to: 'bottom start' }
 
@@ -98,13 +107,21 @@ export function DropDownItems({ anchor, children, className, style, ...props }: 
 		<MenuItems
 			{...props}
 			anchor={anchorProps}
-			className='grid grid-rows-1fr rounded-xl shadow-xl transition-rows duration-500 ease-exponential data-closed:grid-rows-0fr'
+			className={twMerge(
+				'grid grid-rows-1fr rounded-xl shadow-xl transition-rows duration-500 ease-exponential data-closed:grid-rows-0fr',
+				containerClassName,
+			)}
 			transition
 			style={{ ...style, minWidth: 'var(--button-width)' }}
 		>
 			{bag => (
-				<div className='overflow-y-hidden'>
-					<div className={twMerge('bg-neutral-50/20 px-6 py-5 backdrop-blur-md backdrop-brightness-150', className)}>
+				<div className='overflow-y-scroll'>
+					<div
+						className={twMerge(
+							'rounded-xl bg-neutral-50/20 px-6 py-5 backdrop-blur-md backdrop-brightness-150',
+							className,
+						)}
+					>
 						{typeof children === 'function' ? children(bag) : children}
 					</div>
 				</div>
@@ -129,17 +146,19 @@ export function DropDownSection({
 				<>
 					{separatorAbove && <DropDownSeparator />}
 
-					<MenuHeading
-						{...restLabelProps}
-						className={headingBag =>
-							twMerge(
-								'text-[size:larger] font-bold',
-								typeof labelClassName === 'function' ? labelClassName(headingBag) : labelClassName,
-							)
-						}
-					>
-						{label}
-					</MenuHeading>
+					{label && (
+						<MenuHeading
+							{...restLabelProps}
+							className={headingBag =>
+								twMerge(
+									'text-[size:larger] font-bold',
+									typeof labelClassName === 'function' ? labelClassName(headingBag) : labelClassName,
+								)
+							}
+						>
+							{label}
+						</MenuHeading>
+					)}
 
 					{typeof children === 'function' ? children(sectionBag) : children}
 

@@ -1,10 +1,8 @@
 // * Types
 import { ReactNode } from 'react'
 
-export type SubmitButtonProps = Omit<
-	ButtonProps<'button'> & { href?: never },
-	'as' | 'customTheme' | 'href' | 'theme'
-> & {
+export type SubmitButtonProps = Omit<ButtonProps, 'as' | 'customTheme' | 'href' | 'theme'> & {
+	/** This doesn't do much by default, because we use built-in colors for different form states. You'll have to modify a good bit to make this do anything. */
 	customTheme?: {
 		/** Example: `'[--theme-color:var(--color-blue-500)]'` */
 		themeColor: string
@@ -56,7 +54,7 @@ export default function SubmitButton({
 	incomplete,
 	loading,
 	success,
-	type = 'submit',
+	type,
 	...props
 }: SubmitButtonProps) {
 	const [formStatus] = useFormStatus()
@@ -127,10 +125,9 @@ export default function SubmitButton({
 	const dataFormState = getDataFormState()
 
 	return (
-		<Button<'button'>
+		<Button
 			{...props}
 			{...dataFormState}
-			as='button'
 			className={twMerge([formStatusButtonClasses, 'w-full text-white data-loading:text-black', className])}
 			customTheme={{
 				themeColor: twMerge(
@@ -139,7 +136,7 @@ export default function SubmitButton({
 				),
 			}}
 			theme='custom'
-			type={type as 'button' | 'reset' | 'submit'}
+			type={type || 'submit'}
 		>
 			{buttonText}
 		</Button>

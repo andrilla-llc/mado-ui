@@ -1,4 +1,4 @@
-import Button, { ButtonProps } from './button'
+import Button, { ButtonProps, createButton, ExtendedButtonConfig, ExtendedButtonProps } from './button'
 import Details, { DetailsBody, DetailsBodyProps, DetailsProps, DetailsSummary, DetailsSummaryProps } from './details'
 import DropDown, {
 	DropDownButton,
@@ -27,7 +27,7 @@ import Form, {
 } from './form'
 import Ghost from './ghost'
 import Heading, { HeadingProps } from './heading'
-import Link, { Anchor, AnchorProps, LinkProps } from './link'
+import Link, { Anchor, AnchorProps, createLink, ExtendedLinkConfig, ExtendedLinkProps, LinkProps } from './link'
 import Modal, { ModalDialog, ModalProps, ModalTrigger } from './modal'
 import Time from './time'
 import Tooltip, { TooltipPanel, TooltipProps, TooltipTrigger } from './tooltip'
@@ -37,6 +37,8 @@ export {
 	AnchorProps,
 	Button,
 	ButtonProps,
+	createButton,
+	createLink,
 	Details,
 	DetailsBody,
 	DetailsBodyProps,
@@ -55,6 +57,10 @@ export {
 	DropDownSectionProps,
 	DropDownSeparator,
 	DropDownSeparatorProps,
+	ExtendedButtonConfig,
+	ExtendedButtonProps,
+	ExtendedLinkConfig,
+	ExtendedLinkProps,
 	Fieldset,
 	FieldsetProps,
 	Form,

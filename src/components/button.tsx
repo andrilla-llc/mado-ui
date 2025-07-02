@@ -1,4 +1,5 @@
 // * Types
+import { Url, UrlObject } from 'node:url'
 import { ElementType } from 'react'
 import { AnyElementProps, OneOf } from '../types'
 
@@ -39,22 +40,67 @@ type ColorTheme = OneOf<
 	]
 >
 
-type LinkOrOther<TTag extends ElementType> =
-	| (AnyElementProps<TTag> & { href?: never })
-	| (AnchorProps & { href: string })
+type LinkOrOther<TTag extends ElementType = typeof HeadlessButton> = OneOf<
+	[AnyElementProps<TTag> & { href?: never }, AnyElementProps<typeof Anchor> & { href?: string | Url | UrlObject }]
+>
 
-export type ButtonProps<TTag extends ElementType> = LinkOrOther<TTag> &
+export type ButtonPadding = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+
+export type ButtonBorderRadius = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
+
+export type ButtonProps<TTag extends ElementType = typeof HeadlessButton> = LinkOrOther<TTag> &
 	ColorTheme & {
 		/** Customizes the theme color to a sensible gradient. */
 		gradient?: boolean
 		/** The size of the element based on padding. */
-		padding?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-		/** The size of the border-1 radius. */
-		rounded?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
+		padding?: ButtonPadding
+		/** The size of the border radius. */
+		rounded?: ButtonBorderRadius
 	}
 
+export type ExtendedButtonConfig = {
+	/** Modifies the default(s) for what element is rendered. The `as` prop on the component still overrides the default(s) set here. */
+	as?:
+		| ElementType
+		| {
+				/** Modifies the base link element when `href` is present. */
+				link?: ElementType
+				/** Modifies the base button element. */
+				default?: ElementType
+		  }
+	/** Adds default classes. */
+	className?: string
+	defaultTheme?: ColorTheme['theme'] | string
+	/** Sets the default for the `gradient` prop. */
+	gradient?: boolean
+	/** Sets the default for the `padding` prop. */
+	padding?: ButtonPadding
+	/** Sets the default for the `rounded` prop. */
+	rounded?: ButtonBorderRadius
+	/** Add more theme options. */
+	theme?: {
+		[themeName: string]: {
+			/** Custom theme configuration */
+			customTheme: NonNullable<ColorTheme['customTheme']>
+			/** Additional CSS classes to apply */
+			className?: string
+		}
+	}
+}
+
+export type ExtendedThemeNames<T extends ExtendedButtonConfig> =
+	T['theme'] extends Record<string, unknown> ? keyof T['theme'] : never
+
+export type ExtendedButtonProps<
+	TExtendedConfig extends ExtendedButtonConfig,
+	TTag extends ElementType = typeof HeadlessButton,
+> = Omit<ButtonProps<TTag>, 'theme' | 'customTheme'> & {
+	theme?: ButtonProps<TTag>['theme'] | ExtendedThemeNames<TExtendedConfig>
+	customTheme?: ButtonProps<TTag>['customTheme']
+}
+
 // * Components
-import { Anchor, AnchorProps } from './link'
+import { Anchor } from './link'
 import { Button as HeadlessButton } from '@headlessui/react'
 
 // * Utilities
@@ -168,9 +214,111 @@ export default function Button<TTag extends ElementType = typeof HeadlessButton>
 		className,
 	])
 
-	const ButtonElement = 'as' in props ? (props.as as ElementType) : props.href ? Anchor : HeadlessButton<TTag>
+	if ('href' in props && !props.as && props.href)
+		return <HeadlessButton<typeof Anchor> {...props} as={Anchor} className={buttonClasses} />
 
-	const { as, ...restProps } = 'as' in props ? props : { ...props, as: undefined }
+	return <HeadlessButton<'button'> {...props} className={buttonClasses} />
+}
 
-	return <ButtonElement {...restProps} className={buttonClasses} />
+/**
+ * # createButton
+ * Creates an extended Button component with additional theme options.
+ *
+ * @param extendedThemes - Configuration object defining new themes
+ * @returns A new Button component with extended theme support
+ *
+ * @example
+ * ```tsx
+ * const MyButton = createButton({
+ *   as: {
+ *     default: 'div',
+ *     link: NextLink
+ *   },
+ *   className: 'min-w-64',
+ *   padding: 'sm',
+ *   rounded: 'full',
+ *   theme: {
+ *     primary: {
+ *       customTheme: { themeColor: '[--theme-color:var(--color-primary-500)]' },
+ *       className: 'text-white'
+ *     }
+ *   }
+ * })
+ * ```
+ */
+export function createButton<TExtendedConfig extends ExtendedButtonConfig>(config: TExtendedConfig) {
+	return function ExtendedButton<TTag extends ElementType = typeof HeadlessButton>({
+		theme,
+		className,
+		customTheme,
+		gradient,
+		padding,
+		rounded,
+		as,
+		...props
+	}: ExtendedButtonProps<TExtendedConfig, TTag>) {
+		const finalGradient = gradient !== undefined ? gradient : config.gradient,
+			finalPadding = padding !== undefined ? padding : config.padding,
+			finalRounded = rounded !== undefined ? rounded : config.rounded,
+			finalTheme = theme !== undefined ? theme : config.defaultTheme
+
+		const configClassName = config.className
+
+		const shouldOverrideElement = !Boolean(as) && Boolean(config.as)
+
+		const getOverrideElement = () => {
+			if (!config.as) return undefined
+
+			if (typeof config.as === 'function' || typeof config.as === 'string') return config.as
+
+			const hasHref = 'href' in props && props.href
+			if (hasHref && config.as.link) {
+				return config.as.link
+			} else if (!hasHref && config.as.default) {
+				return config.as.default
+			}
+
+			return undefined
+		}
+
+		const buttonProps: Omit<
+			ExtendedButtonProps<TExtendedConfig, TTag>,
+			'as' | 'theme' | 'customTheme' | 'gradient' | 'padding' | 'rounded' | 'className'
+		> & { as?: ElementType } = {
+			...props,
+			className: undefined,
+			customTheme: undefined,
+			gradient: finalGradient,
+			padding: finalPadding,
+			rounded: finalRounded,
+		}
+
+		if (shouldOverrideElement) {
+			const overrideElement = getOverrideElement()
+
+			if (overrideElement) buttonProps.as = overrideElement
+		} else if (as) buttonProps.as = as
+
+		if (finalTheme && typeof finalTheme === 'string' && config.theme && finalTheme in config.theme) {
+			const extendedTheme = config.theme[finalTheme]
+
+			return (
+				<Button
+					{...buttonProps}
+					theme='custom'
+					customTheme={customTheme || extendedTheme.customTheme}
+					className={twMerge(configClassName, extendedTheme.className, className)}
+				/>
+			)
+		}
+
+		return (
+			<Button
+				{...buttonProps}
+				theme={finalTheme as ButtonProps<TTag>['theme']}
+				className={twMerge(configClassName, className)}
+				customTheme={customTheme}
+			/>
+		)
+	}
 }
