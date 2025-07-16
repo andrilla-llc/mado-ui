@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function DocOnClipboard(props: SVGProps<SVGSVGElement>) {
+export default function DocOnClipboard(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 52 64' {...props}>
       <path d='M50.1,2c-1.3-1.3-3.3-2-5.9-2H20.2c-2.6,0-4.6,0.7-5.9,2c-1.3,1.3-2,3.3-2,6v7.1h7.8l18.3,18.4v17.8h5.6 c2.6,0,4.6-0.7,5.9-2s2-3.3,2-6V8C52,5.3,51.4,3.3,50.1,2z M40,7.2c0,0.4-0.1,0.7-0.4,1c-0.3,0.3-0.7,0.5-1.2,0.5H26 c-0.6,0-1-0.2-1.2-0.5c-0.3-0.3-0.4-0.7-0.4-1V6.7c0-0.4,0.1-0.7,0.4-1C25,5.3,25.4,5.2,26,5.2h12.4c0.5,0,1,0.2,1.2,0.5 c0.3,0.3,0.4,0.7,0.4,1V7.2z' />

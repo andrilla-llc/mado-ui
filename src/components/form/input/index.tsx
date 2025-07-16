@@ -1,28 +1,75 @@
 // * Types
 import { OneOf } from '../../../types'
 
-type PasswordOptionList = {
-	matchPreviousInput: boolean
-	requireLowercaseCharacter: boolean
-	requireNumber: boolean
-	requireSpecialCharacter: boolean
-	requireUppercaseCharacter: boolean
-}
+type DateMinMax =
+	| Date
+	| [number, DateTimeObject['month'], DateTimeObject['day']]
+	| Pick<DateTimeObject, 'day' | 'month' | 'year'>
 
-type TypeOfPasswordOrNot = OneOf<
+type DateTimeMinMax =
+	| Date
+	| [
+			number,
+			DateTimeObject['month'],
+			DateTimeObject['day'],
+			DateTimeObject['hour'],
+			DateTimeObject['minute'],
+			DateTimeObject['second'],
+	  ]
+	| DateTimeObject
+
+type TimeMinMax =
+	| [DateTimeObject['hour'], DateTimeObject['minute'], DateTimeObject['second']]
+	| Pick<DateTimeObject, 'hour' | 'minute' | 'second'>
+
+type WeekMinMax = [number, WeekNumber]
+
+type InputType = OneOf<
 	[
 		{
-			type?: 'password'
-			passwordOptions?: Partial<PasswordOptionList>
+			type?: 'date'
+			min?: DateMinMax
+			max?: DateMinMax
 		},
 		{
-			type?: Exclude<HTMLInputTypeAttribute, 'password'>
+			type?: 'datetime' | 'datetime-local'
+			min?: DateTimeMinMax
+			max?: DateTimeMinMax
+		},
+		{
+			type?: 'number'
+			max?: number
+			min?: number
+		},
+		{
+			type?: 'password'
+			options?: Partial<PasswordOptions>
+		},
+		{
+			type?: 'tel'
+			options?: Partial<PhoneOptions>
+		},
+		{
+			type?: 'time'
+			min?: TimeMinMax
+			max?: TimeMinMax
+		},
+		{
+			type?: 'week'
+			min?: WeekMinMax
+			max?: WeekMinMax
+		},
+		{
+			type?: Exclude<
+				HTMLInputTypeAttribute,
+				'date' | 'datetime' | 'datetime-local' | 'number' | 'password' | 'tel' | 'time' | 'week'
+			>
 		},
 	]
 >
 
-export type InputProps = Omit<HeadlessInputProps, 'name' | 'type'> &
-	TypeOfPasswordOrNot & {
+export type InputProps = Omit<HeadlessInputProps, 'max' | 'min' | 'name' | 'type'> &
+	InputType & {
 		description?: ReactNode
 		descriptionProps?: Omit<DescriptionProps, 'children'> & {
 			/** @deprecated Use the `description` prop instead. */
@@ -38,6 +85,40 @@ export type InputProps = Omit<HeadlessInputProps, 'name' | 'type'> &
 		ref?: RefObject<HTMLInputElement | null>
 	}
 
+type PasswordOptions = {
+	matchPreviousInput: boolean
+	requireLowercaseCharacter: boolean
+	requireNumber: boolean
+	requireSpecialCharacter: boolean
+	requireUppercaseCharacter: boolean
+}
+
+type PhoneOptions = {
+	countryCode: string
+	/**
+	 * @example
+	 * format: 'continuous'
+	 * returns: 5555555555
+	 *
+	 * @example
+	 * format: 'dot'
+	 * returns: 555.555.5555
+	 *
+	 * @example
+	 * format: 'hyphenated'
+	 * returns: 555-555-5555
+	 *
+	 * @example
+	 * format: 'space'
+	 * returns: 555 555 5555
+	 *
+	 * @example
+	 * format: 'standard' (default)
+	 * returns: (555) 555-5555
+	 */
+	format: 'continuous' | 'dot' | 'hyphenated' | 'none' | 'space' | 'standard'
+}
+
 // * React
 import {
 	ChangeEventHandler,
@@ -51,7 +132,7 @@ import {
 } from 'react'
 
 // * Hooks
-import { defineField, Field as FieldContext, useFormContext } from '../../../hooks'
+import { defineField, isStringField, StringField, useFieldsetContext, useFormContext } from '../../../hooks'
 
 // * Headless UI
 import {
@@ -66,14 +147,26 @@ import {
 } from '@headlessui/react'
 
 // * Components
-import Button from '../../button'
-import Tooltip, { TooltipPanel, TooltipTrigger } from '../../tooltip'
+import { Button } from '../../button'
+import { Tooltip, TooltipPanel, TooltipTrigger } from '../../tooltip'
 import { ExclamationmarkOctagon } from '../../../icons'
 
 // * Utilities
-import { formatPhoneNumber, isEmail, isPhoneNumber, toLowerCase, twMerge } from '../../../utils'
+import {
+	DateTimeObject,
+	formatPhoneNumber,
+	getMonthIndexFromName,
+	getUserReadableDate,
+	isEmail,
+	isPhoneNumber,
+	toLowerCase,
+	twMerge,
+	WeekNumber,
+} from '../../../utils'
 
-export default function Input({
+const specialCharacterRegex = new RegExp(/[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~€‚ƒ„…†‡‰‹‘’“”•–—™›¡¢£¥§©«¬®°±¶º»¿×÷]/)
+
+export function Input({
 	checked,
 	className,
 	defaultValue,
@@ -84,9 +177,12 @@ export default function Input({
 	invalid = true,
 	label,
 	labelProps,
+	max,
+	min,
 	name,
 	onBlur,
 	onChange,
+	options,
 	placeholder,
 	ref,
 	required = true,
@@ -94,16 +190,18 @@ export default function Input({
 	value,
 	...props
 }: InputProps) {
-	const [formContext, setFormContext] = useFormContext(),
+	const [formContext, formContextFunctions] = useFormContext(),
+		[fieldsetContext, fieldsetContextFunctions] = useFieldsetContext(),
 		[errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
+	if (type === 'password' && !placeholder) placeholder = '••••••••' + (required && !label ? '*' : '')
 	if (placeholder === '*') placeholder = name + (required && !label ? '*' : '')
 	if (label === '*') label = name
 
 	const uniqueID = useId(),
 		fieldContextID = toLowerCase(name, [, '_']) + '§' + uniqueID
 
-	if (Boolean(formContext?.find(field => field.id === fieldContextID)?.invalid)) invalid = true
+	const isInFieldset = fieldsetContext && !fieldsetContext.decorative
 
 	const getFieldContextType = () => {
 		switch (type) {
@@ -124,31 +222,34 @@ export default function Input({
 
 	const fieldContextType = getFieldContextType()
 
-	const initialFieldContext = defineField({
-		type: fieldContextType,
-		id: fieldContextID,
-		invalid,
-		name,
-		required,
-		value: value ? `${value}` : defaultValue ? `${defaultValue}` : '',
-	})
+	const fieldContext = (isInFieldset ? fieldsetContext.fieldList : formContext)?.find(
+		({ id: fieldID }) => fieldID === fieldContextID,
+	)
 
 	useEffect(() => {
-		if (!setFormContext) return
-
-		setFormContext(prevContext => {
-			const otherFields = (prevContext || []).filter(field => field.id !== initialFieldContext.id)
-
-			return [...otherFields, initialFieldContext]
+		const initialFieldContext = defineField({
+			type: fieldContextType,
+			id: fieldContextID,
+			invalid,
+			name,
+			required,
+			value: value ? `${value}` : defaultValue ? `${defaultValue}` : '',
 		})
 
-		return () => {
-			setFormContext(prevContext => (prevContext || []).filter(field => field.id !== initialFieldContext.id))
-		}
-	}, [setFormContext])
+		if (isInFieldset) {
+			fieldsetContextFunctions.registerField(initialFieldContext)
 
-	const fieldContext: FieldContext =
-		formContext?.find(({ id: fieldID }) => fieldID === initialFieldContext.id) || initialFieldContext
+			return () => {
+				fieldsetContextFunctions.removeField(initialFieldContext.id)
+			}
+		}
+
+		formContextFunctions.registerField(initialFieldContext)
+
+		return () => {
+			formContextFunctions.removeField(initialFieldContext.id)
+		}
+	}, [isInFieldset])
 
 	const validateField = (validValue: string) => {
 		const noValue = !validValue || validValue === ''
@@ -167,13 +268,113 @@ export default function Input({
 			case 'email':
 				if (!isEmail(validValue)) errorMessageList.push('This is not a valid email.')
 				break
+			case 'date':
+				const valueAsTime = new Date().getTime()
+
+				if (min && !(min instanceof Date) && typeof min !== 'number') {
+					if (Array.isArray(min)) {
+						const monthIndex = typeof min[1] === 'number' ? min[1] - 1 : getMonthIndexFromName(min[1])
+
+						min = new Date(min[0], monthIndex, min[2])
+					} else if ('year' in min && 'month' in min && 'day' in min) {
+						const monthIndex = typeof min.month === 'number' ? min.month - 1 : getMonthIndexFromName(min.month)
+
+						min = new Date(min.year, monthIndex, min.day)
+					}
+
+					if (valueAsTime < (min as Date).getTime())
+						errorMessageList.push(`Value cannot be lower than ${getUserReadableDate(min as Date)}.`)
+				}
+
+				if (max && !(max instanceof Date) && typeof max !== 'number') {
+					if (Array.isArray(max)) {
+						const monthIndex = typeof max[1] === 'number' ? max[1] - 1 : getMonthIndexFromName(max[1])
+
+						max = new Date(max[0], monthIndex, max[2])
+					} else if ('year' in max && 'month' in max && 'day' in max) {
+						const monthIndex = typeof max.month === 'number' ? max.month - 1 : getMonthIndexFromName(max.month)
+
+						max = new Date(max.year, monthIndex, max.day)
+					}
+
+					if (valueAsTime > (max as Date).getTime())
+						errorMessageList.push(`Value cannot be higher than ${getUserReadableDate(max as Date)}.`)
+				}
+
+				break
 			case 'number':
-				if (isNaN(Number(validValue))) errorMessageList.push('This is not a valid number.')
+				const valueAsNumber = Number(validValue)
+
+				if (isNaN(valueAsNumber)) errorMessageList.push('This is not a valid number.')
+
+				if (typeof max === 'number' && valueAsNumber > max) errorMessageList.push(`Value cannot be higher than ${max}.`)
+
+				if (typeof min === 'number' && valueAsNumber < min) errorMessageList.push(`Value cannot be lower than ${min}.`)
+				break
+			case 'password':
+				if (options) {
+					const {
+						matchPreviousInput,
+						requireLowercaseCharacter,
+						requireNumber,
+						requireSpecialCharacter,
+						requireUppercaseCharacter,
+					} = options as Partial<PasswordOptions>
+
+					if (matchPreviousInput && formContext && formContext.length >= 2) {
+						if (isInFieldset && fieldsetContext.fieldList.length > 1) {
+							const currentInputIndex = fieldsetContext.fieldList.findIndex(
+								({ id: fieldID }) => fieldID === fieldContext?.id,
+							)
+
+							if (currentInputIndex > 0) {
+								const previousInput = fieldsetContext.fieldList.find((_, index) => index === currentInputIndex - 1)
+
+								if (
+									previousInput &&
+									isStringField(previousInput) &&
+									(previousInput as StringField).value !== validValue
+								)
+									errorMessageList.push('Passwords must match.')
+							}
+						} else {
+							const currentInputIndex = formContext.findIndex(({ id: fieldID }) => fieldID === fieldContext?.id)
+
+							if (currentInputIndex > 0) {
+								const previousInput = formContext.find((_, index) => index === currentInputIndex - 1)
+
+								if (
+									previousInput &&
+									isStringField(previousInput) &&
+									(previousInput as StringField).value !== validValue
+								)
+									errorMessageList.push('Passwords must match.')
+							}
+						}
+					}
+
+					if (requireLowercaseCharacter && !/[a-z]/g.test(validValue))
+						errorMessageList.push('You must include a lowercase character.')
+
+					if (requireNumber && !/[0-9]/g.test(validValue)) errorMessageList.push('You must include a number.')
+
+					if (requireSpecialCharacter && !specialCharacterRegex.test(validValue))
+						errorMessageList.push('You must include a special character.')
+
+					if (requireUppercaseCharacter && !/[A-Z]/g.test(validValue))
+						errorMessageList.push('You must include an uppercase character.')
+				}
 				break
 			case 'tel':
 				if (!isPhoneNumber(validValue)) errorMessageList.push('This is not a valid phone number.')
 				break
 		}
+
+		if (props.maxLength && validValue.length > Number(props.maxLength))
+			errorMessageList.push(`This may not have more than ${props.maxLength} characters.`)
+
+		if (props.minLength && validValue.length < Number(props.minLength))
+			errorMessageList.push(`This must have at least ${props.minLength} characters.`)
 
 		if (errorMessageList.length === 0) return true
 
@@ -190,23 +391,14 @@ export default function Input({
 		const { currentTarget } = e,
 			{ value: newValue } = currentTarget
 
-		setFormContext?.(prevContext => {
-			if (!prevContext) return []
-
-			const field = prevContext.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-			if (!field) throw new Error(`Field with id "${initialFieldContext.id}" not found in form context.`)
-
-			const otherFields = prevContext.filter(({ id: fieldID }) => fieldID !== initialFieldContext.id)
-
-			const updatedField = { ...field, value: newValue }
-
-			const invalidField = validateField(newValue) === false
-
-			if (invalidField !== field.invalid) updatedField.invalid = invalidField
-
-			return [...otherFields, updatedField]
-		})
+		if (isInFieldset) {
+			fieldsetContextFunctions.updateField(fieldContextID, {
+				value: newValue,
+				invalid: validateField(newValue) === false,
+			})
+		} else {
+			formContextFunctions.updateField(fieldContextID, { value: newValue, invalid: validateField(newValue) === false })
+		}
 
 		onChange?.(e)
 	}
@@ -222,37 +414,21 @@ export default function Input({
 
 		if (required) validateField(newValue)
 
+		let processedValue = newValue
+
 		switch (type) {
 			case 'email':
-				setFormContext?.(prevContext => {
-					if (!prevContext) return []
-
-					const field = prevContext.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-					if (!field) throw new Error(`Field with id "${initialFieldContext.id}" not found in form context.`)
-
-					const otherFields = prevContext.filter(({ id: fieldID }) => fieldID !== initialFieldContext.id)
-
-					const updatedField = { ...field, value: newValue.toLowerCase() }
-
-					return [...otherFields, updatedField]
-				})
+				processedValue = newValue.toLowerCase()
 				break
 			case 'tel':
-				setFormContext?.(prevContext => {
-					if (!prevContext) return []
-
-					const field = prevContext.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-					if (!field) throw new Error(`Field with id "${initialFieldContext.id}" not found in form context.`)
-
-					const otherFields = prevContext.filter(({ id: fieldID }) => fieldID !== initialFieldContext.id)
-
-					const updatedField = { ...field, value: formatPhoneNumber(newValue, '1') }
-
-					return [...otherFields, updatedField]
-				})
+				processedValue = formatPhoneNumber(newValue, options as Partial<PhoneOptions>)
 				break
+		}
+
+		if (isInFieldset) {
+			fieldsetContextFunctions.updateField(fieldContextID, { value: processedValue })
+		} else {
+			formContextFunctions.updateField(fieldContextID, { value: processedValue })
 		}
 
 		onBlur?.(e)
@@ -318,10 +494,10 @@ export default function Input({
 					ref={ref}
 					required={required}
 					type={type}
-					value={fieldContext?.value}
+					value={(fieldContext as StringField)?.value || ''}
 				/>
 
-				{fieldContext.invalid && errorMessage && (
+				{(fieldContext as StringField)?.invalid && errorMessage && (
 					<Tooltip anchor='top-end' arrow portal>
 						<TooltipTrigger
 							as={Button}

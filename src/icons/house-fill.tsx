@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function HouseFill(props: SVGProps<SVGSVGElement>) {
+export default function HouseFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 56.3' {...props}>
       <path d='M33.6,10.7c-0.5-0.4-1-0.6-1.6-0.6c-0.6,0-1.1,0.2-1.6,0.6l-22,18.5v21.3c0,1.8,0.5,3.3,1.6,4.3c1.1,1,2.5,1.6,4.4,1.6h35.3 c1.9,0,3.4-0.5,4.4-1.6c1.1-1,1.6-2.5,1.6-4.3V29.2L33.6,10.7z M38.9,52H25.1V34.3c0-0.6,0.2-1.1,0.6-1.5c0.4-0.4,0.9-0.6,1.5-0.6 h9.7c1.4,0,2,0.7,2,2V52z' />

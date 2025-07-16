@@ -1,5 +1,5 @@
 // * Types
-import { ElementType, FormEvent, FormEventHandler, Fragment, useEffect } from 'react'
+import { ElementType, FormEvent, FormEventHandler, Fragment, useCallback, useEffect } from 'react'
 import { AnyElementProps } from '../../types'
 
 export type FormSubmitArgs = {
@@ -30,6 +30,7 @@ export type FormProps<T extends ElementType = 'form'> = Omit<
 
 // * Form Status
 import {
+	Field,
 	FormContext,
 	FormContextProvider,
 	FormStatus,
@@ -40,7 +41,6 @@ import {
 
 // * Utilities
 import { twMerge } from '../../utils'
-// import { findComponentByType } from '../../utils'
 
 function FormComponent<T extends ElementType = 'form'>({
 	as,
@@ -55,15 +55,31 @@ function FormComponent<T extends ElementType = 'form'>({
 	const [formContext] = useFormContext(),
 		[formStatus, setFormStatus] = useFormStatus()
 
-	// const submitButton = findComponentByType(children, SubmitButton)
+	const checkField = useCallback((field: Field): boolean => {
+		if (field.type !== 'array' && field.type !== 'object' && !field.invalid) return true
+
+		if (field.type === 'object') return field.fields.every(objectField => checkField(objectField))
+
+		return false
+	}, [])
+
+	const everyFieldIsValid = useCallback(() => {
+		if (!formContext) return false
+
+		return formContext.every(field => checkField(field))
+	}, [formContext, checkField])
 
 	useEffect(() => {
 		if (!formContext) return
 
-		if (formStatus !== 'incomplete' && formContext.find(({ invalid }) => invalid)) setFormStatus?.('incomplete')
+		if (
+			formStatus !== 'incomplete' &&
+			formContext.find(context => context.type !== 'array' && context.type !== 'object' && context.invalid)
+		)
+			setFormStatus?.('incomplete')
 
-		if (formStatus !== 'ready' && formContext.every(({ invalid }) => !invalid)) setFormStatus?.('ready')
-	}, [formContext])
+		if (formStatus !== 'ready' && everyFieldIsValid()) setFormStatus?.('ready')
+	}, [formContext, everyFieldIsValid])
 
 	const processSubmit: FormEventHandler<HTMLFormElement> =
 		handleSubmit ||
@@ -96,7 +112,7 @@ function FormComponent<T extends ElementType = 'form'>({
 	)
 }
 
-export default function Form<T extends ElementType = 'form'>({
+export function Form<T extends ElementType = 'form'>({
 	controlled = 'auto',
 	initialStatus = 'incomplete',
 	...props
@@ -112,9 +128,7 @@ export default function Form<T extends ElementType = 'form'>({
 	)
 }
 
-import Fieldset, { FieldsetProps } from './fieldset'
-import Input, { InputProps } from './input'
-import SubmitButton, { SubmitButtonProps } from './submit-button'
-import Textarea, { TextareaProps } from './textarea'
-
-export { Fieldset, FieldsetProps, Input, InputProps, Textarea, TextareaProps, SubmitButton, SubmitButtonProps }
+export * from './fieldset'
+export * from './input'
+export * from './submit-button'
+export * from './textarea'

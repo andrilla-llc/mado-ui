@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function PersonCropSquare(props: SVGProps<SVGSVGElement>) {
+export default function PersonCropSquare(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 64' {...props}>
       <path d='M61.2,2.7C59.4,0.9,56.7,0,53.1,0H10.9C7.3,0,4.6,0.9,2.7,2.7C0.9,4.5,0,7.2,0,10.8v42.4c0,3.6,0.9,6.3,2.7,8.1 c1.8,1.8,4.5,2.7,8.2,2.7h42.2c3.6,0,6.4-0.9,8.2-2.7c1.8-1.8,2.7-4.5,2.7-8.1V10.8C64,7.2,63.1,4.5,61.2,2.7z M58.4,52.9 c0,1.8-0.5,3.2-1.4,4.1c-0.9,0.9-2.3,1.4-4,1.4H11c-1.7,0-3.1-0.5-4-1.4c-0.9-0.9-1.4-2.3-1.4-4.1V11.1C5.6,9.3,6.1,7.9,7,7 s2.3-1.4,4-1.4h42c1.7,0,3.1,0.5,4,1.4c0.9,0.9,1.4,2.3,1.4,4.1V52.9z' />

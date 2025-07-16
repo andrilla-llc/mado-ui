@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function ThreePeople(props: SVGProps<SVGSVGElement>) {
+export default function ThreePeople(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 184.1 87.8' {...props}>
       <path d='M61.4,87.8h61.3c3.9,0,6.6-0.5,8.1-1.6s2.3-2.7,2.3-4.9c0-3.1-1-6.4-2.9-9.9s-4.6-6.7-8.2-9.8c-3.6-3-7.9-5.5-12.9-7.4 c-5.1-1.9-10.8-2.9-17.1-2.9c-6.3,0-12,1-17.1,2.9s-9.4,4.4-13,7.4s-6.3,6.3-8.2,9.8s-2.8,6.8-2.8,9.9c0,2.1,0.8,3.8,2.3,4.9 C54.9,87.2,57.6,87.8,61.4,87.8z' />

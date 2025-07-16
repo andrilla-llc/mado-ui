@@ -16,10 +16,10 @@ export type TextareaProps = Omit<HeadlessTextareaProps, 'name'> & {
 }
 
 // * React
-import { ChangeEventHandler, ReactNode, RefObject, useEffect, useId, useState } from 'react'
+import { ChangeEventHandler, FocusEventHandler, ReactNode, RefObject, useEffect, useId, useState } from 'react'
 
-// * Hooks
-import { defineField, Field as FieldContext, useFormContext } from '../../hooks'
+// * 窓 UI
+import { defineField, StringField, useFieldsetContext, useFormContext } from '../../hooks'
 
 // * Headless UI
 import {
@@ -34,14 +34,14 @@ import {
 } from '@headlessui/react'
 
 // * Components
-import Tooltip, { TooltipPanel, TooltipTrigger } from '../tooltip'
-import Button from '../button'
+import { Tooltip, TooltipPanel, TooltipTrigger } from '../tooltip'
+import { Button } from '../button'
 import { ExclamationmarkOctagon } from '../../icons'
 
 // * Utilities
 import { toLowerCase, twMerge } from '../../utils'
 
-export default function Textarea({
+export function Textarea({
 	className,
 	defaultValue,
 	description,
@@ -60,42 +60,46 @@ export default function Textarea({
 	value,
 	...props
 }: TextareaProps) {
-	const [formContext, setFormContext] = useFormContext(),
-		[errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+	const [formContext, formContextFunctions] = useFormContext()
+	const [fieldsetContext, fieldsetContextFunctions] = useFieldsetContext()
+	const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
 	if (placeholder === '*') placeholder = name + (required && !label ? '*' : '')
 	if (label === '*') label = name
 
-	const uniqueID = useId(),
-		fieldContextID = toLowerCase(name, [, '_']) + '§' + uniqueID
+	const uniqueID = useId()
+	const fieldContextID = toLowerCase(name, [' ', '_']) + '§' + uniqueID
 
-	if (Boolean(formContext?.find(field => field.id === fieldContextID)?.invalid)) invalid = true
-
-	const initialFieldContext = defineField({
-		type: 'textarea',
-		id: fieldContextID,
-		invalid,
-		name,
-		required,
-		value: value ? `${value}` : defaultValue ? `${defaultValue}` : '',
-	})
+	const isInFieldset = fieldsetContext && !fieldsetContext.decorative
 
 	useEffect(() => {
-		if (!setFormContext) return
-
-		setFormContext(prevContext => {
-			const otherFields = (prevContext || []).filter(field => field.id !== initialFieldContext.id)
-
-			return [...otherFields, initialFieldContext]
+		const initialFieldContext = defineField({
+			type: 'textarea',
+			id: fieldContextID,
+			invalid,
+			name,
+			required,
+			value: value ? `${value}` : defaultValue ? `${defaultValue}` : '',
 		})
 
-		return () => {
-			setFormContext(prevContext => (prevContext || []).filter(field => field.id !== initialFieldContext.id))
-		}
-	}, [setFormContext])
+		if (isInFieldset) {
+			fieldsetContextFunctions.registerField(initialFieldContext)
 
-	const fieldContext: FieldContext =
-		formContext?.find(({ id: fieldID }) => fieldID === initialFieldContext.id) || initialFieldContext
+			return () => {
+				fieldsetContextFunctions.removeField(initialFieldContext.id)
+			}
+		}
+
+		formContextFunctions.registerField(initialFieldContext)
+
+		return () => {
+			formContextFunctions.removeField(initialFieldContext.id)
+		}
+	}, [isInFieldset])
+
+	const fieldContext = (isInFieldset ? fieldsetContext.fieldList : formContext)?.find(
+		({ id: fieldID }) => fieldID === fieldContextID,
+	)
 
 	const validateField = (validValue: string) => {
 		const noValue = !validValue || validValue === ''
@@ -110,6 +114,12 @@ export default function Textarea({
 			return false
 		}
 
+		if (props.maxLength && validValue.length > Number(props.maxLength))
+			errorMessageList.push(`This may not have more than ${props.maxLength} characters.`)
+
+		if (props.minLength && validValue.length < Number(props.minLength))
+			errorMessageList.push(`This must have at least ${props.minLength} characters.`)
+
 		if (errorMessageList.length === 0) return true
 
 		setErrorMessage(errorMessageList.join(' '))
@@ -122,28 +132,45 @@ export default function Textarea({
 			return
 		}
 
-		const { currentTarget } = e,
-			{ value: newValue } = currentTarget
+		const { currentTarget } = e
+		const { value: newValue } = currentTarget
 
-		setFormContext?.(prevContext => {
-			if (!prevContext) return []
-
-			const field = prevContext.find(({ id: fieldID }) => fieldID === initialFieldContext.id)
-
-			if (!field) throw new Error(`Field with id "${initialFieldContext.id}" not found in form context.`)
-
-			const otherFields = prevContext.filter(({ id: fieldID }) => fieldID !== initialFieldContext.id)
-
-			const updatedField = { ...field, value: newValue }
-
-			const invalidField = validateField(newValue) === false
-
-			if (invalidField !== field.invalid) updatedField.invalid = invalidField
-
-			return [...otherFields, updatedField]
-		})
+		if (isInFieldset) {
+			fieldsetContextFunctions.updateField(fieldContextID, {
+				value: newValue,
+				invalid: validateField(newValue) === false,
+			})
+		} else {
+			formContextFunctions.updateField(fieldContextID, {
+				value: newValue,
+				invalid: validateField(newValue) === false,
+			})
+		}
 
 		onChange?.(e)
+	}
+
+	const handleBlur: FocusEventHandler<HTMLTextAreaElement> = e => {
+		if (disabled) {
+			e.preventDefault()
+			return
+		}
+
+		const { currentTarget } = e
+		const { value: newValue } = currentTarget
+
+		if (required) validateField(newValue)
+
+		// No special processing needed for textarea like email/phone formatting
+		const processedValue = newValue
+
+		if (isInFieldset) {
+			fieldsetContextFunctions.updateField(fieldContextID, { value: processedValue })
+		} else {
+			formContextFunctions.updateField(fieldContextID, { value: processedValue })
+		}
+
+		onBlur?.(e)
 	}
 
 	const restFieldProps: Omit<FieldProps, 'className' | 'disabled'> = fieldProps
@@ -202,13 +229,14 @@ export default function Textarea({
 					id={fieldContext?.id}
 					invalid={invalid}
 					onChange={handleChange}
+					onBlur={handleBlur}
 					placeholder={placeholder}
 					ref={ref}
 					required={required}
-					value={fieldContext?.value}
+					value={(fieldContext as StringField)?.value || ''}
 				/>
 
-				{fieldContext.invalid && errorMessage && (
+				{(fieldContext as StringField)?.invalid && errorMessage && (
 					<Tooltip anchor='top-end' arrow portal>
 						<TooltipTrigger
 							as={Button}

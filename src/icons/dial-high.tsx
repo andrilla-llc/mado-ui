@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function DialHigh(props: SVGProps<SVGSVGElement>) {
+export default function DialHigh(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 55.5' {...props}>
       <path d='M32,12.7c-10.6,0-19.3,8.6-19.3,19.3c0,10.7,8.7,19.3,19.3,19.3S51.3,42.7,51.3,32C51.3,21.3,42.6,12.7,32,12.7z M32,46.9 c-8.3,0-15-6.7-15-15c0-8.2,6.8-15,15-15c8.3,0,15,6.8,15,15C47,40.2,40.3,46.9,32,46.9z' />

@@ -26,7 +26,7 @@ import {
 } from '@headlessui/react'
 
 // * Components
-import Button from './button'
+import { Button } from './button'
 import { ChevronDown } from '../icons'
 
 // * Utilities
@@ -84,11 +84,7 @@ export function DetailsBody<TTag extends ElementType = 'div'>({
 	)
 }
 
-export default function Details<TTag extends ElementType = 'div'>({
-	as = 'div',
-	className,
-	...props
-}: DetailsProps<TTag>) {
+export function Details<TTag extends ElementType = 'div'>({ as = 'div', className, ...props }: DetailsProps<TTag>) {
 	return (
 		<Disclosure
 			{...props}

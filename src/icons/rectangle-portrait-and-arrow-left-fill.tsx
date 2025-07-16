@@ -1,7 +1,7 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
 export default function RectanglePortraitAndArrowLeftFill(
-  props: SVGProps<SVGSVGElement>,
+  props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>,
 ) {
   return (
     <svg viewBox='0 0 64 58.6' {...props}>

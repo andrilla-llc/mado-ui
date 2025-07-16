@@ -41,12 +41,12 @@ export type SubmitButtonProps = Omit<ButtonProps, 'as' | 'customTheme' | 'href' 
 import { useFormStatus } from '../../hooks'
 
 // * Components
-import Button, { ButtonProps } from '../button'
+import { Button, ButtonProps } from '../button'
 
 // * Utilities
 import { twMerge, twSort } from '../../utils'
 
-export default function SubmitButton({
+export function SubmitButton({
 	children,
 	className,
 	customTheme,

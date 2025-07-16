@@ -96,7 +96,7 @@ export function TooltipPanel<T extends ElementType = 'div'>({
 	)
 }
 
-export default function Tooltip({
+export function Tooltip({
 	anchor = 'top',
 	arrow,
 	arrowClassName,

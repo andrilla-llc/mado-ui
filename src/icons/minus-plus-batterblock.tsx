@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function MinusPlusBatteryblock(props: SVGProps<SVGSVGElement>) {
+export default function MinusPlusBatteryblock(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 50' {...props}>
       <path d='M13.9,30.4h11.3c1.1,0,2-0.9,2-2s-0.9-2-2-2H13.9c-1.1,0-2,0.9-2,2S12.7,30.4,13.9,30.4z' />

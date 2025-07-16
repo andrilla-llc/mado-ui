@@ -1,7 +1,7 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
 export default function ArrowTriangle2CirclepathCircle(
-  props: SVGProps<SVGSVGElement>,
+  props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>,
 ) {
   return (
     <svg viewBox='0 0 64 64' {...props}>

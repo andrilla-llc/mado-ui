@@ -18,7 +18,7 @@ import { HTMLAttributes, RefObject, useEffect, useState } from 'react'
 // * Utilities
 import { getDate, getHours, getMilliseconds, getMinutes, getMonth, getMonthName, getSeconds } from '../utils'
 
-export default function Time({
+export function Time({
 	children,
 	dateObject,
 	dateTime,

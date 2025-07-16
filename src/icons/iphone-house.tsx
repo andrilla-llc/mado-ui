@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function IPhoneHouse(props: SVGProps<SVGSVGElement>) {
+export default function IPhoneHouse(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 32.3 64' {...props}>
       <path d='M19,5h-5.6c-0.9,0-1.6,0.7-1.6,1.6c0,0.9,0.7,1.6,1.6,1.6H19c0.9,0,1.6-0.7,1.6-1.6C20.6,5.7,19.9,5,19,5z' />

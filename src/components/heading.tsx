@@ -37,7 +37,7 @@ function getTextFromChildren(children: ReactNode) {
  * A heading component that renders HTML heading elements (h1-h6) with appropriate styling.
  * Automatically generates an ID for the heading based on its content if none is provided.
  */
-export default function Heading({ as = 'h2', children, customize, className, id, ref, ...props }: HeadingProps) {
+export function Heading({ as = 'h2', children, customize, className, id, ref, ...props }: HeadingProps) {
 	const H = as
 
 	const targetableID = id || getTextFromChildren(children).replace(/\s+/g, '-').toLowerCase()

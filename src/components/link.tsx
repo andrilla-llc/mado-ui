@@ -1,5 +1,5 @@
 // * Types
-import { AnyElementProps, OneOf } from '../types'
+import { AnyElementProps, ColorTheme, OneOf } from '../types'
 import { ElementType, MouseEventHandler, RefObject } from 'react'
 
 // * Utilities
@@ -66,32 +66,6 @@ type ThemeColorOrClasses = OneOf<
 		{
 			/** This doesn't use any preset color theme classes. */
 			classes: string
-		},
-	]
->
-
-type ColorTheme = OneOf<
-	[
-		{
-			/** Color theme. */
-			theme?:
-				| 'blue'
-				| 'brown'
-				| 'green'
-				| 'grey'
-				| 'sky-blue'
-				| 'magenta'
-				| 'orange'
-				| 'pink'
-				| 'purple'
-				| 'red'
-				| 'violet'
-				| 'yellow'
-		},
-		{
-			/** Color theme. */
-			theme?: 'custom'
-			customTheme: ThemeColorOrClasses
 		},
 	]
 >
@@ -482,7 +456,7 @@ const getMultilineFillCenterClasses = (theme: LinkProps['theme'] = 'blue', custo
  * @example
  *   <Link href='/about' type='fill-ltr' theme='red' title='About Us'>Learn more about our company</Link>
  */
-export default function Link<TTag extends ElementType = typeof Anchor>({
+export function Link<TTag extends ElementType = typeof Anchor>({
 	as,
 	className,
 	customTheme,
@@ -571,7 +545,7 @@ export type ExtendedLinkConfig = {
 	}
 }
 
-export type ExtendedThemeNames<T extends ExtendedLinkConfig> =
+type ExtendedThemeNames<T extends ExtendedLinkConfig> =
 	T['theme'] extends Record<string, unknown> ? keyof T['theme'] : never
 
 export type ExtendedLinkProps<

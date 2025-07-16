@@ -33,7 +33,7 @@ import {
 	DialogBackdrop,
 	DialogTitleProps,
 } from '@headlessui/react'
-import Button from './button'
+import { Button } from './button'
 import { Xmark } from '../icons'
 
 // * Utilities
@@ -59,7 +59,7 @@ export function ModalClose<T extends ElementType = typeof HeadlessButton>({ as, 
 	return <Element {...props} />
 }
 
-export default function Modal({ children, className, onClose, onOpen, place = 'bottom' }: ModalProps) {
+export function Modal({ children, className, onClose, onOpen, place = 'bottom' }: ModalProps) {
 	const [bodyElement, setBodyElement] = useState<HTMLBodyElement | null>(null)
 
 	useEffect(() => {

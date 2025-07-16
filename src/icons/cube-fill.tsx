@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function CubeFill(props: SVGProps<SVGSVGElement>) {
+export default function CubeFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 59.7 64' {...props}>
       <path d='M29.8,30.3l27.7-15.7c-0.4-0.4-1-0.8-1.6-1.2L35.2,1.6c-1.8-1-3.6-1.6-5.4-1.6c-1.7,0-3.5,0.5-5.3,1.6L3.8,13.4 c-0.7,0.4-1.2,0.7-1.6,1.2L29.8,30.3z' />

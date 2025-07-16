@@ -1,44 +1,7 @@
 // * Types
 import { Url, UrlObject } from 'node:url'
 import { ElementType } from 'react'
-import { AnyElementProps, OneOf } from '../types'
-
-type ColorTheme = OneOf<
-	[
-		{
-			/** Color theme. */
-			theme?:
-				| 'blue'
-				| 'brown'
-				| 'green'
-				| 'grey'
-				| 'sky-blue'
-				| 'magenta'
-				| 'orange'
-				| 'pink'
-				| 'purple'
-				| 'red'
-				| 'violet'
-				| 'yellow'
-		},
-		{
-			/** Color theme. */
-			theme?: 'custom'
-			customTheme: OneOf<
-				[
-					{
-						/** Example: `'[--theme-color:var(--color-blue-500)]'` */
-						themeColor: string
-					},
-					{
-						/** This doesn't use any preset color theme classes. */
-						classes: string
-					},
-				]
-			>
-		},
-	]
->
+import { AnyElementProps, ColorTheme, OneOf } from '../types'
 
 type LinkOrOther<TTag extends ElementType = typeof HeadlessButton> = OneOf<
 	[AnyElementProps<TTag> & { href?: never }, AnyElementProps<typeof Anchor> & { href?: string | Url | UrlObject }]
@@ -88,7 +51,7 @@ export type ExtendedButtonConfig = {
 	}
 }
 
-export type ExtendedThemeNames<T extends ExtendedButtonConfig> =
+type ExtendedThemeNames<T extends ExtendedButtonConfig> =
 	T['theme'] extends Record<string, unknown> ? keyof T['theme'] : never
 
 export type ExtendedButtonProps<
@@ -110,7 +73,7 @@ import { twMerge, twSort } from '../utils'
  * # Button
  * - A pre-styled button with utility props for easy customization depending on use case.
  */
-export default function Button<TTag extends ElementType = typeof HeadlessButton>({
+export function Button<TTag extends ElementType = typeof HeadlessButton>({
 	className,
 	customTheme,
 	gradient = false,

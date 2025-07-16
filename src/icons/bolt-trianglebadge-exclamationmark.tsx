@@ -1,7 +1,7 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
 export default function BoltTrianglebadgeExclamationmark(
-  props: SVGProps<SVGSVGElement>,
+  props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>,
 ) {
   return (
     <svg viewBox='0 0 55.8 64' {...props}>

@@ -1,3 +1,133 @@
+export type DayNumber =
+	| 1
+	| 2
+	| 3
+	| 4
+	| 5
+	| 6
+	| 7
+	| 8
+	| 9
+	| 10
+	| 11
+	| 12
+	| 13
+	| 14
+	| 15
+	| 16
+	| 17
+	| 18
+	| 19
+	| 20
+	| 21
+	| 22
+	| 23
+	| 24
+	| 25
+	| 26
+	| 27
+	| 28
+	| 29
+	| 30
+	| 31
+
+export type DateTimeObject = {
+	day: DayNumber
+	hour: HourNumber
+	minute: MinuteNumber
+	month: MonthNumber | MonthName
+	second: SecondNumber
+	year: number
+}
+
+export type HourNumber =
+	| 0
+	| 1
+	| 2
+	| 3
+	| 4
+	| 5
+	| 6
+	| 7
+	| 8
+	| 9
+	| 10
+	| 11
+	| 12
+	| 13
+	| 14
+	| 15
+	| 16
+	| 17
+	| 18
+	| 19
+	| 20
+	| 21
+	| 22
+	| 23
+
+export type MinuteNumber =
+	| 0
+	| 1
+	| 2
+	| 3
+	| 4
+	| 5
+	| 6
+	| 7
+	| 8
+	| 9
+	| 10
+	| 11
+	| 12
+	| 13
+	| 14
+	| 15
+	| 16
+	| 17
+	| 18
+	| 19
+	| 20
+	| 21
+	| 22
+	| 23
+	| 24
+	| 25
+	| 26
+	| 27
+	| 28
+	| 29
+	| 30
+	| 31
+	| 32
+	| 33
+	| 34
+	| 35
+	| 36
+	| 37
+	| 38
+	| 39
+	| 40
+	| 41
+	| 42
+	| 43
+	| 44
+	| 45
+	| 46
+	| 47
+	| 48
+	| 49
+	| 50
+	| 51
+	| 52
+	| 53
+	| 54
+	| 55
+	| 56
+	| 57
+	| 58
+	| 59
+
 export type MonthName =
 	| 'January'
 	| 'February'
@@ -12,7 +142,68 @@ export type MonthName =
 	| 'November'
 	| 'December'
 
+export type MonthNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
+
+export type SecondNumber = MinuteNumber
+
 export type WeekdayName = 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday'
+
+export type WeekdayNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7
+
+export type WeekNumber =
+	| 1
+	| 2
+	| 3
+	| 4
+	| 5
+	| 6
+	| 7
+	| 8
+	| 9
+	| 10
+	| 11
+	| 12
+	| 13
+	| 14
+	| 15
+	| 16
+	| 17
+	| 18
+	| 19
+	| 20
+	| 21
+	| 22
+	| 23
+	| 24
+	| 25
+	| 26
+	| 27
+	| 28
+	| 29
+	| 30
+	| 31
+	| 32
+	| 33
+	| 34
+	| 35
+	| 36
+	| 37
+	| 38
+	| 39
+	| 40
+	| 41
+	| 42
+	| 43
+	| 44
+	| 45
+	| 46
+	| 47
+	| 48
+	| 49
+	| 50
+	| 51
+	| 52
+	| 53
 
 /** The current date as a Date object */
 const d = new Date()
@@ -360,14 +551,42 @@ export function getUserReadableDateFromTimestampz(timestampz: string): 'Today' |
 
 	const timezoneIsAheadOfUTC = time?.includes('+')
 
-	const [hms, _timezone] = timezoneIsAheadOfUTC ? time?.split('+') : time?.split('-') || []
+	const [hms, timezone] = timezoneIsAheadOfUTC ? time?.split('+') : time?.split('-') || []
 
 	const [hours, minutes, seconds] = hms?.split(':').map(string => Number(string)) || []
 
-	// const [timezoneHours, timezoneMinutes] = timezone?.split(':').map(string => Number(string)) || []
+	const [timezoneHours, timezoneMinutes] = timezone?.split(':').map(string => Number(string)) || []
 
 	const dateAndTime = new Date(year, month - 1, day, hours, minutes, seconds),
 		userReadableDateAndTime = getUserReadableDate(dateAndTime)
 
 	return userReadableDateAndTime
+}
+
+export function getLocalTime(time: string | [number, number]) {
+	const date = new Date(),
+		[hours, minutes] = typeof time === 'string' ? time.split(':') : time
+
+	const timezone = getTimezone()
+
+	console.log(timezone)
+
+	date.setUTCHours(Number(hours))
+	date.setMinutes(Number(minutes))
+
+	return date.toLocaleTimeString([], {
+		hour: 'numeric',
+		minute: '2-digit',
+		hour12: true,
+	})
+}
+
+export function getTimezone() {
+	const date = new Date()
+
+	const timezonePart = Intl.DateTimeFormat('en-US', { timeZoneName: 'short' })
+		.formatToParts(date)
+		.find(part => part.type === 'timeZoneName')
+
+	return timezonePart ? timezonePart.value : ''
 }

@@ -9,6 +9,43 @@ export type AsElement<TTag extends ElementType = 'div'> = {
 	as?: TTag
 }
 
+export type ColorTheme = OneOf<
+	[
+		{
+			/** Color theme. */
+			theme?:
+				| 'blue'
+				| 'brown'
+				| 'green'
+				| 'grey'
+				| 'sky-blue'
+				| 'magenta'
+				| 'orange'
+				| 'pink'
+				| 'purple'
+				| 'red'
+				| 'violet'
+				| 'yellow'
+		},
+		{
+			/** Color theme. */
+			theme?: 'custom'
+			customTheme: OneOf<
+				[
+					{
+						/** Example: `'[--theme-color:var(--color-blue-500)]'` */
+						themeColor: string
+					},
+					{
+						/** This doesn't use any preset color theme classes. */
+						classes: string
+					},
+				]
+			>
+		},
+	]
+>
+
 export type MergeTypes<TypesArray extends unknown[], Result = object> = TypesArray extends [
 	infer Head,
 	...infer Remaining,

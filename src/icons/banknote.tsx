@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function Banknote(props: SVGProps<SVGSVGElement>) {
+export default function Banknote(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 40.1' {...props}>
       <path d='M62.1,0H1.9C0.8,0,0,0.8,0,1.9v36.2c0,1.2,0.8,2,1.9,2h60.1c1.2,0,1.9-0.8,1.9-2V1.9C64,0.8,63.2,0,62.1,0z M60.1,35.5 c0,0.5-0.2,0.7-0.7,0.7H4.6c-0.5,0-0.7-0.2-0.7-0.7V4.6c0-0.5,0.2-0.7,0.7-0.7h54.8c0.5,0,0.7,0.2,0.7,0.7V35.5z' />

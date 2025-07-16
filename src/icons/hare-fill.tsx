@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function HareFill(props: SVGProps<SVGSVGElement>) {
+export default function HareFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 46.1' {...props}>
       <path d='M18.1,46.1c2.1,0,3.8-0.2,5.1-0.6c1.3-0.4,2.5-0.9,3.6-1.6l-6.6-5.5c-0.1,0-0.3,0-0.5,0c-0.2,0-0.4,0-0.6,0 c-0.5,0-1.2,0-2-0.1c-0.8-0.1-1.6-0.1-2.6-0.1c-1.2,0-2.1,0.3-2.8,0.9s-1,1.4-1,2.3c0,1.4,0.7,2.6,2,3.5 C14,45.7,15.8,46.1,18.1,46.1z' />

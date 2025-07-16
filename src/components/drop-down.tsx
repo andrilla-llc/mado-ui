@@ -151,7 +151,7 @@ export function DropDownSection({
 							{...restLabelProps}
 							className={headingBag =>
 								twMerge(
-									'text-[size:larger] font-bold',
+									'text-[size:larger] font-bold text-current/80',
 									typeof labelClassName === 'function' ? labelClassName(headingBag) : labelClassName,
 								)
 							}
@@ -183,6 +183,6 @@ export function DropDownSeparator({ className, ...props }: DropDownSeparatorProp
 	)
 }
 
-export default function DropDown(props: DropDownProps) {
+export function DropDown(props: DropDownProps) {
 	return <Menu {...props} />
 }

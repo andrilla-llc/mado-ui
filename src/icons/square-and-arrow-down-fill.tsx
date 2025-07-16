@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function SquareAndArrowDownFill(props: SVGProps<SVGSVGElement>) {
+export default function SquareAndArrowDownFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 52.6 64' {...props}>
       <path d='M43.3,16.6H28.7V2.3c0-1.3-1.1-2.3-2.4-2.3c-1.3,0-2.4,1.1-2.4,2.3v14.3H9.3c-6.2,0-9.3,3.1-9.3,9.2v29 C0,60.9,3.1,64,9.3,64h34c6.2,0,9.3-3.1,9.3-9.2v-29C52.6,19.7,49.5,16.6,43.3,16.6z M38,34.4l-10,9.7c-0.6,0.6-1.1,0.8-1.7,0.8 c-0.6,0-1.1-0.2-1.7-0.8l-10-9.7c-0.4-0.4-0.7-0.9-0.7-1.6c0-1.2,0.9-2.1,2.2-2.1c0.6,0,1.2,0.2,1.6,0.7l5,5.4l1.5,1.6l-0.2-4.5 V18.7c0-1.3,1-2.2,2.4-2.2c1.4,0,2.4,0.9,2.4,2.2v15.2l-0.2,4.4l1.5-1.5l5-5.4c0.4-0.5,1-0.7,1.6-0.7c1.2,0,2.2,0.9,2.2,2.1 C38.8,33.5,38.5,34,38,34.4z' />

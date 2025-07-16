@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function BubbleLeftFill(props: SVGProps<SVGSVGElement>) {
+export default function BubbleLeftFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 60.3' {...props}>
       <path d='M17.3,60.3c0.6,0,1.1-0.2,1.6-0.5c0.5-0.3,1.1-0.8,1.7-1.4l10.5-9.6l19.6,0c2.9,0,5.3-0.5,7.3-1.5c2-1,3.5-2.5,4.5-4.5 c1-2,1.5-4.4,1.5-7.2V13.3c0-2.8-0.5-5.2-1.5-7.2c-1-2-2.5-3.5-4.5-4.5c-2-1-4.4-1.6-7.3-1.6H13.3C10.4,0,8,0.5,6,1.6 c-2,1-3.5,2.5-4.5,4.5c-1,2-1.5,4.4-1.5,7.2v22.3c0,2.8,0.5,5.2,1.5,7.2c1,2,2.5,3.5,4.5,4.5c2,1,4.4,1.5,7.3,1.5h1.3v8.5 c0,0.9,0.2,1.6,0.7,2.2C15.8,60,16.4,60.3,17.3,60.3z' />

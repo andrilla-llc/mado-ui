@@ -410,21 +410,33 @@ export default function App() {
 						</p>
 
 						<Form onSubmit={handleSubmit}>
-							<Fieldset legend='Full Name'>
-								<Input name='First Name' label='*' description='Enter your first name' placeholder='*' />
+							<Fieldset legend='Full Name' join=' '>
+								<div className='grid grid-cols-2 gap-(--tw-gap)'>
+									<Input name='First Name' label='*' description='Enter your first name' placeholder='*' />
 
-								<Input name='Last Name' label='*' description='Enter your last name' placeholder='*' />
+									<Input name='Last Name' label='*' description='Enter your last name' placeholder='*' />
+								</div>
 							</Fieldset>
 
-							<Input
-								name='Email Address'
-								type='email'
-								label='*'
-								description='Enter your email address'
-								placeholder='*'
-							/>
+							<Fieldset legend='Contact Info'>
+								<div className='grid grid-cols-2 gap-(--tw-gap)'>
+									<Input
+										name='Email Address'
+										type='email'
+										label='*'
+										description='Enter your email address'
+										placeholder='*'
+									/>
 
-							<Input name='Phone Number' type='tel' label='*' description='Enter your phone number' placeholder='*' />
+									<Input
+										name='Phone Number'
+										type='tel'
+										label='*'
+										description='Enter your phone number'
+										placeholder='*'
+									/>
+								</div>
+							</Fieldset>
 
 							<Textarea
 								name='Message'
@@ -432,6 +444,46 @@ export default function App() {
 								description='Enter a message, if you would like'
 								placeholder='Message…'
 							/>
+
+							<Fieldset legend='Password'>
+								<div className='grid grid-cols-2 gap-(--tw-gap)'>
+									<Input
+										name='Password'
+										type='password'
+										label='*'
+										description='Enter a password'
+										minLength={8}
+										options={{
+											requireLowercaseCharacter: true,
+											requireNumber: true,
+											requireSpecialCharacter: true,
+											requireUppercaseCharacter: true,
+										}}
+									/>
+
+									<Input
+										name='Confirm Password'
+										type='password'
+										label='*'
+										description='Enter your password again'
+										options={{
+											matchPreviousInput: true,
+										}}
+									/>
+								</div>
+							</Fieldset>
+
+							<Fieldset legend='Misc Input Types' decorative>
+								<div className='grid grid-cols-2 gap-(--tw-gap)'>
+									<Input
+										name='Date'
+										type='date'
+										label='*'
+										min={[2000, 'August', 24]}
+										max={{ day: 24, month: 8, year: 2025 }}
+									/>
+								</div>
+							</Fieldset>
 
 							<SubmitButton>Submit</SubmitButton>
 						</Form>

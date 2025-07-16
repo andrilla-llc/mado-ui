@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function HouseDeskclock(props: SVGProps<SVGSVGElement>) {
+export default function HouseDeskclock(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 56.3' {...props}>
       <path d='M13.8,56.3h36.3c3.8,0,6-2.2,6-5.9V20.8l-4.3-2.9v31.5c0,1.8-0.9,2.7-2.6,2.7H14.7c-1.7,0-2.6-0.9-2.6-2.7V17.8l-4.3,2.9 v29.6C7.7,54.2,9.9,56.3,13.8,56.3z' />

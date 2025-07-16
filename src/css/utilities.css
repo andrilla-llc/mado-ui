@@ -48,6 +48,20 @@
 	animation-play-state: var(--tw-animation-state);
 }
 
+@utility gap-* {
+	--tw-gap: calc(var(--spacing) * --value(number));
+	--tw-gap-x: var(--tw-gap, calc(var(--spacing) * --value(number)));
+	--tw-gap-y: var(--tw-gap, calc(var(--spacing) * --value(number)));
+}
+
+@utility gap-x-* {
+	--tw-gap-x: calc(var(--spacing) * --value(number));
+}
+
+@utility gap-y-* {
+	--tw-gap-y: calc(var(--spacing) * --value(number));
+}
+
 @utility grid-cols-0fr {
 	grid-template-columns: 0fr;
 }

@@ -1,24 +1,96 @@
 /**
  * # Format Phone Number
  * Converts any string containing at least 10 numbers to a formatted phone number
- * @param {string} string
- * @returns {string} string formatted (000) 000-0000
+ * @param {string} phoneNumber
+ * @param options
+ * @property {string} `countryCode`
+ * @property {'continuous' | 'dot' | 'hyphenated' | 'none' | 'space' | 'standard'} `format`
+ *
+ * Input: a555b555c5555d
+ *
+ * @example
+ * format: 'continuous'
+ * countryCode: '1'
+ * returns: +1 5555555555
+ *
+ * @example
+ * format: 'dot'
+ * returns: 555.555.5555
+ *
+ * @example
+ * format: 'hyphenated'
+ * returns: 555-555-5555
+ *
+ * @example
+ * format: 'none'
+ * countryCode: '1'
+ * returns: +1 a555b555c5555d
+ *
+ * @example
+ * format: 'space'
+ * returns: 555 555 5555
+ *
+ * @example
+ * format: 'standard' (default)
+ * returns: (555) 555-5555
+ *
+ * @returns {string} string formatted
  */
-export function formatPhoneNumber(string: string, countryCode?: string): string {
-	return (
-		`${countryCode ? `+${countryCode} ` : ''}` +
-		string
-			.replace(/\D/g, '')
-			.slice(-10)
-			.split('')
-			.map((char, index) => {
-				if (index === 0) return `(${char}`
-				if (index === 2) return `${char}) `
-				if (index === 5) return `${char}-`
-				return char
-			})
-			.join('')
-	)
+export function formatPhoneNumber(
+	phoneNumber: string,
+	options?: Partial<{
+		countryCode: string
+		format: 'continuous' | 'dot' | 'hyphenated' | 'none' | 'space' | 'standard'
+	}>,
+): string {
+	const format = options?.format || 'standard'
+
+	if (format !== 'none') phoneNumber = phoneNumber.replace(/\D/g, '').slice(-10)
+
+	switch (format) {
+		case 'dot':
+			phoneNumber = phoneNumber
+				.split('')
+				.map((char, index) => {
+					if (index === 2) return `${char}.`
+					if (index === 5) return `${char}.`
+					return char
+				})
+				.join('')
+			break
+		case 'hyphenated':
+			phoneNumber = phoneNumber
+				.split('')
+				.map((char, index) => {
+					if (index === 2) return `${char}-`
+					if (index === 5) return `${char}-`
+					return char
+				})
+				.join('')
+			break
+		case 'space':
+			phoneNumber = phoneNumber
+				.split('')
+				.map((char, index) => {
+					if (index === 2) return `${char} `
+					if (index === 5) return `${char} `
+					return char
+				})
+				.join('')
+			break
+		case 'standard':
+			phoneNumber = phoneNumber
+				.split('')
+				.map((char, index) => {
+					if (index === 0) return `(${char}`
+					if (index === 2) return `${char}) `
+					if (index === 5) return `${char}-`
+					return char
+				})
+				.join('')
+	}
+
+	return `${options?.countryCode ? `+${options?.countryCode} ` : ''}` + phoneNumber
 }
 
 /**

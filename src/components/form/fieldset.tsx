@@ -1,11 +1,47 @@
 // * Types
-export type FieldsetProps = HeadlessFieldsetProps & {
-	legend?: string
-	legendProps?: Omit<LegendProps, 'children'> & {
-		/** @deprecated Use the `legend` prop instead. */
-		children?: never
+import { OneOf } from '../../types'
+
+type NameOrLegend = OneOf<
+	[
+		{
+			legend: string
+			legendProps?: Omit<LegendProps, 'children'> & {
+				/** @deprecated Use the `legend` prop instead. */
+				children?: never
+			}
+		},
+		{ name: string },
+	]
+>
+
+export type FieldsetProps = Omit<HeadlessFieldsetProps, 'name'> &
+	NameOrLegend & {
+		/** When true, the fieldset will only be used for decoration and will not affect the `formContext`. */
+		decorative?: boolean
+		/**
+		 * Joins all values in the fieldset into a single string value.
+		 *
+		 * @example
+		 * ```tsx
+		 * <Fieldset legend='Full Name' join=' '>
+		 *   <Input name='First Name />
+		 *   <Input name='Last Name />
+		 * </Fieldset>
+		 * ```
+		 * `[{ name: 'First Name', value: 'Johnny' }, { name: 'Last Name', value: 'Appleseed' }]`
+		 *
+		 * ↓
+		 *
+		 * `[{ name: 'Full Name', value: 'Johnny Appleseed' }]`
+		 */
+		join?: string
 	}
-}
+
+// * Mado UI
+import { FieldsetContextProvider } from '../../hooks'
+
+// * Hooks
+import { useId } from 'react'
 
 // * Headless UI
 import {
@@ -16,31 +52,59 @@ import {
 } from '@headlessui/react'
 
 // * Utilities
-import { twMerge } from '../../utils'
+import { twMerge, toLowerCase } from '../../utils'
 
-export default function Fieldset({ children, className, legend, legendProps, ...props }: FieldsetProps) {
+export function Fieldset({
+	children,
+	className,
+	decorative = false,
+	join,
+	legend,
+	legendProps,
+	name,
+	...props
+}: FieldsetProps) {
+	const uniqueID = useId()
+
+	const fieldsetId = toLowerCase(legend || name!, [' ', '_']) + '§' + uniqueID
+
 	const { className: legendClassName, ...restLegendProps } = legendProps || {}
 
-	return (
-		<HeadlessFieldset
-			{...props}
-			className={bag => twMerge('contents', typeof className === 'function' ? className(bag) : className)}
-		>
-			{bag => (
-				<>
-					<Legend
-						{...restLegendProps}
-						className={twMerge(
-							'text-lg font-bold sm:text-xl',
-							typeof legendClassName === 'function' ? legendClassName(bag) : legendClassName,
-						)}
-					>
-						{legend}
-					</Legend>
+	name = legend || name!
 
-					{typeof children === 'function' ? children(bag) : children}
-				</>
-			)}
-		</HeadlessFieldset>
+	return (
+		<FieldsetContextProvider
+			initialValue={{
+				decorative,
+				fieldList: [],
+				id: fieldsetId,
+				join,
+				name,
+			}}
+		>
+			<HeadlessFieldset
+				{...props}
+				name={name}
+				className={bag => twMerge('contents', typeof className === 'function' ? className(bag) : className)}
+			>
+				{bag => (
+					<>
+						{legend && (
+							<Legend
+								{...restLegendProps}
+								className={twMerge(
+									'text-xl font-bold text-current/80',
+									typeof legendClassName === 'function' ? legendClassName(bag) : legendClassName,
+								)}
+							>
+								{legend}
+							</Legend>
+						)}
+
+						{typeof children === 'function' ? children(bag) : children}
+					</>
+				)}
+			</HeadlessFieldset>
+		</FieldsetContextProvider>
 	)
 }

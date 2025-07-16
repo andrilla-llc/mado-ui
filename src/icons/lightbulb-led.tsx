@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { ComponentPropsWithRef } from 'react'
 
-export default function LightbulbLed(props: SVGProps<SVGSVGElement>) {
+export default function LightbulbLed(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 36.8 64' {...props}>
       <rect width='27.9' height='3.6' x='4.45' y='28' />
