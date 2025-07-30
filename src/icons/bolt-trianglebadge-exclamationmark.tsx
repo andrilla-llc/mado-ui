@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function BoltTrianglebadgeExclamationmark(
+export function BoltTrianglebadgeExclamationmark(
   props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>,
 ) {
   return (

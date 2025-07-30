@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function Qrcode(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function Qrcode(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 64' {...props}>
       <path d='M27.4,1.7c-1.1-1.1-2.8-1.7-5-1.7H6.7c-2.2,0-3.9,0.6-5,1.7C0.6,2.8,0,4.5,0,6.8v15.5c0,2.3,0.6,4,1.7,5.1s2.8,1.7,5,1.7 h15.8c2.2,0,3.9-0.6,5-1.7s1.7-2.8,1.7-5.1V6.8C29.1,4.5,28.5,2.8,27.4,1.7z M24.2,22.3c0,1.3-0.6,1.9-1.9,1.9H6.7 c-1.2,0-1.8-0.6-1.8-1.9V6.8c0-1.2,0.6-1.9,1.8-1.9h15.7c1.2,0,1.9,0.6,1.9,1.9V22.3z' />

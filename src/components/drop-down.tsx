@@ -1,5 +1,6 @@
 // * Types
-import { ElementType, ReactNode } from 'react'
+import { AnyElementProps } from '../types'
+import { ElementType, ReactElement, ReactNode, useEffect } from 'react'
 
 export type DropDownButtonProps<TTag extends ElementType = 'button'> = Omit<
 	MenuButtonProps<TTag>,
@@ -10,7 +11,8 @@ export type DropDownButtonProps<TTag extends ElementType = 'button'> = Omit<
 	className?: string
 }
 
-export type DropDownItemProps = MenuItemProps
+export type DropDownItemProps<TTag extends ElementType = 'div'> = Omit<MenuItemProps<TTag>, 'as'> &
+	AnyElementProps<TTag>
 
 export type DropDownItemsProps = Omit<MenuItemsProps, 'className' | 'transition'> & {
 	className?: string
@@ -29,7 +31,8 @@ export type DropDownSectionProps = MenuSectionProps & {
 	separatorBelow?: boolean
 }
 
-export type DropDownSeparatorProps = MenuSeparatorProps
+export type DropDownSeparatorProps<TTag extends ElementType = 'div'> = Omit<MenuSeparatorProps<TTag>, 'as'> &
+	AnyElementProps<TTag>
 
 // * Headless UI
 import {
@@ -77,8 +80,8 @@ export function DropDownButton<TTag extends ElementType = 'button'>({
 	)
 }
 
-export function DropDownItem({ as, ...props }: DropDownItemProps) {
-	return <MenuItem as={as || 'div'} {...props} />
+export function DropDownItem<TTag extends ElementType = 'div'>({ as, ...props }: DropDownItemProps<TTag>) {
+	return <MenuItem {...props} as={(as as MenuItemProps['as']) || 'div'} />
 }
 
 export function DropDownItems({
@@ -108,11 +111,12 @@ export function DropDownItems({
 			{...props}
 			anchor={anchorProps}
 			className={twMerge(
-				'grid grid-rows-1fr rounded-xl shadow-xl transition-rows duration-500 ease-exponential data-closed:grid-rows-0fr',
+				'grid grid-rows-1fr rounded-xl shadow-xl transition-rows duration-500 ease-exponential not-data-open:not-data-enter:not-data-leave:grid-rows-0fr data-closed:grid-rows-0fr',
 				containerClassName,
 			)}
-			transition
+			static={props.static}
 			style={{ ...style, minWidth: 'var(--button-width)' }}
+			transition
 		>
 			{bag => (
 				<div className='overflow-y-scroll'>
@@ -169,10 +173,15 @@ export function DropDownSection({
 	)
 }
 
-export function DropDownSeparator({ className, ...props }: DropDownSeparatorProps) {
+export function DropDownSeparator<TTag extends ElementType = 'div'>({
+	as,
+	className,
+	...props
+}: DropDownSeparatorProps<TTag>) {
 	return (
 		<MenuSeparator
 			{...props}
+			as={(as as MenuSeparatorProps['as']) || 'div'}
 			className={bag =>
 				twMerge(
 					'my-4 block h-px rounded-full bg-neutral-950/20',

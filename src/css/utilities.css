@@ -78,6 +78,10 @@
 	grid-template-rows: 1fr;
 }
 
+@utility transition-cols {
+	transition-property: grid-template-columns;
+}
+
 @utility transition-rows {
 	transition-property: grid-template-rows;
 }

@@ -25,7 +25,7 @@ export type FormContext = Field[]
 import { ReactNode, useCallback } from 'react'
 
 // * Hooks
-import createFastContext from './create-fast-context'
+import { createFastContext } from './create-fast-context'
 
 /**
  * # Define Field

@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function SquareAndArrowUpFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function SquareAndArrowUpFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 50.3 64' {...props}>
       <path d='M8.9,64h32.5c3,0,5.2-0.7,6.7-2.2c1.5-1.5,2.2-3.7,2.2-6.6V27.5c0-2.9-0.7-5.1-2.2-6.6c-1.5-1.5-3.7-2.2-6.7-2.2H28v21 c0,0.8-0.3,1.4-0.8,1.9c-0.6,0.5-1.2,0.8-2,0.8c-0.8,0-1.4-0.3-2-0.8c-0.6-0.5-0.8-1.2-0.8-1.9v-21H8.9c-3,0-5.2,0.7-6.7,2.2 C0.7,22.4,0,24.6,0,27.5v27.7c0,2.9,0.7,5.1,2.2,6.6C3.7,63.3,5.9,64,8.9,64z' />

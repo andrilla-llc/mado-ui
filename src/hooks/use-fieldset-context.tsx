@@ -22,7 +22,7 @@ export type FieldsetContext = [
 import { ReactNode, useCallback, useEffect } from 'react'
 
 // * Hooks
-import createFastContext from './create-fast-context'
+import { createFastContext } from './create-fast-context'
 
 const { Provider, useStore } = createFastContext<FieldsetContextValue | undefined>(undefined)
 

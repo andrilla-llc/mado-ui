@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function BriefcaseFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function BriefcaseFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 55.7' {...props}>
       <path d='M61.8,12.4c-1.5-1.5-3.7-2.2-6.7-2.2h-8.5V7.9c0-2.7-0.7-4.7-2.1-6S41.1,0,38.5,0H25.5c-2.5,0-4.4,0.6-5.8,1.9 s-2.2,3.3-2.2,6v2.3H8.9c-3,0-5.2,0.7-6.7,2.2C0.7,13.8,0,16,0,18.9v2.3c3.5,1.4,7,2.6,10.5,3.5c3.5,0.9,7,1.5,10.6,1.9 c3.6,0.4,7.2,0.6,10.9,0.6c3.7,0,7.4-0.2,10.9-0.6c3.6-0.4,7.1-1,10.6-1.9c3.5-0.9,7-2,10.5-3.5v-2.3C64,16,63.3,13.8,61.8,12.4z M42.1,10.2H21.9V7.6c0-1.1,0.3-1.9,0.9-2.5c0.6-0.6,1.5-0.9,2.6-0.9h13.2c1.1,0,2,0.3,2.6,0.9c0.6,0.6,0.9,1.4,0.9,2.5V10.2z' />

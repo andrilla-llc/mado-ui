@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function House(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function House(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
 	return (
 		<svg viewBox='0 0 64 56.3' {...props}>
 			<path d='M24.3,53.6h15.5V34c0-1.4-0.7-2-2-2H26.3c-0.6,0-1.1,0.2-1.5,0.5c-0.4,0.4-0.6,0.9-0.6,1.5V53.6z' />

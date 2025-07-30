@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function Envelope(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function Envelope(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 49.9' {...props}>
       <path d='M61.7,2.2C60.2,0.7,57.9,0,54.9,0H8.2C5.6,0,3.6,0.7,2.2,2.2C0.7,3.7,0,6,0,9v32c0,3,0.8,5.2,2.3,6.7s3.8,2.2,6.8,2.2h46.7 c2.6,0,4.6-0.7,6.1-2.2c1.4-1.5,2.2-3.7,2.2-6.7V9C64,6,63.2,3.7,61.7,2.2z M59.6,41c0,1.5-0.4,2.6-1.2,3.4 c-0.8,0.8-1.9,1.2-3.3,1.2H8.9c-1.4,0-2.6-0.4-3.3-1.2s-1.2-1.9-1.2-3.4V9c0-1.5,0.4-2.6,1.2-3.4s1.9-1.2,3.3-1.2H55 c1.4,0,2.5,0.4,3.3,1.2c0.8,0.8,1.2,1.9,1.2,3.4V41z' />

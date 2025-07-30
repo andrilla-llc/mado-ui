@@ -2,6 +2,12 @@
 
 ## Components
 
+### DropDown
+
+#### Issues
+
+- `as` prop causes type error in production. Functionality works, though.
+
 ### Input
 
 #### Downfalls

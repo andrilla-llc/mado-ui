@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function DocOnMagnifyingglass(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function DocOnMagnifyingglass(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 51 64' {...props}>
       <path d='M8.5,58.9h15.1c-1.5-1.2-2.7-2.7-3.6-4.4H8.8c-2.8,0-4.3-1.5-4.3-4.2V8.7c0-2.7,1.5-4.3,4.3-4.3h28.7c2.7,0,4.3,1.5,4.3,4.3 v24c1.7,0.9,3.2,2.1,4.4,3.6V8.6c0-5.8-2.9-8.6-8.5-8.6H8.5C2.8,0,0,2.9,0,8.6v41.7C0,56.1,2.8,58.9,8.5,58.9z' />

@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function ChevronUpChevronDown(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function ChevronUpChevronDown(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 55.592 64' {...props}>
       <path d='m27.792,0c-.42,0-.826.083-1.22.249-.394.166-.808.429-1.243.787L.959,20.832c-.64.578-.959,1.373-.959,2.386,0,.931.313,1.717.94,2.358.626.642,1.423.963,2.389.963.373,0,.754-.079,1.143-.238.389-.158.8-.399,1.235-.721L27.8,7.585l22.085,17.995c.409.322.814.563,1.216.721.401.158.789.238,1.162.238.966,0,1.763-.321,2.389-.963.626-.642.939-1.428.939-2.358,0-1.012-.333-1.807-.998-2.386L30.247,1.028c-.435-.358-.854-.619-1.258-.783-.404-.164-.803-.246-1.197-.246Z' />

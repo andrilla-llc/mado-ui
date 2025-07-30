@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function Calendar(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function Calendar(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 97.4 90' {...props}>
       <path d='M93.6,3.8c-2.6-2.5-6.4-3.8-11.5-3.8H15.4C10.3,0,6.5,1.3,3.9,3.8,1.3,6.3,0,10.1,0,15.2v59.6c0,5,1.3,8.8,3.9,11.4,2.6,2.5,6.4,3.8,11.5,3.8h66.7c5.1,0,8.9-1.3,11.5-3.8,2.6-2.5,3.8-6.3,3.8-11.4V15.2c0-5-1.3-8.8-3.8-11.4ZM89.5,75.3c0,2.3-.6,4-1.8,5.1-1.2,1.1-2.9,1.7-5,1.7H14.7c-2.2,0-3.8-.6-5-1.7-1.2-1.1-1.8-2.8-1.8-5.1V29.3c0-2.3.6-4,1.8-5.1,1.2-1.1,2.8-1.7,5-1.7h68c2.2,0,3.9.6,5,1.7,1.2,1.1,1.8,2.8,1.8,5.1v46Z' />

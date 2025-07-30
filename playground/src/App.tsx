@@ -13,6 +13,7 @@ import {
 	Form,
 	FormSubmitArgs,
 	Heading,
+	IFrame,
 	Input,
 	Link,
 	Modal,
@@ -23,6 +24,7 @@ import {
 	Tooltip,
 	TooltipPanel,
 	TooltipTrigger,
+	Video,
 } from 'mado-ui/components'
 
 function delay(ms: number) {
@@ -267,6 +269,123 @@ export default function App() {
 								Custom Cyan Theme Color with Gradient
 							</Button>
 						</div>
+					</li>
+
+					<li className='rounded-3xl px-6 pt-4.5 pb-6 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							IFrame
+						</Heading>
+
+						<p className='pb-8'>A pre-styled button with utility props for easy customization depending on use case.</p>
+
+						<IFrame
+							src='https://player.vimeo.com/video/988865902?h=ea416448ea&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479'
+							title='American Cityscapes'
+							allow={['fullscreen', 'picture-in-picture']}
+							className='rounded-xl'
+						/>
+					</li>
+
+					<li className='rounded-3xl px-6 pt-4.5 pb-6 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Video
+						</Heading>
+
+						<p className='pb-8'>
+							A fully-fledged video-player? Wow! Sure, it's not as secure or simple as Vimeo, and doesn't have as many
+							features as YouTube, but if you need a simple, free, customizable video-player, here it is.
+						</p>
+
+						<Video
+							title='American Cityscapes'
+							className='rounded-xl'
+							loop
+							poster={[
+								{
+									src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/american-cityscapes-1080p.webp',
+									type: 'image/webp',
+									width: 1080,
+									primary: true,
+								},
+							]}
+							srcSet={[
+								{
+									srcGroup: [
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/webm/american-cityscapes-240p.webm',
+											type: 'video/webm',
+										},
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/mp4/american-cityscapes-240p.mp4',
+											type: 'video/mp4',
+										},
+									],
+									width: 240,
+								},
+								{
+									srcGroup: [
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/webm/american-cityscapes-360p.webm',
+											type: 'video/webm',
+										},
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/mp4/american-cityscapes-360p.mp4',
+											type: 'video/mp4',
+										},
+									],
+									width: 360,
+								},
+								{
+									srcGroup: [
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/webm/american-cityscapes-540p.webm',
+											type: 'video/webm',
+										},
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/mp4/american-cityscapes-540p.mp4',
+											type: 'video/mp4',
+										},
+									],
+									width: 540,
+								},
+								{
+									srcGroup: [
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/webm/american-cityscapes-720p.webm',
+											type: 'video/webm',
+										},
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/mp4/american-cityscapes-720p.mp4',
+											type: 'video/mp4',
+										},
+									],
+									width: 720,
+								},
+								{
+									srcGroup: [
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/webm/american-cityscapes-1080p.webm',
+											type: 'video/webm',
+										},
+										{
+											src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/mp4/american-cityscapes-1080p.mp4',
+											type: 'video/mp4',
+										},
+									],
+									width: 1080,
+								},
+								{
+									src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/webm/american-cityscapes-1440p.webm',
+									type: 'video/webm',
+									width: 1440,
+								},
+								{
+									src: 'https://dcwujwzbdeazxiwcantj.supabase.co/storage/v1/object/public/videos/american-cityscapes/webm/american-cityscapes-2160p.webm',
+									type: 'video/webm',
+									width: 2160,
+								},
+							]}
+						/>
 					</li>
 
 					<li className='rounded-3xl px-6 py-4.5 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>

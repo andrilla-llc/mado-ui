@@ -1,7 +1,7 @@
 // * React
 import { HTMLAttributes, useRef, createContext, useContext, useSyncExternalStore } from 'react'
 
-export default function createFastContext<Store>(defaultInitialState: Store) {
+export function createFastContext<Store>(defaultInitialState: Store) {
 	function useStoreData(initialState: Store = defaultInitialState): {
 		get: () => Store
 		set: (value: Store | ((prevState: Store) => Store)) => void

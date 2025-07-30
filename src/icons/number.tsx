@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function Number(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function Number(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 58.9 64' {...props}>
       <path d='M12.1,64c1.7,0,2.7-0.8,3-2.5l11.7-58c0-0.1,0.1-0.3,0.1-0.5c0-0.2,0-0.4,0-0.6c0-0.8-0.3-1.4-0.8-1.8C25.6,0.2,25,0,24.2,0 c-0.9,0-1.6,0.2-2.1,0.7c-0.5,0.5-0.8,1.1-0.9,1.9L9.5,60.5c-0.1,0.3-0.1,0.7-0.1,1.1c0,0.8,0.2,1.4,0.7,1.8 C10.6,63.8,11.3,64,12.1,64z' />

@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function ChevronLeftForwardslashChevronRight(
+export function ChevronLeftForwardslashChevronRight(
   props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>,
 ) {
   return (

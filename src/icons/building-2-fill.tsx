@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function Building2Fill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function Building2Fill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 58' {...props}>
       <path d='M62.8,14.7c-0.8-0.9-1.9-1.3-3.3-1.3H45.1V53c0,0.9-0.1,1.8-0.3,2.6c-0.2,0.8-0.5,1.6-1,2.3h15.7c1.4,0,2.5-0.4,3.3-1.3 c0.8-0.9,1.2-2.1,1.2-3.6V18.3C64,16.8,63.6,15.6,62.8,14.7z M57.7,48.6c0,0.6-0.3,1-0.9,1h-4.5c-0.6,0-1-0.3-1-1v-4.3 c0-0.7,0.3-1,1-1h4.5c0.6,0,0.9,0.3,0.9,1V48.6z M57.7,37.9c0,0.6-0.3,0.9-0.9,0.9h-4.5c-0.6,0-1-0.3-1-0.9v-4.4 c0-0.6,0.3-0.9,1-0.9h4.5c0.6,0,0.9,0.3,0.9,0.9V37.9z M57.7,27.1c0,0.7-0.3,1-0.9,1h-4.5c-0.6,0-1-0.3-1-1v-4.3c0-0.6,0.3-1,1-1 h4.5c0.6,0,0.9,0.3,0.9,1V27.1z' />

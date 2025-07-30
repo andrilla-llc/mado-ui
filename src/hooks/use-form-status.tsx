@@ -4,7 +4,7 @@ import { ReactNode, Suspense } from 'react'
 export type FormStatus = 'error' | 'incomplete' | 'loading' | 'ready' | 'success' | 'readonly'
 
 // * Hooks
-import createFastContext from './create-fast-context'
+import { createFastContext } from './create-fast-context'
 
 const DEFAULT_STATUS: FormStatus = 'incomplete'
 

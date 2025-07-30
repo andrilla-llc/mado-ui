@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function ArrowTriangle2CirclepathCircleFill(
+export function ArrowTriangle2CirclepathCircleFill(
   props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>,
 ) {
   return (

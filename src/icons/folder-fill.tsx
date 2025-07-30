@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function FolderFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function FolderFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 51.6' {...props}>
       <path d='M0,42.8c0,2.9,0.7,5.1,2.2,6.6c1.5,1.5,3.7,2.2,6.6,2.2H56c2.5,0,4.5-0.7,5.9-2.2c1.4-1.5,2.1-3.7,2.1-6.6V19.7H0V42.8z' />

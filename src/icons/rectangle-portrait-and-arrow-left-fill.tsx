@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function RectanglePortraitAndArrowLeftFill(
+export function RectanglePortraitAndArrowLeftFill(
   props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>,
 ) {
   return (

@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function ListBulletClipboardFill(
+export function ListBulletClipboardFill(
   props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>,
 ) {
   return (

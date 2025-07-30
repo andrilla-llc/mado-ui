@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function FigureWaterFitness(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function FigureWaterFitness(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 45.9' {...props}>
       <path d='M31.8,11.8c3.3,0,5.9-2.7,5.9-5.9c0-3.3-2.7-5.9-5.9-5.9c-3.3,0-5.9,2.6-5.9,5.9C25.9,9.2,28.5,11.8,31.8,11.8z' />

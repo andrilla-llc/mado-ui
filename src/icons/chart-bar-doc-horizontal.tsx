@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function ChartBarDocHorizontal(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function ChartBarDocHorizontal(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
 	return (
 		<svg viewBox='0 0 50.2 64' {...props}>
 			<path d='M11,9.9c-0.6,0-1.1,0.2-1.4,0.6c-0.3,0.4-0.5,0.9-0.5,1.5v5c0,0.6,0.2,1.1,0.5,1.5c0.3,0.4,0.8,0.6,1.4,0.6h18.3 c0.6,0,1.1-0.2,1.4-0.6c0.3-0.4,0.5-0.9,0.5-1.5v-5c0-0.6-0.2-1.1-0.5-1.5c-0.3-0.4-0.8-0.6-1.4-0.6H11z' />

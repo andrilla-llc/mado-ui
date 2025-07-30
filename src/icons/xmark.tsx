@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function xmark(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function Xmark(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 64' {...props}>
       <path d='M1,63c0.7,0.7,1.6,1,2.6,1s1.9-0.3,2.6-1L32,37.1L57.8,63c0.7,0.7,1.5,1,2.5,1c1,0,1.9-0.3,2.6-1c0.7-0.7,1-1.6,1-2.6 c0-1-0.3-1.8-1-2.5L37.1,32L63,6.2c0.7-0.7,1-1.6,1-2.6S63.7,1.7,63,1c-0.7-0.7-1.6-1-2.6-1c-1,0-1.8,0.3-2.5,1L32,26.9L6.2,1 C5.5,0.3,4.6,0,3.6,0C2.6,0,1.7,0.3,1,1C0.3,1.7,0,2.6,0,3.6c0,1,0.3,1.9,1,2.6L26.9,32L1,57.8c-0.7,0.7-1,1.5-1,2.6 C0,61.4,0.3,62.3,1,63z' />

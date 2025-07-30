@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function Eye(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function Eye(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 40.1' {...props}>
       <path d='M32,0C13.3,0,0,15.3,0,20.1c0,4.8,13.3,20.1,32,20.1c18.9,0,32-15.3,32-20.1C64,15.3,50.9,0,32,0z M32,36.4 c-15.4,0-27.9-13.1-27.9-16.4C4.1,17.3,16.6,3.7,32,3.7c15.4,0,27.9,13.6,27.9,16.4C59.9,23.4,47.4,36.4,32,36.4z' />

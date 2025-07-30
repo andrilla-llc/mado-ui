@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function Sensor(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function Sensor(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 45.6' {...props}>
       <path d='M36.7,0H8.3C2.8,0,0,2.7,0,8.2v29.3c0,5.4,2.8,8.2,8.3,8.2h28.4c5.5,0,8.3-2.7,8.3-8.2V8.2C45,2.7,42.2,0,36.7,0z M40.7,37.3c0,2.7-1.5,4.1-4.1,4.1H8.3c-2.6,0-4.1-1.4-4.1-4.1V8.4c0-2.7,1.5-4.1,4.1-4.1h28.3c2.6,0,4.1,1.4,4.1,4.1V37.3z' />

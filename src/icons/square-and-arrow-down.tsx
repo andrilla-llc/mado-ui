@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function SquareAndArrowDown(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function SquareAndArrowDown(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 52.6 64' {...props}>
       <path d='M9.3,64h34c6.2,0,9.3-3.1,9.3-9.2V25.2c0-6.1-3.1-9.2-9.3-9.2h-8.3v4.8h8.2c2.9,0,4.6,1.6,4.6,4.6v29.1 c0,3.1-1.7,4.6-4.6,4.6H9.4c-3,0-4.6-1.6-4.6-4.6V25.5c0-3.1,1.6-4.6,4.6-4.6h8.2V16H9.3C3.1,16,0,19.1,0,25.2v29.5 C0,60.9,3.1,64,9.3,64z' />

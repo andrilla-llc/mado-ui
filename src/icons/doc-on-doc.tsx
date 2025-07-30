@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function DocOnDoc(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function DocOnDoc(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 52 64' {...props}>
       <path d='M51.5,18.7c-0.4-1.1-1-2.1-2-3.1L36.6,2.5c-0.9-0.9-1.9-1.6-3-2C32.6,0.2,31.3,0,30,0h-9.8c-2.6,0-4.6,0.7-5.9,2 c-1.3,1.3-2,3.3-2,6v6.1h4.1V8c0-1.3,0.3-2.2,1-2.9c0.7-0.7,1.7-1,3-1h11.2v13c0,1.5,0.4,2.6,1.1,3.3c0.7,0.7,1.8,1.1,3.2,1.1h11.9 v21.8c0,1.3-0.3,2.2-1,2.9c-0.7,0.7-1.7,1-3,1h-5v4.1h5.2c2.6,0,4.6-0.7,5.9-2s2-3.3,2-6V22.7C52,21.1,51.8,19.8,51.5,18.7z M36.6,17.8c-0.8,0-1.3-0.4-1.3-1.3V6.1l11.5,11.7H36.6z' />

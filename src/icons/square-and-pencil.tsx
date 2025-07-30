@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function SquareAndPencil(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function SquareAndPencil(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 50.3 64' {...props}>
       <path d='M8.9,64h32.5c3,0,5.2-0.7,6.7-2.2c1.5-1.5,2.2-3.7,2.2-6.6V26.9c0-2.9-0.7-5.1-2.2-6.6c-1.5-1.5-3.7-2.2-6.7-2.2h-7.9v4.6 h7.8c1.4,0,2.5,0.4,3.3,1.1c0.8,0.7,1.2,1.9,1.2,3.3V55c0,1.5-0.4,2.6-1.2,3.3c-0.8,0.7-1.9,1.1-3.3,1.1H9c-1.4,0-2.5-0.4-3.3-1.1 c-0.8-0.7-1.1-1.9-1.1-3.3V27.1c0-1.5,0.4-2.6,1.1-3.3c0.8-0.7,1.9-1.1,3.3-1.1h7.8v-4.6H8.9c-3,0-5.2,0.7-6.7,2.2 C0.7,21.8,0,24,0,26.9v28.3c0,2.9,0.7,5.1,2.2,6.6C3.7,63.3,5.9,64,8.9,64z' />

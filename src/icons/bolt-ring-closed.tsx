@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function BoltRingClosed(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function BoltRingClosed(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 64' {...props}>
       <path d='M0,32c0,17.7,14.4,32,32,32c17.7,0,32-14.3,32-32C64,16,52.2,2.7,36.8,0.4c0.6,0.9,1,2,1,3.3c0,1.6-0.6,2.9-1.6,4 c11.6,2,20.5,12.2,20.5,24.4c0,13.6-11.1,24.7-24.7,24.7C18.4,56.7,7.3,45.6,7.3,32C7.3,18.4,18.4,7.3,32,7.3c2,0,3.6-1.6,3.6-3.6 C35.6,1.6,34,0,32,0C14.4,0,0,14.3,0,32z' />

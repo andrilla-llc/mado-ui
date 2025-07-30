@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function Network(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function Network(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 64' {...props}>
       <path d='M5.1,18.7c7.8,8.3,18.7,13,30.3,13c9.1,0,17.9-3.1,24.9-8.6l-1.7-3.5c-6.5,5.4-14.6,8.3-23.2,8.4 c-11.1,0-21.5-4.8-28.5-13.1L5.1,18.7z' />

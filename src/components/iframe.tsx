@@ -1,17 +1,46 @@
 // * Types
+import { ComponentPropsWithRef } from 'react'
+
 export type IFrameAllowAttribute =
 	| 'accelerometer'
+	| 'ambient-light-sensor'
+	| 'attribution-reporting'
 	| 'autoplay'
+	| 'bluetooth'
 	| 'camera'
+	| 'captured-surface-control'
+	| 'compute-pressure'
+	| 'cross-origin-isolated'
+	| 'deferred-fetch'
+	| 'deferred-fetch-minimal'
+	| 'display-capture'
 	| 'encrypted-media'
 	| 'fullscreen'
+	| 'gamepad'
+	| 'geolocation'
 	| 'gyroscope'
+	| 'hid'
+	| 'identity-credentials-get'
+	| 'idle-detection'
+	| 'language-detector'
+	| 'local-fonts'
 	| 'magnetometer'
 	| 'microphone'
+	| 'midi'
+	| 'otp-credentials'
 	| 'payment'
 	| 'picture-in-picture'
 	| 'publickey-credentials-get'
+	| 'screen-wake-lock'
+	| 'serial'
+	| 'speaker-selection'
+	| 'storage-access'
+	| 'translator'
+	| 'summarizer'
 	| 'usb'
+	| 'web-share'
+	| 'window-management'
+	| 'xr-spatial-tracking'
 
 export type IFrameReferrerPolicyAttribute =
 	| 'no-referrer'
@@ -34,6 +63,7 @@ export type IFrameSandboxAttribute =
 	| 'allow-presentation'
 	| 'allow-same-origin'
 	| 'allow-scripts'
+	| 'allow-storage-access-by-user-activation'
 	| 'allow-top-navigation'
 	| 'allow-top-navigation-by-user-activation'
 	| 'allow-top-navigation-to-custom-protocols'
@@ -42,23 +72,56 @@ export type IFrameProps = Omit<
 	ComponentPropsWithRef<'iframe'>,
 	'allow' | 'children' | 'referrerPolicy' | 'sandbox' | 'title'
 > & {
-	allow?: IFrameAllowAttribute | IFrameAllowAttribute[] | 'allow-all'
+	allow?: (IFrameAllowAttribute | Record<IFrameAllowAttribute, string[] | boolean>)[] | 'allow-all'
 	referrerPolicy?: IFrameReferrerPolicyAttribute
-	sandbox?: IFrameSandboxAttribute | IFrameSandboxAttribute[] | 'allow-all'
+	sandbox?: IFrameSandboxAttribute[]
 	title: string
 }
-
-// * React
-import { ComponentPropsWithRef, forwardRef } from 'react'
 
 // * Utilities
 import { twMerge } from '../utils'
 
-const allAllowProperties =
-	'accelerometer, autoplay, camera, encrypted-media, fullscreen, gyroscope, magnetometer, microphone, payment, picture-in-picture, publickey-credentials-get, usb'
-
-const allSandboxProperties =
-	'allow-downloads allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts allow-top-navigation allow-top-navigation-by-user-activation allow-top-navigation-to-custom-protocols'
+const allAllowProperties: IFrameAllowAttribute[] = [
+	'accelerometer',
+	'ambient-light-sensor',
+	'attribution-reporting',
+	'autoplay',
+	'bluetooth',
+	'camera',
+	'captured-surface-control',
+	'compute-pressure',
+	'cross-origin-isolated',
+	'deferred-fetch',
+	'deferred-fetch-minimal',
+	'display-capture',
+	'encrypted-media',
+	'fullscreen',
+	'gamepad',
+	'geolocation',
+	'gyroscope',
+	'hid',
+	'identity-credentials-get',
+	'idle-detection',
+	'language-detector',
+	'local-fonts',
+	'magnetometer',
+	'microphone',
+	'midi',
+	'otp-credentials',
+	'payment',
+	'picture-in-picture',
+	'publickey-credentials-get',
+	'screen-wake-lock',
+	'serial',
+	'speaker-selection',
+	'storage-access',
+	'summarizer',
+	'translator',
+	'usb',
+	'web-share',
+	'window-management',
+	'xr-spatial-tracking',
+]
 
 /**
  * # iFrame
@@ -71,19 +134,34 @@ export function IFrame({
 	sandbox,
 	...props
 }: IFrameProps) {
-	const useAllAllow = allow === 'allow-all',
-		useAllSandbox = sandbox === 'allow-all',
-		allowIsString = typeof allow === 'string',
-		sandboxIsString = typeof sandbox === 'string'
+	const allowAttribute = (
+		allow === 'allow-all'
+			? allAllowProperties.map(property => `${property} *`)
+			: allow?.map(property => {
+					if (typeof property === 'string') return `${property} *`
+
+					const propertyDefinition: string[] = []
+
+					Object.entries(property).forEach(([key, value]) => {
+						propertyDefinition.push(key)
+
+						if (value === true) propertyDefinition.push('*')
+						if (value === false) propertyDefinition.push(`'none'`)
+						if (Array.isArray(value)) value.forEach(origin => propertyDefinition.push(origin))
+					})
+
+					return propertyDefinition.join(' ')
+				}) || []
+	).join('; ')
 
 	return (
 		<iframe
 			{...props}
-			className={twMerge('aspect-video w-full', className)}
-			allow={useAllAllow ? allAllowProperties : allowIsString ? allow : allow?.join('; ')}
+			allow={allowAttribute}
+			allowFullScreen={allowAttribute?.includes('fullscreen')}
+			className={twMerge('aspect-video w-full bg-linear-60 from-neutral-700 via-neutral-500 to-neutral-600', className)}
 			referrerPolicy={referrerPolicy}
-			sandbox={useAllSandbox ? allSandboxProperties : sandboxIsString ? sandbox : sandbox?.join(' ')}
-			allowFullScreen={allow?.includes('fullscreen') || useAllAllow}
+			sandbox={sandbox?.join(' ')}
 		/>
 	)
 }

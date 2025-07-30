@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function BookFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function BookFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 64 51' {...props}>
       <path d='M15.7,0c-2.1,0-4.1,0.3-6.1,0.9c-2,0.6-3.8,1.5-5.4,2.6C2.6,4.7,1.3,6.1,0.3,7.7C0.2,8,0.1,8.3,0,8.5c0,0.3,0,0.6,0,1.2 v39.2c0,0.6,0.2,1.1,0.6,1.5C1,50.8,1.5,51,2.2,51c0.3,0,0.7-0.1,1-0.2s0.6-0.3,0.9-0.5c1.7-1.5,3.7-2.6,5.9-3.4 c2.2-0.8,4.5-1.1,6.8-1.1c2.2,0,4.2,0.4,6.2,1.1c1.9,0.7,3.6,1.7,5.1,3c0.3,0.3,0.6,0.4,1,0.4c0.3,0,0.6-0.1,0.8-0.3 c0.2-0.2,0.3-0.5,0.3-0.8V7.9c0-0.4,0-0.6-0.1-0.8c-0.1-0.2-0.2-0.5-0.5-0.8c-1.3-2-3.3-3.5-5.8-4.6S18.6,0,15.7,0z' />

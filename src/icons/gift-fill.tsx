@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 
-export default function GiftFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
+export function GiftFill(props: Omit<ComponentPropsWithRef<'svg'>, 'viewBox'>) {
   return (
     <svg viewBox='0 0 58.6 64' {...props}>
       <path d='M4.3,56.2c0,2.5,0.7,4.5,2.2,5.8s3.4,2,6,2h14.3V36.6H4.3V56.2z' />
