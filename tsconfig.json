@@ -12,7 +12,10 @@
 		"rootDir": "src",
 		"skipLibCheck": true,
 		"declarationMap": true,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"preserveSymlinks": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitReturns": true
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "dist"]

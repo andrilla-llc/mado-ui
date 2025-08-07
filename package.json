@@ -1,7 +1,7 @@
 {
 	"name": "mado-ui",
 	"author": "Andrilla LLC",
-	"version": "0.5.2",
+	"version": "0.5.3",
 	"description": "A collection of opinionated React components built on Tailwind CSS",
 	"repository": "https://github.com/andrilla-llc/mado-ui",
 	"license": "GNU GPL",
