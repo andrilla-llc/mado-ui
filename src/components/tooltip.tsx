@@ -29,7 +29,6 @@ import {
 	CSSProperties,
 	ElementType,
 	FocusEventHandler,
-	Fragment,
 	isValidElement,
 	MouseEventHandler,
 	ReactElement,
@@ -65,7 +64,7 @@ export function TooltipTrigger<T extends ElementType = typeof HeadlessButton>({
 	asChild = false,
 	children,
 	...props
-}: TooltipTriggerProps<T>) {
+}: TooltipTriggerProps<T>): ReactElement {
 	const TooltipTriggerElement = as || HeadlessButton
 
 	if (asChild && isValidElement(children)) return cloneElement(children as ReactElement<any>, props)
@@ -79,7 +78,7 @@ export function TooltipPanel<T extends ElementType = 'div'>({
 	className,
 	style,
 	...props
-}: TooltipPanelProps<T>) {
+}: TooltipPanelProps<T>): ReactElement {
 	const TooltipPanelElement = as || 'div'
 
 	return (
@@ -106,7 +105,7 @@ export function Tooltip({
 	onClose,
 	onOpen,
 	portal,
-}: TooltipProps) {
+}: TooltipProps): ReactElement {
 	const [isOpen, setIsOpen] = useState(false),
 		timeoutRef = useRef<NodeJS.Timeout>(undefined),
 		arrowRef = useRef<HTMLDivElement>(null)

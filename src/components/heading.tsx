@@ -13,7 +13,7 @@ export type HeadingProps = HTMLAttributes<HTMLHeadingElement> & {
 }
 
 // * React
-import { Children, HTMLAttributes, ReactNode, RefObject, isValidElement } from 'react'
+import { Children, HTMLAttributes, ReactElement, ReactNode, RefObject, isValidElement } from 'react'
 
 // * Utilities
 import { twMerge } from '../utils'
@@ -37,7 +37,7 @@ function getTextFromChildren(children: ReactNode) {
  * A heading component that renders HTML heading elements (h1-h6) with appropriate styling.
  * Automatically generates an ID for the heading based on its content if none is provided.
  */
-export function Heading({ as = 'h2', children, customize, className, id, ref, ...props }: HeadingProps) {
+export function Heading({ as = 'h2', children, customize, className, id, ref, ...props }: HeadingProps): ReactElement {
 	const H = as
 
 	const targetableID = id || getTextFromChildren(children).replace(/\s+/g, '-').toLowerCase()

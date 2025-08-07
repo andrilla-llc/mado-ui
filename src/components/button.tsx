@@ -1,6 +1,6 @@
 // * Types
 import { Url, UrlObject } from 'node:url'
-import { ElementType } from 'react'
+import { ElementType, ReactElement } from 'react'
 import { AnyElementProps, ColorTheme, OneOf } from '../types'
 
 type LinkOrOther<TTag extends ElementType = typeof HeadlessButton> = OneOf<
@@ -81,7 +81,7 @@ export function Button<TTag extends ElementType = typeof HeadlessButton>({
 	rounded = 'lg',
 	theme = 'blue',
 	...props
-}: ButtonProps<TTag>) {
+}: ButtonProps<TTag>): ReactElement {
 	const getPaddingClasses = () => {
 		switch (padding) {
 			case 'xs':

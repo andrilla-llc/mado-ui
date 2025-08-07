@@ -16,7 +16,16 @@ export type TextareaProps = Omit<HeadlessTextareaProps, 'name'> & {
 }
 
 // * React
-import { ChangeEventHandler, FocusEventHandler, ReactNode, RefObject, useEffect, useId, useState } from 'react'
+import {
+	ChangeEventHandler,
+	FocusEventHandler,
+	ReactElement,
+	ReactNode,
+	RefObject,
+	useEffect,
+	useId,
+	useState,
+} from 'react'
 
 // * 窓 UI
 import { defineField, StringField, useFieldsetContext, useFormContext } from '../../hooks'
@@ -59,7 +68,7 @@ export function Textarea({
 	required = true,
 	value,
 	...props
-}: TextareaProps) {
+}: TextareaProps): ReactElement {
 	const [formContext, formContextFunctions] = useFormContext()
 	const [fieldsetContext, fieldsetContextFunctions] = useFieldsetContext()
 	const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)

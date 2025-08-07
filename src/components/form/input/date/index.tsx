@@ -52,12 +52,12 @@ export type DateTimeInputProps = OneOf<
 }
 
 // * React
-import { useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
 
 // * Utilities
 import { getLocalTime } from '../../../../utils'
 
-export function DateTimeInput({ theme, type, ui, ...props }: DateTimeInputProps) {
+export function DateTimeInput({ theme, type, ui, ...props }: DateTimeInputProps): ReactElement {
 	if (!ui)
 		switch (type) {
 			case 'date':

@@ -124,6 +124,7 @@ import {
 	ChangeEventHandler,
 	FocusEventHandler,
 	HTMLInputTypeAttribute,
+	ReactElement,
 	ReactNode,
 	RefObject,
 	useEffect,
@@ -189,7 +190,7 @@ export function Input({
 	type,
 	value,
 	...props
-}: InputProps) {
+}: InputProps): ReactElement {
 	const [formContext, formContextFunctions] = useFormContext(),
 		[fieldsetContext, fieldsetContextFunctions] = useFieldsetContext(),
 		[errorMessage, setErrorMessage] = useState<string | undefined>(undefined)

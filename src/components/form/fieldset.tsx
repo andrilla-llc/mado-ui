@@ -40,8 +40,8 @@ export type FieldsetProps = Omit<HeadlessFieldsetProps, 'name'> &
 // * Mado UI
 import { FieldsetContextProvider } from '../../hooks'
 
-// * Hooks
-import { useId } from 'react'
+// * React
+import { ReactElement, useId } from 'react'
 
 // * Headless UI
 import {
@@ -63,7 +63,7 @@ export function Fieldset({
 	legendProps,
 	name,
 	...props
-}: FieldsetProps) {
+}: FieldsetProps): ReactElement {
 	const uniqueID = useId()
 
 	const fieldsetId = toLowerCase(legend || name!, [' ', '_']) + '§' + uniqueID

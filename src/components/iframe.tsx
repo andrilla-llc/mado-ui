@@ -1,5 +1,5 @@
 // * Types
-import { ComponentPropsWithRef } from 'react'
+import { ComponentPropsWithRef, ReactElement } from 'react'
 
 export type IFrameAllowAttribute =
 	| 'accelerometer'
@@ -133,7 +133,7 @@ export function IFrame({
 	referrerPolicy = 'no-referrer-when-downgrade',
 	sandbox,
 	...props
-}: IFrameProps) {
+}: IFrameProps): ReactElement {
 	const allowAttribute = (
 		allow === 'allow-all'
 			? allAllowProperties.map(property => `${property} *`)

@@ -1,6 +1,6 @@
 // * Types
 import { AnyElementProps } from '../types'
-import { ElementType, ReactNode } from 'react'
+import { ElementType, ReactElement, ReactNode } from 'react'
 
 export type DropDownButtonProps<TTag extends ElementType = 'button'> = Omit<
 	MenuButtonProps<TTag>,
@@ -65,7 +65,7 @@ export function DropDownButton<TTag extends ElementType = 'button'>({
 	children,
 	className,
 	...props
-}: DropDownButtonProps<TTag>) {
+}: DropDownButtonProps<TTag>): ReactElement {
 	return (
 		<MenuButton {...props} as={as || 'button'} className={twJoin('group/button', className)}>
 			{children}
@@ -80,7 +80,10 @@ export function DropDownButton<TTag extends ElementType = 'button'>({
 	)
 }
 
-export function DropDownItem<TTag extends ElementType = 'div'>({ as, ...props }: DropDownItemProps<TTag>) {
+export function DropDownItem<TTag extends ElementType = 'div'>({
+	as,
+	...props
+}: DropDownItemProps<TTag>): ReactElement {
 	return <MenuItem {...props} as={(as as MenuItemProps['as']) || 'div'} />
 }
 
@@ -91,7 +94,7 @@ export function DropDownItems({
 	containerClassName,
 	style,
 	...props
-}: DropDownItemsProps) {
+}: DropDownItemsProps): ReactElement {
 	const getAnchorProps = () => {
 		let initialAnchor: typeof anchor = { gap: '1rem', padding: '1rem', to: 'bottom start' }
 
@@ -141,7 +144,7 @@ export function DropDownSection({
 	separatorAbove,
 	separatorBelow,
 	...props
-}: DropDownSectionProps) {
+}: DropDownSectionProps): ReactElement {
 	const { labelClassName, ...restLabelProps } = { labelClassName: labelProps?.className || '', ...labelProps }
 
 	return (
@@ -177,7 +180,7 @@ export function DropDownSeparator<TTag extends ElementType = 'div'>({
 	as,
 	className,
 	...props
-}: DropDownSeparatorProps<TTag>) {
+}: DropDownSeparatorProps<TTag>): ReactElement {
 	return (
 		<MenuSeparator
 			{...props}
@@ -192,6 +195,6 @@ export function DropDownSeparator<TTag extends ElementType = 'div'>({
 	)
 }
 
-export function DropDown(props: DropDownProps) {
+export function DropDown(props: DropDownProps): ReactElement {
 	return <Menu {...props} />
 }

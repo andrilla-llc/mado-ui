@@ -1,5 +1,4 @@
 // * Types
-import { ElementType, FormEvent, FormEventHandler, Fragment, useCallback, useEffect } from 'react'
 import { AnyElementProps } from '../../types'
 
 export type FormSubmitArgs = {
@@ -28,6 +27,9 @@ export type FormProps<T extends ElementType = 'form'> = Omit<
 		| Promise<{ error?: string; status?: 'error' } | { status?: 'success' }>
 }
 
+// * React
+import { ElementType, FormEvent, FormEventHandler, Fragment, ReactElement, useCallback, useEffect } from 'react'
+
 // * Form Status
 import {
 	Field,
@@ -51,7 +53,7 @@ function FormComponent<T extends ElementType = 'form'>({
 	onSubmit,
 	onSuccess,
 	...props
-}: Omit<FormProps<T>, 'controlled' | 'initialStatus'>) {
+}: Omit<FormProps<T>, 'controlled' | 'initialStatus'>): ReactElement {
 	const [formContext] = useFormContext(),
 		[formStatus, setFormStatus] = useFormStatus()
 

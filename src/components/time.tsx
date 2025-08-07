@@ -13,7 +13,7 @@ type TimeProps = HTMLAttributes<HTMLTimeElement> &
 	}> & { ref?: RefObject<HTMLTimeElement | null> }
 
 // * React
-import { HTMLAttributes, RefObject, useEffect, useState } from 'react'
+import { HTMLAttributes, ReactElement, RefObject, useEffect, useState } from 'react'
 
 // * Utilities
 import { getDate, getHours, getMilliseconds, getMinutes, getMonth, getMonthName, getSeconds } from '../utils'
@@ -31,7 +31,7 @@ export function Time({
 	year,
 	ref,
 	...props
-}: TimeProps) {
+}: TimeProps): ReactElement {
 	const [date, setDate] = useState<Date | undefined>(dateObject || undefined)
 
 	const getDateAndTime = () => {

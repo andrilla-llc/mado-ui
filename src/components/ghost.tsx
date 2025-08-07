@@ -1,12 +1,12 @@
 // * Types
-import { HTMLAttributes } from 'react'
+import { HTMLAttributes, ReactElement } from 'react'
 
-type GhostProps = HTMLAttributes<HTMLDivElement>
+export type GhostProps = HTMLAttributes<HTMLDivElement>
 
 // * Utilities
 import { twMerge } from '../utils'
 
-export function Ghost({ children, className, ...props }: GhostProps) {
+export function Ghost({ children, className, ...props }: GhostProps): ReactElement {
 	return (
 		<div {...props} className={twMerge('block w-24 max-w-full animate-pulse rounded bg-white/50', className)}>
 			{children || <>&nbsp;</>}

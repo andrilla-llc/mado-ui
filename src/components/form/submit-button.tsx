@@ -1,5 +1,5 @@
 // * Types
-import { ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 
 export type SubmitButtonProps = Omit<ButtonProps, 'as' | 'customTheme' | 'href' | 'theme'> & {
 	/** This doesn't do much by default, because we use built-in colors for different form states. You'll have to modify a good bit to make this do anything. */
@@ -56,7 +56,7 @@ export function SubmitButton({
 	success,
 	type,
 	...props
-}: SubmitButtonProps) {
+}: SubmitButtonProps): ReactElement {
 	const [formStatus] = useFormStatus()
 
 	const getFormStatusButtonClasses = () => {

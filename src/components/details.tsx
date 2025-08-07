@@ -1,5 +1,5 @@
 // * Types
-import { ElementType, ReactNode } from 'react'
+import { ElementType, ReactElement, ReactNode } from 'react'
 
 export type DetailsBodyProps<TTag extends ElementType = 'div'> = Omit<DisclosurePanelProps<TTag>, 'className'> & {
 	className?: string
@@ -37,7 +37,7 @@ export function DetailsSummary<TTag extends ElementType = typeof Button>({
 	children,
 	className,
 	...props
-}: DetailsSummaryProps<TTag>) {
+}: DetailsSummaryProps<TTag>): ReactElement {
 	return (
 		<DisclosureButton<typeof Button<typeof HeadlessButton>>
 			{...props}
@@ -65,7 +65,7 @@ export function DetailsBody<TTag extends ElementType = 'div'>({
 	children,
 	className,
 	...props
-}: DetailsBodyProps<TTag>) {
+}: DetailsBodyProps<TTag>): ReactElement {
 	return (
 		<DisclosurePanel
 			{...props}
@@ -84,7 +84,11 @@ export function DetailsBody<TTag extends ElementType = 'div'>({
 	)
 }
 
-export function Details<TTag extends ElementType = 'div'>({ as = 'div', className, ...props }: DetailsProps<TTag>) {
+export function Details<TTag extends ElementType = 'div'>({
+	as = 'div',
+	className,
+	...props
+}: DetailsProps<TTag>): ReactElement {
 	return (
 		<Disclosure
 			{...props}

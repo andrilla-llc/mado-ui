@@ -48,6 +48,7 @@ import {
 	ComponentPropsWithRef,
 	MouseEvent,
 	MouseEventHandler,
+	ReactElement,
 	ReactEventHandler,
 	TouchEvent,
 	useCallback,
@@ -81,8 +82,8 @@ import {
 	SixtyArrowTriangleheadCounterclockwise,
 	SpeakerMinusFill,
 	SpeakerPlusFill,
-	SpeakerSlashFill,
-	SpeakerWave3Fill,
+	// SpeakerSlashFill,
+	// SpeakerWave3Fill,
 	ThirtyArrowTriangleheadClockwise,
 	ThirtyArrowTriangleheadCounterclockwise,
 	TenArrowTriangleheadClockwise,
@@ -98,7 +99,16 @@ type FunctionKey = ' ' | 'ArrowRight' | 'ArrowLeft' | 'ArrowUp' | 'ArrowDown' | 
 
 type ModifierKey = 'meta' | 'ctrl' | 'alt' | 'shift'
 
-export function Video({ autoPlay, className, controls = true, poster, ref, srcSet, title, ...props }: VideoProps) {
+export function Video({
+	autoPlay,
+	className,
+	controls = true,
+	poster,
+	ref,
+	srcSet,
+	title,
+	...props
+}: VideoProps): ReactElement {
 	// * General/Core
 	const uniqueID = useId(),
 		figureRef = useRef<HTMLElement>(null),

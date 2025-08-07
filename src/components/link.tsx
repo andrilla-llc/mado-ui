@@ -1,6 +1,6 @@
 // * Types
 import { AnyElementProps, ColorTheme, OneOf } from '../types'
-import { ElementType, MouseEventHandler, RefObject } from 'react'
+import { ElementType, MouseEventHandler, ReactElement } from 'react'
 
 // * Utilities
 import { twMerge, twSort } from '../utils'
@@ -19,7 +19,7 @@ export function Anchor<TTag extends ElementType = 'a'>({
 	target,
 	rel,
 	...props
-}: AnchorProps<TTag>) {
+}: AnchorProps<TTag>): ReactElement {
 	const isExternal = `${href}`.startsWith('http'),
 		hasHash = `${href}`.includes('#')
 
@@ -463,7 +463,7 @@ export function Link<TTag extends ElementType = typeof Anchor>({
 	theme = 'blue',
 	type,
 	...props
-}: LinkProps<TTag>) {
+}: LinkProps<TTag>): ReactElement {
 	const getLinkClasses = () => {
 		switch (type) {
 			case 'static':

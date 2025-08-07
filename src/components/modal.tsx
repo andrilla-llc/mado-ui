@@ -39,27 +39,33 @@ import { Xmark } from '../icons'
 // * Utilities
 import { easeOutExpo, findComponentByType, twMerge } from '../utils'
 
-export function ModalTrigger<T extends ElementType = typeof HeadlessButton>({ as, ...props }: AnyElementProps<T>) {
+export function ModalTrigger<T extends ElementType = typeof HeadlessButton>({
+	as,
+	...props
+}: AnyElementProps<T>): ReactElement {
 	const Element = as || HeadlessButton
 
 	return <Element {...props} />
 }
 
-export function ModalTitle(props: DialogTitleProps) {
+export function ModalTitle(props: DialogTitleProps): ReactElement {
 	return <DialogTitle {...props} />
 }
 
-export function ModalDialog(props: HTMLAttributes<HTMLDivElement>) {
+export function ModalDialog(props: HTMLAttributes<HTMLDivElement>): ReactElement {
 	return <div {...props} />
 }
 
-export function ModalClose<T extends ElementType = typeof HeadlessButton>({ as, ...props }: AnyElementProps<T>) {
+export function ModalClose<T extends ElementType = typeof HeadlessButton>({
+	as,
+	...props
+}: AnyElementProps<T>): ReactElement {
 	const Element = as || HeadlessButton
 
 	return <Element {...props} />
 }
 
-export function Modal({ children, className, onClose, onOpen, place = 'bottom' }: ModalProps) {
+export function Modal({ children, className, onClose, onOpen, place = 'bottom' }: ModalProps): ReactElement {
 	const [bodyElement, setBodyElement] = useState<HTMLBodyElement | null>(null)
 
 	useEffect(() => {
