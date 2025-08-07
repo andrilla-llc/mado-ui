@@ -1,6 +1,6 @@
 // * Types
 import { AnyElementProps } from '../types'
-import { ElementType, ReactElement, ReactNode, useEffect } from 'react'
+import { ElementType, ReactNode } from 'react'
 
 export type DropDownButtonProps<TTag extends ElementType = 'button'> = Omit<
 	MenuButtonProps<TTag>,

@@ -36,7 +36,7 @@ const createConfig = (input, outputName) => ({
 })
 
 export default [
-	createConfig('src/index.ts', 'index'),
+	createConfig('src/index.ts', 'index', true),
 	createConfig('src/components.ts', 'components'),
 	createConfig('src/hooks.ts', 'hooks'),
 	createConfig('src/icons.ts', 'icons'),

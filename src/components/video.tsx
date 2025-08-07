@@ -46,14 +46,19 @@ export type VideoProps = Omit<
 // * React
 import {
 	ComponentPropsWithRef,
+	MouseEvent,
 	MouseEventHandler,
 	ReactEventHandler,
+	TouchEvent,
 	useCallback,
 	useEffect,
 	useId,
 	useRef,
 	useState,
 } from 'react'
+
+// * Hooks
+import { Coords, usePointerMovement } from '../hooks'
 
 // * Components
 import { DropDown, DropDownButton, DropDownItem, DropDownItems, DropDownSeparator } from './drop-down'
@@ -94,23 +99,33 @@ type FunctionKey = ' ' | 'ArrowRight' | 'ArrowLeft' | 'ArrowUp' | 'ArrowDown' | 
 type ModifierKey = 'meta' | 'ctrl' | 'alt' | 'shift'
 
 export function Video({ autoPlay, className, controls = true, poster, ref, srcSet, title, ...props }: VideoProps) {
+	// * General/Core
 	const uniqueID = useId(),
 		figureRef = useRef<HTMLElement>(null),
 		videoPlayerRef = useRef<HTMLVideoElement>(null),
-		[isPlaying, setIsPlaying] = useState(autoPlay),
-		isFullscreenRef = useRef(false),
-		[isFullscreen, setIsFullscreen] = useState(false),
-		[progress, setProgress] = useState(0),
-		[showControls, setShowControls] = useState(true),
-		pressedKeyListRef = useRef<ModifierKey[]>([]),
-		[pressedKeyList, setPressedKeyList] = useState<ModifierKey[]>([]),
-		[volume, setVolume] = useState(1)
-
-	const [seekIndicator, setSeekIndicator] = useState({ isInPlayedArea: false, position: 0 })
-
-	const sortedSrcSet = srcSet.sort((a, b) => a.width - b.width)
+		sortedSrcSet = srcSet.sort((a, b) => a.width - b.width)
 
 	const primaryPoster = poster ? poster.find(({ primary }) => primary)?.src || poster[0].src : ''
+
+	const preventDefaultEvent: ReactEventHandler = e => e.preventDefault()
+
+	// * Play/Pause Controls
+	const [isPlaying, setIsPlaying] = useState(autoPlay)
+
+	const togglePlay = useCallback(() => {
+		setIsPlaying(previous => {
+			if (!previous) videoPlayerRef.current?.play()
+			if (previous) videoPlayerRef.current?.pause()
+
+			return !previous
+		})
+
+		handleMouseMoveControls()
+	}, [])
+
+	// * Fullscreen Controls
+	const isFullscreenRef = useRef(false),
+		[isFullscreen, setIsFullscreen] = useState(false)
 
 	const updateFullscreenState = useCallback(() => {
 		if (Boolean(document.fullscreenElement) !== isFullscreenRef.current) {
@@ -118,34 +133,6 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 			isFullscreenRef.current = Boolean(document.fullscreenElement)
 		}
 	}, [])
-
-	useEffect(() => {
-		if (typeof window === 'undefined') return
-
-		document.addEventListener('fullscreenchange', updateFullscreenState)
-
-		return () => {
-			document.removeEventListener('fullscreenchange', updateFullscreenState)
-		}
-	}, [])
-
-	const handleTimeUpdate = () => {
-		if (videoPlayerRef.current) {
-			const newProgress = (videoPlayerRef.current.currentTime / videoPlayerRef.current.duration) * 100
-			setProgress(prev => (Math.abs(prev - newProgress) > 0.1 ? newProgress : prev))
-		}
-	}
-
-	const togglePlay = useCallback(
-		() =>
-			setIsPlaying(previous => {
-				if (!previous) videoPlayerRef.current?.play()
-				if (previous) videoPlayerRef.current?.pause()
-
-				return !previous
-			}),
-		[],
-	)
 
 	const toggleFullscreen = () => {
 		if (document.fullscreenElement) {
@@ -164,6 +151,95 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 
 	const enterPictureInPicture = () => videoPlayerRef.current?.requestPictureInPicture()
 
+	useEffect(() => {
+		if (typeof window === 'undefined') return
+
+		document.addEventListener('fullscreenchange', updateFullscreenState)
+
+		return () => {
+			document.removeEventListener('fullscreenchange', updateFullscreenState)
+		}
+	}, [])
+
+	// * Progress/Seeking Controls
+	const [progress, setProgress] = useState(0),
+		trackProgressStartTimeRef = useRef(0),
+		[seekIndicator, setSeekIndicator] = useState({ isInPlayedArea: false, position: 0 }),
+		seekIndicatorMouseDownPositionRef = useRef(0),
+		scrubberRef = useRef<HTMLDivElement>(null),
+		[timeRemaining, setTimeRemaining] = useState(0)
+
+	const handleTimeUpdate = () => {
+		const videoPlayer = videoPlayerRef.current
+
+		if (!videoPlayer) return
+
+		const { currentTime, duration } = videoPlayer
+
+		const newProgress = (currentTime / duration) * 100
+		setProgress(prev => (Math.abs(prev - newProgress) > 0.1 ? newProgress : prev))
+		setTimeRemaining(duration - currentTime)
+	}
+
+	const handleProgressSlider = ({ x }: Coords) => {
+		const videoPlayer = videoPlayerRef.current,
+			scrubber = scrubberRef.current
+
+		if (!videoPlayer || !scrubber) return
+
+		const { duration } = videoPlayer,
+			{ width } = scrubber.getBoundingClientRect()
+
+		videoPlayer.fastSeek(
+			Math.max(Math.min(trackProgressStartTimeRef.current + x / (width / duration), duration - 1), 0),
+		)
+	}
+
+	const { trackPointerMovement: trackProgress } = usePointerMovement({ onChange: handleProgressSlider })
+
+	const initiateTrackProgress = (e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>) => {
+		const videoPlayer = videoPlayerRef.current
+
+		if (!videoPlayer) return
+
+		trackProgress(e)
+
+		trackProgressStartTimeRef.current = videoPlayer.currentTime
+	}
+
+	const handleSeekIndicatorMovement: MouseEventHandler<HTMLDivElement> = e => {
+		const videoPlayer = videoPlayerRef.current
+
+		if (!videoPlayer) return
+
+		const { currentTime, duration } = videoPlayer
+
+		const { clientX, currentTarget } = e,
+			{ width, x } = currentTarget.getBoundingClientRect()
+
+		const position = clientX - x
+
+		const isInPlayedArea = position <= width / (duration / currentTime)
+
+		setSeekIndicator({ isInPlayedArea, position })
+	}
+
+	const initializeSeeking = () => (seekIndicatorMouseDownPositionRef.current = seekIndicator.position)
+
+	const handleSeekRelease: MouseEventHandler<HTMLDivElement> = e => {
+		const videoPlayer = videoPlayerRef.current
+
+		if (!videoPlayer) return
+
+		const { duration } = videoPlayer,
+			{ currentTarget } = e,
+			{ width } = currentTarget.getBoundingClientRect()
+
+		if (seekIndicatorMouseDownPositionRef.current === seekIndicator.position)
+			videoPlayer.fastSeek(Math.min(duration / (width / seekIndicatorMouseDownPositionRef.current), duration - 1))
+	}
+
+	// * Skip Controls
 	const [skipDuration, setSkipDuration] = useState(10)
 
 	const getSkipAmount = () => {
@@ -186,24 +262,100 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 	}
 
 	const skipBack = useCallback(() => {
-		if (!videoPlayerRef.current) return
+		const videoPlayer = videoPlayerRef.current
 
-		const { currentTime } = videoPlayerRef.current
+		if (!videoPlayer) return
+
+		const { currentTime } = videoPlayer
 
 		const skipAmount = getSkipAmount()
 
-		videoPlayerRef.current.fastSeek(Math.max(currentTime - skipAmount, 0))
+		videoPlayer.fastSeek(Math.max(currentTime - skipAmount, 0))
 	}, [])
 
 	const skipForward = useCallback(() => {
-		if (!videoPlayerRef.current) return
+		const videoPlayer = videoPlayerRef.current
 
-		const { currentTime, duration } = videoPlayerRef.current
+		if (!videoPlayer) return
+
+		const { currentTime, duration } = videoPlayer
 
 		const skipAmount = getSkipAmount()
 
-		videoPlayerRef.current.fastSeek(Math.min(currentTime + skipAmount, duration - 1))
+		videoPlayer.fastSeek(Math.min(currentTime + skipAmount, duration - 1))
 	}, [])
+
+	// * Volume Controls
+	const [volume, setVolume] = useState(1),
+		trackVolumeStartRef = useRef(0)
+
+	const handleVolumeChange: ReactEventHandler<HTMLVideoElement> = e => {
+		const { currentTarget } = e,
+			{ volume } = currentTarget
+
+		setVolume(volume)
+	}
+
+	const handleVolumeSlider = ({ y }: Coords) => {
+		const videoPlayer = videoPlayerRef.current
+
+		if (!videoPlayer) return
+
+		videoPlayer.volume = Math.max(Math.min(trackVolumeStartRef.current + (y / 96) * -1, 1), 0)
+	}
+
+	const { trackPointerMovement: trackVolume } = usePointerMovement({ onChange: handleVolumeSlider })
+
+	const initiateTrackVolume = (e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>) => {
+		const videoPlayer = videoPlayerRef.current
+
+		if (!videoPlayer) return
+
+		trackVolume(e)
+
+		trackVolumeStartRef.current = videoPlayer.volume
+	}
+
+	const increaseVolume = () => {
+		const videoPlayer = videoPlayerRef.current
+
+		if (!videoPlayer) return
+
+		videoPlayer.volume += 0.1
+	}
+
+	const decreaseVolume = () => {
+		const videoPlayer = videoPlayerRef.current
+
+		if (!videoPlayer) return
+
+		videoPlayer.volume -= 0.1
+	}
+
+	// * Controls Visibility
+	const [showControls, setShowControls] = useState(true),
+		mouseMoveTimeoutRef = useRef<NodeJS.Timeout>(undefined)
+
+	const displayControls = () => {
+		if (!showControls) setShowControls(true)
+	}
+
+	const hideControls = () => {
+		if (!videoPlayerRef.current?.paused) setShowControls(false)
+	}
+
+	const handleMouseMoveControls = () => {
+		clearTimeout(mouseMoveTimeoutRef.current)
+		displayControls()
+
+		mouseMoveTimeoutRef.current = setTimeout(() => hideControls(), 1500)
+	}
+
+	const clearMouseMoveControlsTimeout = () => clearTimeout(mouseMoveTimeoutRef.current)
+
+	// * Keyboard Controls
+	const pressedKeyListRef = useRef<ModifierKey[]>([]),
+		[pressedKeyList, setPressedKeyList] = useState<ModifierKey[]>([])
 
 	const updateModifierKeys = useCallback(
 		({
@@ -242,8 +394,6 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 		[],
 	)
 
-	const preventContextMenu: MouseEventHandler<HTMLButtonElement> = e => e.preventDefault()
-
 	const handleKeydown = useCallback(
 		(e: KeyboardEvent) => {
 			const { key, metaKey, altKey, shiftKey, ctrlKey } = e
@@ -266,10 +416,10 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 					skipBack()
 					break
 				case 'ArrowUp':
-					// Volume up
+					increaseVolume()
 					break
 				case 'ArrowDown':
-					// Volume down
+					decreaseVolume()
 					break
 				case 'f':
 					requestFullscreen()
@@ -291,68 +441,21 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 	useEffect(() => {
 		if (typeof window === 'undefined') return
 
-		document.addEventListener('keydown', handleKeydown)
-		document.addEventListener('keyup', handleKeyup)
+		const controller = new AbortController(),
+			signal = controller.signal
+
+		document.addEventListener('keydown', handleKeydown, { signal })
+		document.addEventListener('keyup', handleKeyup, { signal })
 
 		return () => {
-			document.removeEventListener('keydown', handleKeydown)
-			document.removeEventListener('keyup', handleKeyup)
+			controller.abort()
 		}
 	}, [handleKeydown, handleKeyup])
 
+	// * Remote Playback Controls
 	const handleRemotePlayback = () => videoPlayerRef.current?.remote.prompt()
 
-	const handleSeekIndicatorMovement: MouseEventHandler<HTMLDivElement> = e => {
-		if (!videoPlayerRef.current) return
-
-		const { currentTime, duration } = videoPlayerRef.current
-
-		const { clientX, currentTarget } = e,
-			{ width, x } = currentTarget.getBoundingClientRect()
-
-		const position = clientX - x
-
-		const isInPlayedArea = position <= width / (duration / currentTime)
-
-		setSeekIndicator({ isInPlayedArea, position })
-	}
-
-	const seekIndicatorMouseDownPositionRef = useRef(0)
-
-	const initializeSeeking = () => (seekIndicatorMouseDownPositionRef.current = seekIndicator.position)
-
-	const handleSeekRelease: MouseEventHandler<HTMLDivElement> = e => {
-		if (!videoPlayerRef.current) return
-
-		const { duration } = videoPlayerRef.current,
-			{ currentTarget } = e,
-			{ width } = currentTarget.getBoundingClientRect()
-
-		if (seekIndicatorMouseDownPositionRef.current === seekIndicator.position)
-			videoPlayerRef.current.fastSeek(
-				Math.min(duration / (width / seekIndicatorMouseDownPositionRef.current), duration - 1),
-			)
-	}
-
-	const mouseMoveTimeoutRef = useRef<NodeJS.Timeout>(undefined)
-
-	const displayControls = () => {
-		if (!showControls) setShowControls(true)
-	}
-
-	const hideControls = () => {
-		if (!videoPlayerRef.current?.paused) setShowControls(false)
-	}
-
-	const handleMouseMoveControls = () => {
-		clearTimeout(mouseMoveTimeoutRef.current)
-		displayControls()
-
-		mouseMoveTimeoutRef.current = setTimeout(() => hideControls(), 1500)
-	}
-
-	const clearMouseMoveControlsTimeout = () => clearTimeout(mouseMoveTimeoutRef.current)
-
+	// * Progressive Enhancement
 	const progressiveEnhancementSourceLengthRef = useRef(1)
 
 	const [progressiveEnhancementList, setProgressiveEnhancementList] = useState(
@@ -363,8 +466,6 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 		const { currentTarget } = e,
 			{ currentSrc, currentTime } = currentTarget
 
-		console.log('current:', currentSrc)
-
 		const proEnhanceSrcLength = progressiveEnhancementSourceLengthRef.current + 1,
 			updatedProEnhanceList = sortedSrcSet.filter((_, index) => index < proEnhanceSrcLength)
 
@@ -374,9 +475,9 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 		progressiveEnhancementSourceLengthRef.current = proEnhanceSrcLength
 
 		const srcToCompare =
-			typeof updatedProEnhanceList[-1].src === 'string'
-				? updatedProEnhanceList[-1].src
-				: updatedProEnhanceList[-1].srcGroup
+			typeof updatedProEnhanceList.at(-1)?.src === 'string'
+				? updatedProEnhanceList.at(-1)?.src
+				: updatedProEnhanceList.at(-1)?.srcGroup
 
 		if (!srcToCompare) return
 
@@ -384,15 +485,13 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 			(Array.isArray(srcToCompare) && srcToCompare.every(({ src }) => src !== currentSrc)) ||
 			(!Array.isArray(srcToCompare) && srcToCompare !== currentSrc)
 		) {
-			const srcType = currentSrc.split('.')[-1]
+			const srcType = currentSrc.split('.').at(-1)
 
 			const src = Array.isArray(srcToCompare)
-				? srcToCompare.find(({ src }) => src.split('.')[-1] === srcType)?.src || srcToCompare[0].src
+				? srcToCompare.find(({ src }) => src.split('.').at(-1) === srcType)?.src || srcToCompare[0].src
 				: srcToCompare
 
 			if (!src) return
-
-			console.log('updated:', src)
 
 			currentTarget.src = src
 			currentTarget.currentTime = currentTime || 0
@@ -400,10 +499,13 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 		}
 	}
 
+	// * Download Controls
 	const captureCurrentFrame = () => {
-		if (!videoPlayerRef.current) return
+		const videoPlayer = videoPlayerRef.current
 
-		const { videoHeight, videoWidth } = videoPlayerRef.current
+		if (!videoPlayer) return
+
+		const { videoHeight, videoWidth } = videoPlayer
 
 		const canvas = document.createElement('canvas'),
 			canvasContext = canvas.getContext('2d')
@@ -413,7 +515,7 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 		canvas.width = videoWidth
 		canvas.height = videoHeight
 
-		canvasContext.drawImage(videoPlayerRef.current, 0, 0, canvas.width, canvas.height)
+		canvasContext.drawImage(videoPlayer, 0, 0, canvas.width, canvas.height)
 
 		canvas.toBlob(
 			blob => {
@@ -436,20 +538,6 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 		)
 	}
 
-	const increaseVolume = () => {
-		if (!videoPlayerRef.current) return
-
-		videoPlayerRef.current.volume += 0.1
-		setVolume(videoPlayerRef.current.volume)
-	}
-
-	const decreaseVolume = () => {
-		if (!videoPlayerRef.current) return
-
-		videoPlayerRef.current.volume -= 0.1
-		setVolume(videoPlayerRef.current.volume)
-	}
-
 	return (
 		<figure
 			{...(showControls ? { 'data-controls': true } : {})}
@@ -465,8 +553,8 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 				{...props}
 				className='size-full object-cover'
 				onLoad={handleProEnhance}
-				onLoadedMetadata={handleProEnhance}
 				onTimeUpdate={handleTimeUpdate}
+				onVolumeChange={handleVolumeChange}
 				poster={primaryPoster}
 				ref={videoPlayerRef || ref}
 				title={title}
@@ -487,12 +575,12 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 			</video>
 
 			{controls && (
-				<div className='absolute inset-0 isolate text-neutral-50 opacity-0 transition-opacity duration-1000 ease-exponential group-data-controls/video:opacity-100'>
+				<div className='absolute inset-0 isolate text-neutral-50 opacity-0 transition-opacity duration-1000 ease-exponential select-none group-data-controls/video:opacity-100'>
 					<div className='grid-flow-cols absolute top-1/2 left-1/2 grid -translate-x-1/2 -translate-y-1/2 place-items-center gap-2'>
 						<button
 							className='col-start-1 col-end-2 row-start-0 row-end-1 grid size-16 rounded-full backdrop-blur-[1px] backdrop-brightness-101 transition-[scale,-webkit-backdrop-filter,backdrop-filter] duration-300 ease-exponential active:scale-95 active:backdrop-blur-[2px] active:backdrop-brightness-125 pointer-fine:hover:scale-105 pointer-fine:hover:backdrop-blur-xs pointer-fine:hover:backdrop-brightness-110 pointer-fine:active:scale-95 pointer-fine:active:backdrop-blur-[2px] pointer-fine:active:backdrop-brightness-125'
 							onClick={togglePlay}
-							onContextMenu={preventContextMenu}
+							onContextMenu={preventDefaultEvent}
 							title={isPlaying ? 'Pause' : 'Play'}
 						>
 							<PauseFill className='col-start-0 col-end-1 row-start-0 row-end-1 size-full scale-0 opacity-0 drop-shadow-[0_.25rem_2rem] drop-shadow-neutral-950/75 transition-[scale,opacity] duration-500 ease-exponential group-data-playing/video:scale-60 group-data-playing/video:opacity-100' />
@@ -503,7 +591,7 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 						<button
 							className='col-start-0 col-end-1 row-start-0 row-end-1 grid size-12 rounded-full backdrop-blur-[1px] backdrop-brightness-101 transition-[scale,-webkit-backdrop-filter,backdrop-filter] duration-300 ease-exponential active:scale-95 active:backdrop-blur-[2px] active:backdrop-brightness-125 pointer-fine:hover:scale-105 pointer-fine:hover:backdrop-blur-xs pointer-fine:hover:backdrop-brightness-110 pointer-fine:active:scale-95 pointer-fine:active:backdrop-blur-[2px] pointer-fine:active:backdrop-brightness-125'
 							onClick={skipBack}
-							onContextMenu={preventContextMenu}
+							onContextMenu={preventDefaultEvent}
 							title={`Skip Back ${skipDuration} Seconds`}
 						>
 							<FiveArrowTriangleheadCounterclockwise className='col-start-0 col-end-1 row-start-0 row-end-1 size-full scale-60 opacity-0 drop-shadow-[0_.25rem_2rem] drop-shadow-neutral-950/75 group-data-alt/video:group-data-meta/video:opacity-100 group-data-alt/video:group-data-meta/video:group-data-ctrl/video:opacity-0 group-data-alt/video:group-data-meta/video:group-data-shift/video:opacity-0' />
@@ -522,7 +610,7 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 						<button
 							className='col-start-2 col-end-3 row-start-0 row-end-1 grid size-12 rounded-full backdrop-blur-[1px] backdrop-brightness-101 transition-[scale,-webkit-backdrop-filter,backdrop-filter] duration-300 ease-exponential active:scale-95 active:backdrop-blur-[2px] active:backdrop-brightness-125 pointer-fine:hover:scale-105 pointer-fine:hover:backdrop-blur-xs pointer-fine:hover:backdrop-brightness-110 pointer-fine:active:scale-95 pointer-fine:active:backdrop-blur-[2px] pointer-fine:active:backdrop-brightness-125'
 							onClick={skipForward}
-							onContextMenu={preventContextMenu}
+							onContextMenu={preventDefaultEvent}
 							title={`Skip Forward ${skipDuration} Seconds`}
 						>
 							<FiveArrowTriangleheadClockwise className='col-start-0 col-end-1 row-start-0 row-end-1 size-full scale-60 opacity-0 drop-shadow-[0_.25rem_2rem] drop-shadow-neutral-950/75 group-data-alt/video:group-data-meta/video:opacity-100 group-data-alt/video:group-data-meta/video:group-data-ctrl/video:opacity-0 group-data-alt/video:group-data-meta/video:group-data-shift/video:opacity-0' />
@@ -542,9 +630,14 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 					<div className='absolute inset-x-2 bottom-2 flex items-center gap-2 rounded-xl bg-neutral-900/50 px-2 py-1 shadow-2xl backdrop-blur-xs backdrop-brightness-110'>
 						<div
 							className='group/scrubber h-2 w-max flex-grow cursor-grab overflow-clip rounded-md bg-neutral-50/50 backdrop-blur-xs backdrop-brightness-110 transition-[height] duration-300 ease-exponential active:h-4 pointer-fine:hover:h-4 pointer-fine:active:h-4'
-							onMouseDown={initializeSeeking}
+							onMouseDown={e => {
+								initiateTrackProgress(e)
+								initializeSeeking()
+							}}
 							onMouseMove={handleSeekIndicatorMovement}
 							onMouseUp={handleSeekRelease}
+							onTouchStart={initiateTrackProgress}
+							ref={scrubberRef}
 						>
 							<div
 								aria-hidden='true'
@@ -570,13 +663,46 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 							<progress className='sr-only' max={MAX_PROGRESS} value={progress} />
 						</div>
 
+						<span className='block text-xs'>
+							{timeRemaining / 60 >= 1
+								? `${Math.round(timeRemaining / 60)}:${Math.round(
+										(timeRemaining / 60 - Math.round(timeRemaining / 60)) * 60,
+									)
+										.toString()
+										.padStart(2, '0')}`
+								: Math.round(timeRemaining) === 60
+									? `1:00`
+									: `0:${Math.round(timeRemaining).toString().padStart(2, '0')}`}
+						</span>
+
 						<DropDown>
 							<DropDownButton
 								arrow={false}
-								className='flex size-6 items-center justify-center rounded-xs transition-transform duration-300 ease-exponential active:scale-95 pointer-fine:hover:scale-105 pointer-fine:active:scale-95'
+								className='group/button flex size-6 items-center justify-center rounded-xs transition-transform duration-300 ease-exponential active:scale-95 pointer-fine:hover:scale-105 pointer-fine:active:scale-95'
 								title='Volume'
 							>
-								<SpeakerWave3Fill className='size-full scale-80 drop-shadow-[0_.125rem_1rem] drop-shadow-neutral-950/75' />
+								<svg
+									viewBox='0 0 64 47'
+									className='size-full scale-80 drop-shadow-[0_.125rem_1rem] drop-shadow-neutral-950/75 transition-transform duration-300 ease-exponential'
+									style={{ translate: `${volume > 0.66 ? '0' : volume > 0.33 ? '2px' : volume > 0 ? '4px' : '6px'} 0` }}
+								>
+									<path d='M25.707,44.076C27.257,44.076 28.39,42.947 28.39,41.387L28.39,4.841C28.39,3.307 27.257,2.025 25.656,2.025C24.542,2.025 23.767,2.512 22.558,3.666L12.393,13.203C12.251,13.345 12.047,13.436 11.818,13.436L4.99,13.436C1.759,13.436 0,15.195 0,18.654L0,27.525C0,30.953 1.759,32.737 4.99,32.737L11.818,32.737C12.047,32.737 12.251,32.808 12.393,32.95L22.558,42.583C23.666,43.615 24.593,44.076 25.707,44.076Z' />
+									<path
+										className='transition-opacity duration-300 ease-exponential'
+										d='M36.874,33.192C37.684,33.728 38.797,33.566 39.439,32.64C41.265,30.222 42.371,26.683 42.371,23.026C42.371,19.368 41.265,15.855 39.439,13.411C38.797,12.485 37.684,12.323 36.874,12.885C35.923,13.553 35.761,14.721 36.505,15.713C37.901,17.607 38.662,20.249 38.662,23.026C38.662,25.802 37.876,28.419 36.505,30.338C35.786,31.355 35.923,32.498 36.874,33.192Z'
+										style={{ opacity: volume > 0 ? 1 : 0 }}
+									/>
+									<path
+										className='transition-opacity duration-300 ease-exponential'
+										d='M45.738,39.394C46.624,39.981 47.712,39.799 48.354,38.868C51.402,34.69 53.208,28.904 53.208,23.026C53.208,17.148 51.427,11.31 48.354,7.183C47.712,6.252 46.624,6.07 45.738,6.657C44.858,7.249 44.701,8.362 45.399,9.354C48.023,13.032 49.499,17.952 49.499,23.026C49.499,28.099 47.972,32.994 45.399,36.697C44.726,37.689 44.858,38.802 45.738,39.394Z'
+										style={{ opacity: volume > 0.33 ? 1 : 0 }}
+									/>
+									<path
+										className='transition-opacity duration-300 ease-exponential'
+										d='M54.679,45.708C55.514,46.32 56.683,46.082 57.315,45.121C61.498,39.091 64,31.447 64,23.026C64,14.604 61.422,6.986 57.315,0.93C56.683,-0.056 55.514,-0.269 54.679,0.343C53.804,0.956 53.668,2.079 54.33,3.071C58.012,8.514 60.342,15.379 60.342,23.026C60.342,30.647 58.012,37.562 54.33,42.98C53.668,43.972 53.804,45.095 54.679,45.708Z'
+										style={{ opacity: volume > 0.66 ? 1 : 0 }}
+									/>
+								</svg>
 							</DropDownButton>
 
 							<DropDownItems
@@ -586,7 +712,6 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 									to: 'top',
 								}}
 								className='bg-neutral-900/50 px-1.5 py-1.5 text-neutral-50 backdrop-blur-xs backdrop-brightness-110'
-								static
 							>
 								<DropDownItem
 									as='button'
@@ -597,8 +722,18 @@ export function Video({ autoPlay, className, controls = true, poster, ref, srcSe
 									<SpeakerPlusFill className='size-full scale-80 drop-shadow-[0_.125rem_1rem] drop-shadow-neutral-950/75' />
 								</DropDownItem>
 
-								<DropDownSeparator className='mx-auto my-2 h-24 w-2 cursor-grab overflow-clip rounded-md bg-neutral-50/50 backdrop-blur-xs backdrop-brightness-110 transition-[width] duration-300 ease-exponential active:w-4 pointer-fine:hover:w-4 pointer-fine:active:w-4'>
+								<DropDownSeparator
+									aria-label='Volume slider'
+									aria-valuemin={0}
+									aria-valuemax={100}
+									aria-valuenow={volume * 100}
+									className='mx-auto my-2 h-24 w-2 cursor-grab overflow-clip rounded-md bg-neutral-50/50 backdrop-blur-xs backdrop-brightness-110 transition-[width] duration-300 ease-exponential active:w-4 pointer-fine:hover:w-4 pointer-fine:active:w-4'
+									onMouseDown={initiateTrackVolume}
+									onTouchStart={initiateTrackVolume}
+									role='slider'
+								>
 									<div
+										aria-hidden='true'
 										className='grid size-full rotate-180 transition-rows duration-300 ease-exponential'
 										style={{ gridTemplateRows: `${volume}fr` }}
 									>

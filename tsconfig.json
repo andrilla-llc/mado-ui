@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "ES2021",
+		"target": "ES2024",
 		"module": "ESNext",
 		"moduleResolution": "node",
 		"jsx": "react-jsx",
@@ -10,8 +10,10 @@
 		"declarationDir": "dist",
 		"outDir": "dist",
 		"rootDir": "src",
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"declarationMap": true,
+		"resolveJsonModule": true
 	},
-	"include": ["src"],
+	"include": ["src/**/*"],
 	"exclude": ["node_modules", "dist"]
 }
