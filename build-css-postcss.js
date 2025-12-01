@@ -10,7 +10,7 @@ async function buildCSS() {
 
 		const res = await postcss([
 			tailwindcss({
-				content: ['./src/components/**/*.{js,jsx,ts,tsx}'],
+				content: ['./src/components/**/*.{js,jsx,ts,tsx}', './src/graphics/social-media/**/*.{js,jsx,ts,tsx}'],
 			}),
 		]).process(css, {
 			from: './src/css/index.css',
@@ -29,6 +29,10 @@ const watchMode = process.argv.includes('--watch') || process.argv.includes('-w'
 
 if (watchMode) {
 	fs.watch('./src/components', { recursive: true }, (eventType, filename) => {
+		if (filename && filename.match(/\.(js|jsx|ts|tsx)$/)) buildCSS()
+	})
+
+	fs.watch('./src/graphics/social-media', { recursive: true }, (eventType, filename) => {
 		if (filename && filename.match(/\.(js|jsx|ts|tsx)$/)) buildCSS()
 	})
 

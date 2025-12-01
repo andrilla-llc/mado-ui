@@ -2,7 +2,7 @@
 const config = {
 	plugins: {
 		'@tailwindcss/postcss': {
-			content: ['./src/components/**/*.{js,jsx,ts,tsx}'],
+			content: ['./src/components/**/*.{js,jsx,ts,tsx}', './src/graphics/social-media/**/*.{js,jsx,ts,tsx}'],
 		},
 	},
 }

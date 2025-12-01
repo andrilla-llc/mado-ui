@@ -1,0 +1,1017 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Example</title>
+	</head>
+	<body>
+		<div></div>
+		<script>
+			const display = document.querySelector('div')
+
+			const timezoneList = [
+				{
+					abbr: 'ACDT',
+					name: 'Australian Central Daylight Time',
+					offset: ['+', 10, 30],
+				},
+				{
+					abbr: 'ACST',
+					name: 'Australian Central Standard Time',
+					offset: ['+', 9, 30],
+				},
+				{
+					abbr: 'ACT',
+					name: 'Acre Time',
+					offset: ['-', 5, 0],
+				},
+				{
+					abbr: 'ACWST',
+					name: 'Australian Central Western Standard Time',
+					offset: ['+', 8, 45],
+				},
+				{
+					abbr: 'ADT',
+					name: 'Atlantic Daylight Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'AEDT',
+					name: 'Australian Eastern Daylight Savings Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'AEST',
+					name: 'Australian Eastern Standard Time',
+					offset: ['+', 10, 0],
+				},
+				{
+					abbr: 'AFT',
+					name: 'Afghanistan Time',
+					offset: ['+', 4, 30],
+				},
+				{
+					abbr: 'AKDT',
+					name: 'Alaska Daylight Time',
+					offset: ['-', 8, 0],
+				},
+				{
+					abbr: 'AKST',
+					name: 'Alaska Standard Time',
+					offset: ['-', 9, 0],
+				},
+				{
+					abbr: 'AMST',
+					name: 'Amazon Summer Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'AMT',
+					name: 'Amazon Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'AMT',
+					name: 'Armenia Time',
+					offset: ['+', 4, 0],
+				},
+				{
+					abbr: 'ART',
+					name: 'Argentina Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'AST',
+					name: 'Atlantic Standard Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'AST',
+					name: 'Arabia Standard Time',
+					offset: ['+', 3, 0],
+				},
+				{
+					abbr: 'AT',
+					name: 'Atlantic Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'AWST',
+					name: 'Australian Western Standard Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'AZOST',
+					name: 'Azores Summer Time',
+					offset: ['+', 0, 0],
+				},
+				{
+					abbr: 'AZOT',
+					name: 'Azores Standard Time',
+					offset: ['-', 1, 0],
+				},
+				{
+					abbr: 'AZT',
+					name: 'Azerbaijan Time',
+					offset: ['+', 4, 0],
+				},
+				{
+					abbr: 'BDT',
+					name: 'Brunei Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'BIT',
+					name: 'Baker Island Time',
+					offset: ['-', 12, 0],
+				},
+				{
+					abbr: 'BNT',
+					name: 'Brunei Darussalam Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'BOT',
+					name: 'Bolivia Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'BRST',
+					name: 'Brasilia Summer Time',
+					offset: ['-', 2, 0],
+				},
+				{
+					abbr: 'BRT',
+					name: 'Brasilia Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'BST',
+					name: 'British Summer Time',
+					offset: ['+', 1, 0],
+				},
+				{
+					abbr: 'BST',
+					name: 'Bangladesh Standard Time',
+					offset: ['+', 6, 0],
+				},
+				{
+					abbr: 'BST',
+					name: 'Bougainville Standard Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'BTT',
+					name: 'Bhutan Time',
+					offset: ['+', 6, 0],
+				},
+				{
+					abbr: 'CAT',
+					name: 'Central Africa Time',
+					offset: ['+', 2, 0],
+				},
+				{
+					abbr: 'CCT',
+					name: 'Cocos Islands Time',
+					offset: ['+', 6, 30],
+				},
+				{
+					abbr: 'CDT',
+					name: 'Central Daylight Time',
+					offset: ['-', 5, 0],
+				},
+				{
+					abbr: 'CDT',
+					name: 'Cuba Daylight Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'CEST',
+					name: 'Central European Summer Time',
+					offset: ['+', 2, 0],
+				},
+				{
+					abbr: 'CET',
+					name: 'Central European Time',
+					offset: ['+', 1, 0],
+				},
+				{
+					abbr: 'CHADT',
+					name: 'Chatham Daylight Time',
+					offset: ['+', 13, 45],
+				},
+				{
+					abbr: 'CHAST',
+					name: 'Chatham Standard Time',
+					offset: ['+', 12, 45],
+				},
+				{
+					abbr: 'CHOST',
+					name: 'Choibalsan Summer Time',
+					offset: ['+', 9, 0],
+				},
+				{
+					abbr: 'CHOT',
+					name: 'Choibalsan Standard Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'CHST',
+					name: 'Chamorro Standard Time',
+					offset: ['+', 10, 0],
+				},
+				{
+					abbr: 'CHUT',
+					name: 'Chuuk Time',
+					offset: ['+', 10, 0],
+				},
+				{
+					abbr: 'CIST',
+					name: 'Clipperton Island Standard Time',
+					offset: ['-', 8, 0],
+				},
+				{
+					abbr: 'CIT',
+					name: 'Central Indonesia Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'CKT',
+					name: 'Cook Island Time',
+					offset: ['-', 10, 0],
+				},
+				{
+					abbr: 'CLST',
+					name: 'Chile Summer Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'CLT',
+					name: 'Chile Standard Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'COST',
+					name: 'Colombia Summer Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'COT',
+					name: 'Colombia Time',
+					offset: ['-', 5, 0],
+				},
+				{
+					abbr: 'CST',
+					name: 'Central Standard Time',
+					offset: ['-', 6, 0],
+				},
+				{
+					abbr: 'CST',
+					name: 'China Standard Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'CST',
+					name: 'Cuba Standard Time',
+					offset: ['-', 5, 0],
+				},
+				{
+					abbr: 'CT',
+					name: 'Central Time',
+					offset: ['-', 6, 0],
+				},
+				{
+					abbr: 'CVT',
+					name: 'Cape Verde Time',
+					offset: ['-', 1, 0],
+				},
+				{
+					abbr: 'CWST',
+					name: 'Central Western Standard Time',
+					offset: ['+', 8, 45],
+				},
+				{
+					abbr: 'CXT',
+					name: 'Christmas Island Time',
+					offset: ['+', 7, 0],
+				},
+				{
+					abbr: 'DAVT',
+					name: 'Davis Time',
+					offset: ['+', 7, 0],
+				},
+				{
+					abbr: 'DDUT',
+					name: "Dumont d'Urville Time",
+					offset: ['+', 10, 0],
+				},
+				{
+					abbr: 'EASST',
+					name: 'Easter Island Summer Time',
+					offset: ['-', 5, 0],
+				},
+				{
+					abbr: 'EAST',
+					name: 'Easter Island Standard Time',
+					offset: ['-', 6, 0],
+				},
+				{
+					abbr: 'EAT',
+					name: 'East Africa Time',
+					offset: ['+', 3, 0],
+				},
+				{
+					abbr: 'ECT',
+					name: 'Ecuador Time',
+					offset: ['-', 5, 0],
+				},
+				{
+					abbr: 'EDT',
+					name: 'Eastern Daylight Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'EEST',
+					name: 'Eastern European Summer Time',
+					offset: ['+', 3, 0],
+				},
+				{
+					abbr: 'EET',
+					name: 'Eastern European Time',
+					offset: ['+', 2, 0],
+				},
+				{
+					abbr: 'EGST',
+					name: 'Eastern Greenland Summer Time',
+					offset: ['+', 0, 0],
+				},
+				{
+					abbr: 'EGT',
+					name: 'Eastern Greenland Time',
+					offset: ['-', 1, 0],
+				},
+				{
+					abbr: 'EIT',
+					name: 'Eastern Indonesian Time',
+					offset: ['+', 9, 0],
+				},
+				{
+					abbr: 'EST',
+					name: 'Eastern Standard Time',
+					offset: ['-', 5, 0],
+				},
+				{
+					abbr: 'ET',
+					name: 'Eastern Time',
+					offset: ['-', 5, 0],
+				},
+				{
+					abbr: 'FET',
+					name: 'Further-eastern European Time',
+					offset: ['+', 3, 0],
+				},
+				{
+					abbr: 'FJT',
+					name: 'Fiji Time',
+					offset: ['+', 12, 0],
+				},
+				{
+					abbr: 'FKST',
+					name: 'Falkland Islands Summer Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'FKT',
+					name: 'Falkland Islands Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'FNT',
+					name: 'Fernando de Noronha Time',
+					offset: ['-', 2, 0],
+				},
+				{
+					abbr: 'GALT',
+					name: 'Galapagos Time',
+					offset: ['-', 6, 0],
+				},
+				{
+					abbr: 'GAMT',
+					name: 'Gambier Islands',
+					offset: ['-', 9, 0],
+				},
+				{
+					abbr: 'GET',
+					name: 'Georgia Standard Time',
+					offset: ['+', 4, 0],
+				},
+				{
+					abbr: 'GFT',
+					name: 'French Guiana Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'GILT',
+					name: 'Gilbert Island Time',
+					offset: ['+', 12, 0],
+				},
+				{
+					abbr: 'GIT',
+					name: 'Gambier Island Time',
+					offset: ['-', 9, 0],
+				},
+				{
+					abbr: 'GMT',
+					name: 'Greenwich Mean Time',
+					offset: ['+', 0, 0],
+				},
+				{
+					abbr: 'GST',
+					name: 'Gulf Standard Time',
+					offset: ['+', 4, 0],
+				},
+				{
+					abbr: 'GST',
+					name: 'South Georgia Time',
+					offset: ['-', 2, 0],
+				},
+				{
+					abbr: 'GYT',
+					name: 'Guyana Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'HADT',
+					name: 'Hawaii-Aleutian Daylight Time',
+					offset: ['-', 9, 0],
+				},
+				{
+					abbr: 'HAST',
+					name: 'Hawaii-Aleutian Standard Time',
+					offset: ['-', 10, 0],
+				},
+				{
+					abbr: 'HKT',
+					name: 'Hong Kong Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'HMT',
+					name: 'Heard and McDonald Islands Time',
+					offset: ['+', 5, 0],
+				},
+				{
+					abbr: 'HOVST',
+					name: 'Khovd Summer Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'HOVT',
+					name: 'Khovd Standard Time',
+					offset: ['+', 7, 0],
+				},
+				{
+					abbr: 'ICT',
+					name: 'Indochina Time',
+					offset: ['+', 7, 0],
+				},
+				{
+					abbr: 'IDT',
+					name: 'Israel Daylight Time',
+					offset: ['+', 3, 0],
+				},
+				{
+					abbr: 'IOT',
+					name: 'Indian Chagos Time',
+					offset: ['+', 6, 0],
+				},
+				{
+					abbr: 'IRDT',
+					name: 'Iran Daylight Time',
+					offset: ['+', 4, 30],
+				},
+				{
+					abbr: 'IRKT',
+					name: 'Irkutsk Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'IRST',
+					name: 'Iran Standard Time',
+					offset: ['+', 3, 30],
+				},
+				{
+					abbr: 'IST',
+					name: 'Indian Standard Time',
+					offset: ['+', 5, 30],
+				},
+				{
+					abbr: 'IST',
+					name: 'Irish Standard Time',
+					offset: ['+', 1, 0],
+				},
+				{
+					abbr: 'IST',
+					name: 'Israel Standard Time',
+					offset: ['+', 2, 0],
+				},
+				{
+					abbr: 'JST',
+					name: 'Japan Standard Time',
+					offset: ['+', 9, 0],
+				},
+				{
+					abbr: 'KGT',
+					name: 'Kyrgyzstan time',
+					offset: ['+', 6, 0],
+				},
+				{
+					abbr: 'KOST',
+					name: 'Kosrae Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'KRAT',
+					name: 'Krasnoyarsk Time',
+					offset: ['+', 7, 0],
+				},
+				{
+					abbr: 'KST',
+					name: 'Korea Standard Time',
+					offset: ['+', 9, 0],
+				},
+				{
+					abbr: 'LHDT',
+					name: 'Lord Howe Daylight Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'LHST',
+					name: 'Lord Howe Standard Time',
+					offset: ['+', 10, 30],
+				},
+				{
+					abbr: 'LINT',
+					name: 'Line Islands Time',
+					offset: ['+', 14, 0],
+				},
+				{
+					abbr: 'MAGT',
+					name: 'Magadan Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'MART',
+					name: 'Marquesas Islands Time',
+					offset: ['-', 9, 30],
+				},
+				{
+					abbr: 'MAWT',
+					name: 'Mawson Station Time',
+					offset: ['+', 5, 0],
+				},
+				{
+					abbr: 'MDT',
+					name: 'Mountain Daylight Time',
+					offset: ['-', 6, 0],
+				},
+				{
+					abbr: 'MHT',
+					name: 'Marshall Islands',
+					offset: ['+', 12, 0],
+				},
+				{
+					abbr: 'MIST',
+					name: 'Macquarie Island Station Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'MIT',
+					name: 'Marquesas Islands Time',
+					offset: ['-', 9, 30],
+				},
+				{
+					abbr: 'MMT',
+					name: 'Myanmar Standard Time',
+					offset: ['+', 6, 30],
+				},
+				{
+					abbr: 'MSK',
+					name: 'Moscow Time',
+					offset: ['+', 3, 0],
+				},
+				{
+					abbr: 'MST',
+					name: 'Mountain Standard Time',
+					offset: ['-', 7, 0],
+				},
+				{
+					abbr: 'MST',
+					name: 'Malaysia Standard Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'MT',
+					name: 'Mountain Time',
+					offset: ['-', 7, 0],
+				},
+				{
+					abbr: 'MUT',
+					name: 'Mauritius Time',
+					offset: ['+', 4, 0],
+				},
+				{
+					abbr: 'MVT',
+					name: 'Maldives Time',
+					offset: ['+', 5, 0],
+				},
+				{
+					abbr: 'MYT',
+					name: 'Malaysia Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'NCT',
+					name: 'New Caledonia Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'NDT',
+					name: 'Newfoundland Daylight Time',
+					offset: ['-', 2, 30],
+				},
+				{
+					abbr: 'NFT',
+					name: 'Norfolk Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'NPT',
+					name: 'Nepal Time',
+					offset: ['+', 5, 45],
+				},
+				{
+					abbr: 'NRT',
+					name: 'Nauru Time',
+					offset: ['+', 12, 0],
+				},
+				{
+					abbr: 'NST',
+					name: 'Newfoundland Standard Time',
+					offset: ['-', 3, 30],
+				},
+				{
+					abbr: 'NT',
+					name: 'Newfoundland Time',
+					offset: ['-', 3, 30],
+				},
+				{
+					abbr: 'NUT',
+					name: 'Niue Time',
+					offset: ['-', 11, 0],
+				},
+				{
+					abbr: 'NZDT',
+					name: 'New Zealand Daylight Time',
+					offset: ['+', 13, 0],
+				},
+				{
+					abbr: 'NZST',
+					name: 'New Zealand Standard Time',
+					offset: ['+', 12, 0],
+				},
+				{
+					abbr: 'OMST',
+					name: 'Omsk Time',
+					offset: ['+', 6, 0],
+				},
+				{
+					abbr: 'ORAT',
+					name: 'Oral Time',
+					offset: ['+', 5, 0],
+				},
+				{
+					abbr: 'PDT',
+					name: 'Pacific Daylight Time',
+					offset: ['-', 7, 0],
+				},
+				{
+					abbr: 'PET',
+					name: 'Peru Time',
+					offset: ['-', 5, 0],
+				},
+				{
+					abbr: 'PETT',
+					name: 'Kamchatka Time',
+					offset: ['+', 12, 0],
+				},
+				{
+					abbr: 'PGT',
+					name: 'Papua New Guinea Time',
+					offset: ['+', 10, 0],
+				},
+				{
+					abbr: 'PHOT',
+					name: 'Phoenix Island Time',
+					offset: ['+', 13, 0],
+				},
+				{
+					abbr: 'PHST',
+					name: 'Philippine Standard Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'PHT',
+					name: 'Philippine Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'PKT',
+					name: 'Pakistan Standard Time',
+					offset: ['+', 5, 0],
+				},
+				{
+					abbr: 'PMDT',
+					name: 'Saint Pierre and Miquelon Daylight time',
+					offset: ['-', 2, 0],
+				},
+				{
+					abbr: 'PMST',
+					name: 'Saint Pierre and Miquelon Standard Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'PONT',
+					name: 'Pohnpei Standard Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'PST',
+					name: 'Pacific Standard Time',
+					offset: ['-', 8, 0],
+				},
+				{
+					abbr: 'PT',
+					name: 'Pacific Time',
+					offset: ['-', 8, 0],
+				},
+				{
+					abbr: 'PWT',
+					name: 'Palau Time',
+					offset: ['+', 9, 0],
+				},
+				{
+					abbr: 'PYST',
+					name: 'Paraguay Summer Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'PYT',
+					name: 'Paraguay Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'RET',
+					name: 'Réunion Time',
+					offset: ['+', 4, 0],
+				},
+				{
+					abbr: 'ROTT',
+					name: 'Rothera Research Station Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'SAKT',
+					name: 'Sakhalin Island time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'SAMT',
+					name: 'Samara Time',
+					offset: ['+', 4, 0],
+				},
+				{
+					abbr: 'SAST',
+					name: 'South African Standard Time',
+					offset: ['+', 2, 0],
+				},
+				{
+					abbr: 'SBT',
+					name: 'Solomon Islands Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'SCT',
+					name: 'Seychelles Time',
+					offset: ['+', 4, 0],
+				},
+				{
+					abbr: 'SGT',
+					name: 'Singapore Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'SLST',
+					name: 'Sri Lanka Standard Time',
+					offset: ['+', 5, 30],
+				},
+				{
+					abbr: 'SRET',
+					name: 'Srednekolymsk Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'SRT',
+					name: 'Suriname Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'SST',
+					name: 'Samoa Standard Time',
+					offset: ['-', 11, 0],
+				},
+				{
+					abbr: 'SYOT',
+					name: 'Showa Station Time',
+					offset: ['+', 3, 0],
+				},
+				{
+					abbr: 'TAHT',
+					name: 'Tahiti Time',
+					offset: ['-', 10, 0],
+				},
+				{
+					abbr: 'TFT',
+					name: 'French Southern and Antarctic Time',
+					offset: ['+', 5, 0],
+				},
+				{
+					abbr: 'THA',
+					name: 'Thailand Standard Time',
+					offset: ['+', 7, 0],
+				},
+				{
+					abbr: 'TJT',
+					name: 'Tajikistan Time',
+					offset: ['+', 5, 0],
+				},
+				{
+					abbr: 'TKT',
+					name: 'Tokelau Time',
+					offset: ['+', 13, 0],
+				},
+				{
+					abbr: 'TLT',
+					name: 'Timor Leste Time',
+					offset: ['+', 9, 0],
+				},
+				{
+					abbr: 'TMT',
+					name: 'Turkmenistan Time',
+					offset: ['+', 5, 0],
+				},
+				{
+					abbr: 'TOT',
+					name: 'Tonga Time',
+					offset: ['+', 13, 0],
+				},
+				{
+					abbr: 'TRT',
+					name: 'Turkey Time',
+					offset: ['+', 3, 0],
+				},
+				{
+					abbr: 'TVT',
+					name: 'Tuvalu Time',
+					offset: ['+', 12, 0],
+				},
+				{
+					abbr: 'ULAST',
+					name: 'Ulaanbaatar Summer Time',
+					offset: ['+', 9, 0],
+				},
+				{
+					abbr: 'ULAT',
+					name: 'Ulaanbaatar Standard Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'USZ1',
+					name: 'Kaliningrad Time',
+					offset: ['+', 2, 0],
+				},
+				{
+					abbr: 'UTC',
+					name: 'Coordinated Universal Time',
+					offset: ['+', 0, 0],
+				},
+				{
+					abbr: 'UYST',
+					name: 'Uruguay Summer Time',
+					offset: ['-', 2, 0],
+				},
+				{
+					abbr: 'UYT',
+					name: 'Uruguay Standard Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'UZT',
+					name: 'Uzbekistan Time',
+					offset: ['+', 5, 0],
+				},
+				{
+					abbr: 'VET',
+					name: 'Venezuelan Standard Time',
+					offset: ['-', 4, 0],
+				},
+				{
+					abbr: 'VLAT',
+					name: 'Vladivostok Time',
+					offset: ['+', 10, 0],
+				},
+				{
+					abbr: 'VOLT',
+					name: 'Volgograd Time',
+					offset: ['+', 4, 0],
+				},
+				{
+					abbr: 'VOST',
+					name: 'Vostok Station Time',
+					offset: ['+', 6, 0],
+				},
+				{
+					abbr: 'VUT',
+					name: 'Vanuatu Time',
+					offset: ['+', 11, 0],
+				},
+				{
+					abbr: 'WAKT',
+					name: 'Wake Island Time',
+					offset: ['+', 12, 0],
+				},
+				{
+					abbr: 'WAST',
+					name: 'West Africa Summer Time',
+					offset: ['+', 2, 0],
+				},
+				{
+					abbr: 'WAT',
+					name: 'West Africa Time',
+					offset: ['+', 1, 0],
+				},
+				{
+					abbr: 'WEST',
+					name: 'Western European Summer Time',
+					offset: ['+', 1, 0],
+				},
+				{
+					abbr: 'WET',
+					name: 'Western European Time',
+					offset: ['+', 0, 0],
+				},
+				{
+					abbr: 'WFT',
+					name: 'Wallis and Futuna Time',
+					offset: ['+', 12, 0],
+				},
+				{
+					abbr: 'WGST',
+					name: 'West Greenland Summer Time',
+					offset: ['-', 2, 0],
+				},
+				{
+					abbr: 'WGST',
+					name: 'West Greenland Time',
+					offset: ['-', 3, 0],
+				},
+				{
+					abbr: 'WIB',
+					name: 'Western Indonesia Time',
+					offset: ['+', 7, 0],
+				},
+				{
+					abbr: 'WIT',
+					name: 'Eastern Indonesia Time',
+					offset: ['+', 9, 0],
+				},
+				{
+					abbr: 'WST',
+					name: 'Western Standard Time',
+					offset: ['+', 8, 0],
+				},
+				{
+					abbr: 'YAKT',
+					name: 'Yakutsk Time',
+					offset: ['+', 9, 0],
+				},
+				{
+					abbr: 'YEKT',
+					name: 'Yekaterinburg Time',
+					offset: ['+', 5, 0],
+				},
+			]
+
+			display.innerHTML = timezoneList.map(({ name }) => `'${name}'`).join(' | ')
+		</script>
+	</body>
+</html>

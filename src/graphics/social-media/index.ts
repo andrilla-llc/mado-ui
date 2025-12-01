@@ -1,0 +1,7 @@
+export * from './facebook-logo'
+export * from './google-logo'
+export * from './instagram-logo'
+export * from './linkedin-logo'
+export * from './tiktok-logo'
+export * from './x-logo'
+export * from './youtube-logo'

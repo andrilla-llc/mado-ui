@@ -19,13 +19,15 @@ import {
 	Modal,
 	ModalDialog,
 	ModalTrigger,
+	Select,
 	SubmitButton,
 	Textarea,
 	Tooltip,
 	TooltipPanel,
 	TooltipTrigger,
 	Video,
-} from 'mado-ui/components'
+} from 'mado-ui'
+import { FacebookLogo, GoogleLogo, InstagramLogo, LinkedInLogo, TikTokLogo, XLogo, YouTubeLogo } from 'mado-ui/graphics'
 
 function delay(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms))
@@ -42,6 +44,10 @@ export default function App() {
 
 	return (
 		<main>
+			<section className='px-6 py-12 sm:px-8 sm:py-16 md:px-10 md:py-20 lg:px-12 lg:py-24 xl:px-14 xl:py-28 2xl:px-16 2xl:py-32'>
+				{/*<Select name='Pick me' label='*' optionList={['example', 'unknown']} />*/}
+			</section>
+
 			<section className='px-6 py-12 sm:px-8 sm:py-16 md:px-10 md:py-20 lg:px-12 lg:py-24 xl:px-14 xl:py-28 2xl:px-16 2xl:py-32'>
 				<div className='pb-8 sm:pb-16 md:pb-24 lg:pb-32'>
 					<h1 className='from-ui-purple via-ui-magenta to-ui-red bg-linear-60 bg-clip-text text-center text-2xl font-thin text-transparent uppercase font-stretch-expanded brightness-125 sm:text-4xl md:text-5xl lg:text-6xl'>
@@ -682,6 +688,207 @@ export default function App() {
 								</DropDownSection>
 							</DropDownItems>
 						</DropDown>
+					</li>
+
+					<li className='rounded-3xl px-6 pt-4.5 pb-6 text-white shadow-2xl backdrop-blur-3xl backdrop-brightness-110'>
+						<Heading as='h3' className='pb-4'>
+							Graphics
+						</Heading>
+
+						<p className='pb-8'>
+							SVG social media logos with built-in primary color palettes—including gradients—while maintaining easy
+							customization.
+						</p>
+
+						<div className='grid gap-4'>
+							<div>
+								<Heading as='h4'>Standard</Heading>
+
+								<ul
+									role='list'
+									className='flex flex-wrap items-center justify-around gap-4 rounded-xl bg-neutral-50 p-6'
+								>
+									<li>
+										<FacebookLogo className='h-12 drop-shadow-lg' />
+									</li>
+
+									<li>
+										<GoogleLogo className='h-12 drop-shadow-lg' />
+									</li>
+
+									<li>
+										<InstagramLogo className='h-12 drop-shadow-lg' />
+									</li>
+
+									<li>
+										<LinkedInLogo className='h-12 drop-shadow-lg' />
+									</li>
+
+									<li>
+										<TikTokLogo className='h-12 drop-shadow-lg' />
+									</li>
+
+									<li>
+										<XLogo className='h-12 fill-black drop-shadow-lg' />
+									</li>
+
+									<li>
+										<YouTubeLogo className='h-12 drop-shadow-lg' />
+									</li>
+								</ul>
+							</div>
+
+							<div>
+								<Heading as='h4'>Cutout</Heading>
+
+								<ul
+									role='list'
+									className='flex flex-wrap items-center justify-around gap-4 rounded-xl bg-neutral-50 bg-linear-to-r from-green-300/25 via-green-300/25 via-50% to-green-700/25 to-50% bg-[size:1rem_100%] p-6'
+								>
+									<li>
+										<FacebookLogo className='h-12 drop-shadow-lg' cutout />
+									</li>
+
+									<li>
+										<LinkedInLogo className='h-12 drop-shadow-lg' cutout />
+									</li>
+
+									<li>
+										<YouTubeLogo className='h-12 drop-shadow-lg' cutout />
+									</li>
+								</ul>
+							</div>
+
+							<div>
+								<Heading as='h4'>Gradient Off</Heading>
+
+								<ul
+									role='list'
+									className='flex flex-wrap items-center justify-around gap-4 rounded-xl bg-neutral-50 p-6'
+								>
+									<li>
+										<FacebookLogo className='h-12 drop-shadow-lg [&_[data-name="background"]]:fill-blue-500' cutout />
+									</li>
+
+									<li>
+										<GoogleLogo className='h-12 fill-blue-500 drop-shadow-lg' gradient={false} />
+									</li>
+
+									<li>
+										<InstagramLogo className='h-12 fill-rose-400 drop-shadow-lg' gradient={false} />
+									</li>
+								</ul>
+							</div>
+
+							<div>
+								<Heading as='h4'>Variants</Heading>
+
+								<ul
+									role='list'
+									className='flex flex-wrap items-center justify-around gap-4 rounded-xl bg-neutral-50 p-6'
+								>
+									<li>
+										<FacebookLogo className='h-12 drop-shadow-lg' variant='f' />
+									</li>
+
+									<li>
+										<TikTokLogo className='h-12 fill-black drop-shadow-lg' variant='solid' />
+									</li>
+								</ul>
+							</div>
+
+							<div>
+								<Heading as='h4'>Dark Mode</Heading>
+
+								<ul
+									role='list'
+									className='flex flex-wrap items-center justify-around gap-4 rounded-xl bg-neutral-950 p-6'
+								>
+									<li>
+										<FacebookLogo className='h-12 drop-shadow-lg' cutout />
+									</li>
+
+									<li>
+										<GoogleLogo className='h-12 drop-shadow-lg' />
+									</li>
+
+									<li>
+										<InstagramLogo className='h-12 drop-shadow-lg' />
+									</li>
+
+									<li>
+										<LinkedInLogo className='h-12 drop-shadow-lg' cutout />
+									</li>
+
+									<li>
+										<TikTokLogo className='h-12 drop-shadow-lg' />
+									</li>
+
+									<li>
+										<XLogo className='h-12 fill-white drop-shadow-lg' />
+									</li>
+
+									<li>
+										<YouTubeLogo className='h-12 drop-shadow-lg' cutout />
+									</li>
+								</ul>
+							</div>
+
+							<div>
+								<Heading as='h4'>Single Palette</Heading>
+
+								<ul
+									role='list'
+									className='flex flex-wrap items-center justify-around gap-4 rounded-xl bg-linear-60 from-violet-900 via-violet-500 to-violet-700 p-6'
+								>
+									<li>
+										<FacebookLogo
+											className='ease-exponential h-12 origin-bottom fill-violet-50/60 drop-shadow-lg transition-[fill,scale] duration-200 hover:scale-125 hover:fill-violet-50/90'
+											cutout
+										/>
+									</li>
+
+									<li>
+										<GoogleLogo
+											className='ease-exponential h-12 origin-bottom fill-violet-50/60 drop-shadow-lg transition-[fill,scale] duration-200 hover:scale-125 hover:fill-violet-50/90'
+											gradient={false}
+										/>
+									</li>
+
+									<li>
+										<InstagramLogo
+											className='ease-exponential h-12 origin-bottom fill-violet-50/60 drop-shadow-lg transition-[fill,scale] duration-200 hover:scale-125 hover:fill-violet-50/90'
+											gradient={false}
+										/>
+									</li>
+
+									<li>
+										<LinkedInLogo
+											className='ease-exponential h-12 origin-bottom fill-violet-50/60 drop-shadow-lg transition-[fill,scale] duration-200 hover:scale-125 hover:fill-violet-50/90'
+											cutout
+										/>
+									</li>
+
+									<li>
+										<TikTokLogo
+											className='ease-exponential h-12 origin-bottom fill-violet-50/60 drop-shadow-lg transition-[fill,scale] duration-200 hover:scale-125 hover:fill-violet-50/90'
+											variant='solid'
+										/>
+									</li>
+
+									<li>
+										<XLogo className='ease-exponential h-12 origin-bottom fill-violet-50/60 drop-shadow-lg transition-[fill,scale] duration-200 hover:scale-125 hover:fill-violet-50/90' />
+									</li>
+
+									<li>
+										<YouTubeLogo
+											className='ease-exponential h-12 origin-bottom fill-violet-50/60 drop-shadow-lg transition-[fill,scale] duration-200 hover:scale-125 hover:fill-violet-50/90'
+											cutout
+										/>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</section>
